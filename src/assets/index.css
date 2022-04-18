@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* hack */
+
+.p-button-primary {
+    background-color: #4F46E5;
+}
+
+.p-tabview-title {
+    padding-left: 10px;
+}

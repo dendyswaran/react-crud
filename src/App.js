@@ -1,24 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import RequireAuth from "./components/RequireAuth";
+import MyAccountPage from "./modules/account/MyAccountPage";
+import SigninPage from "./modules/authentication/SigninPage";
+import SignupPage from "./modules/authentication/SignupPage";
+import DashboardPage from "./modules/dashboard/DashboardPage";
+import DrinkEditPage from "./modules/drink/DrinkEditPage";
+import DrinkPage from "./modules/drink/DrinkPage";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<RequireAuth><DashboardPage /></RequireAuth>} />
+        <Route path="/my-account" element={<RequireAuth><MyAccountPage /></RequireAuth>} />
+        <Route path="/drink" element={<RequireAuth><DrinkPage /></RequireAuth>} />
+        <Route path="/drink/edit/:id" element={<RequireAuth><DrinkEditPage /></RequireAuth>} />
+        <Route path="/auth/signin" element={<SigninPage />} />
+        <Route path="/auth/signup" element={<SignupPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
