@@ -1,4 +1,5 @@
 import axios from "axios"
+import session from "../configs/session"
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000"
 const headers = {
@@ -11,11 +12,30 @@ const headers = {
  * @param {*} data 
  * @param {*} config 
  */
- export const get = (url) => {
+export const get = (url, withToken = false) => {
+    const headerConfig = buildHeader(withToken)
+
     return new Promise((resolve, reject) => {
-        axios.get(`${API_URL}${sanitizeUrl(url)}`, { headers })
+        axios.get(`${API_URL}${sanitizeUrl(url)}`, { headers: headerConfig })
             .then(_result => resolve(_result))
-            .catch(_error => reject(_error) )
+            .catch(_error => reject(_error))
+    })
+}
+
+/**
+ * 
+ * @param {String} url 
+ * @param {*} data 
+ * @param {Boolean} withToken 
+ * @returns 
+ */
+export const post = (url, data = {}, withToken = false) => {    
+    const headerConfig = buildHeader(withToken)
+
+    return new Promise((resolve, reject) => {
+        axios.post(`${API_URL}${sanitizeUrl(url)}`, JSON.stringify(data), { headers: headerConfig })
+            .then(_result => resolve(_result))
+            .catch(_error => reject(_error))
     })
 }
 
@@ -25,11 +45,13 @@ const headers = {
  * @param {*} data 
  * @param {*} config 
  */
-export const post = (url, data = {}) => {
+export const put = (url, data = {}, withToken = false) => {
+    const headerConfig = buildHeader(withToken)
+
     return new Promise((resolve, reject) => {
-        axios.post(`${API_URL}${sanitizeUrl(url)}`, JSON.stringify(data), { headers })
+        axios.put(`${API_URL}${sanitizeUrl(url)}`, JSON.stringify(data), { headers: headerConfig })
             .then(_result => resolve(_result))
-            .catch(_error => reject(_error) )
+            .catch(_error => reject(_error))
     })
 }
 
@@ -39,26 +61,23 @@ export const post = (url, data = {}) => {
  * @param {*} data 
  * @param {*} config 
  */
- export const put = (url, data = {}) => {
+export const del = (url, withToken = false) => {
+    const headerConfig = buildHeader(withToken)
+
     return new Promise((resolve, reject) => {
-        axios.put(`${API_URL}${sanitizeUrl(url)}`, JSON.stringify(data), { headers })
+        axios.delete(`${API_URL}${sanitizeUrl(url)}`, { headers: headerConfig })
             .then(_result => resolve(_result))
-            .catch(_error => reject(_error) )
+            .catch(_error => reject(_error))
     })
 }
 
 /**
  * 
- * @param {String} url 
- * @param {*} data 
- * @param {*} config 
+ * @param {Boolean} withToken 
+ * @returns 
  */
- export const del = (url) => {
-    return new Promise((resolve, reject) => {
-        axios.delete(`${API_URL}${sanitizeUrl(url)}`, { headers })
-            .then(_result => resolve(_result))
-            .catch(_error => reject(_error) )
-    })
+const buildHeader = (withToken = false) => {
+    return withToken ? { ...headers, 'Authorization': `Bearer ${session.getAccessToken()}` } : headers
 }
 
 /**
