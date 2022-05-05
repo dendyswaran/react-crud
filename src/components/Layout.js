@@ -16,7 +16,7 @@ export default function Layout({ children }) {
             <div className='flex flex-col w-full'>
 
                 {/* Navbar menu */}
-                <div className='flex p-5 w-full bg-white justify-between'>
+                <div className='flex p-5 w-full bg-white '>
                     <NavbarLogo />
                     <Navbar />
                 </div>

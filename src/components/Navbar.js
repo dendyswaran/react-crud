@@ -1,13 +1,15 @@
-import { useDispatch } from "react-redux"
+import { Menubar } from 'primereact/menubar'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { authSignout } from "../modules/authentication/services/AuthenticationAction"
-import useAuthentication from "../modules/authentication/services/AuthenticationState"
+import { fetchMenuParents } from '../modules/menu/services/MenuAction'
 import { MenuDropdown, MenuDropdownItem } from "./NavbarMenu"
 
 export default function Navbar() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const { user } = useAuthentication()
+    const { menu_navigation } = useSelector(state => state.menuReducer)
 
     const handleSignout = () => {
         dispatch(authSignout(() => {
@@ -15,12 +17,19 @@ export default function Navbar() {
         }))
     }
 
+    useEffect(() => {
+      return () => dispatch(fetchMenuParents(true))
+    }, [])
+
     return (
-        <div className='lg:flex md:flex items-center'>
-            <MenuDropdown menu={'Manage'} icon={'pi pi-box'}>
-                <MenuDropdownItem onClick={() => navigate("/drink")}>Drink</MenuDropdownItem>
-            </MenuDropdown>
-            <MenuDropdown menu={user.username}>
+        <div className='lg:flex md:flex items-center justify-start flex-1'>
+
+            <Menubar
+                className="border-0 bg-transparent"
+                model={menu_navigation}
+            />
+
+            <MenuDropdown menu={"Account"}>
                 <MenuDropdownItem onClick={() => navigate("/")}>Profile</MenuDropdownItem>
                 <MenuDropdownItem onClick={handleSignout}>Log out</MenuDropdownItem>
             </MenuDropdown>

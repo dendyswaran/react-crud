@@ -1,3 +1,4 @@
+import { GENERIC_ACTION } from "../configs/constant"
 import { del, get, post, put } from "../helpers/ApiHelper"
 
 export function genGetDataById(url, onSuccess) {
@@ -48,15 +49,21 @@ export function genFetchDatatable(url, { tableParams, dtSearch }, successState) 
  * @param {Function} onSuccess 
  * @returns 
  */
-export function genCreateData(url, data, onSuccess) {
+export function genCreateData(url, data, onSuccess, onFailed) {
     return async (dispatch) => {
         try {
+            dispatch({ type: GENERIC_ACTION.GEN_IS_LOADING, payload: true })
+            
             const { data: resp } = await post(url, data, true)
             if (resp.success) {
                 onSuccess(resp.data)
             }
 
-        } catch (e) { }
+        } catch (e) {
+            onFailed(e)
+        } finally {
+            dispatch({ type: GENERIC_ACTION.GEN_IS_LOADING, payload: false })
+        }
     }
 }
 

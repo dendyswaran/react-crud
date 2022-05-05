@@ -6,7 +6,6 @@ import { useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import InputLabel from '../../components/InputLabel'
-import session from '../../configs/session'
 import { authSignin } from './services/AuthenticationAction'
 
 
@@ -30,6 +29,7 @@ export default function SigninPage() {
                 /** on success */ 
                 toastRef.current.show({ severity: 'success', summary: 'Success Message', detail: _respData.message || "Welcome back!", life: 3000 });
                 navigate("/")
+                
             },
             (_respError) => {
                 /** on error */
