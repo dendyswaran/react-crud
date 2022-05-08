@@ -19,7 +19,7 @@ export function authSignin(username, password, onSuccess, onError) {
             })
 
             if (resp.success) {
-                const { username, email, id, accessToken, message } = resp.data
+                const { username, email, id, token, message } = resp.data
                 const user = {
                     username,
                     email,
@@ -33,7 +33,7 @@ export function authSignin(username, password, onSuccess, onError) {
                 })
 
                 /** save access token */
-                session.create(accessToken, user)
+                session.create(token, user)
 
                 /** callback success */
                 onSuccess(resp)
