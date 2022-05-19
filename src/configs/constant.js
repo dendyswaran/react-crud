@@ -40,6 +40,10 @@ export const FORM_OP = {
     CREATE: "create"
 }
 
+export const MANAGE_USER_ACTION = {
+    MANAGE_USER_SUCCESS: "MANAGE_USER_SUCCESS"
+}
+
 export const E_MENU_CLICKEVENT = [
     { label: 'Open new tab', value: 'OPEN_NEW_TAB' },
     { label: 'Open', value: 'OPEN' },

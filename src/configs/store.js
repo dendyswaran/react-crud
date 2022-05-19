@@ -4,13 +4,15 @@ import authReducer from "../modules/authentication/services/AuthenticationReduce
 import drinkReducer from "../modules/drink/services/DrinkReducer";
 import menuReducer from "../modules/menu/services/MenuReducer";
 import genReducer from "../commons/GenericReducer";
+import ManageUserReducer from "../modules/manage-user/services/ManageUserReducer";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const rootReducer = combineReducers({
     authReducer,
     drinkReducer,
     menuReducer,
-    genReducer
+    genReducer,
+    ManageUserReducer
 })
 
 
