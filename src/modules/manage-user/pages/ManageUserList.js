@@ -37,7 +37,7 @@ const ManageUserList = () => {
         const usernameMode = filter.filters['username']?.matchMode;
 
         const userEmailValue = filter.filters['email']?.value;
-        const userEmailMode = filter.filters['email']?.matchMode;
+        const userEmailMode = filter.filters['email'].matchMode;
 
         const filterObject = {
             id: {value: idValue && idValue > 0 ? Number(idValue):null, matchMode: idMode || FilterMatchMode.EQUALS, type: "numeric" },
