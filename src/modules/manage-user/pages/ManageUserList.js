@@ -80,14 +80,24 @@ const ManageUserList = () => {
         })
     }, [datatable]);
 
+    /**
+     * Header for datatable
+     * @returns {JSX.Element}
+     */
     const renderHeader= () => {
         return (
             <div className="flex justify-between">
                 <h3 className="text-2xl font-bold">User List</h3>
-                <span>
-                    <i className="pi pi-search mr-4"/>
-                    <input placeholder="Search" className="mr-3"/>
-                </span>
+                <label className="relative block">
+                    <span className="sr-only">Search</span>
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-2">
+                        {/*<svg className="h-5 w-5 fill-slate-300" viewBox="0 0 20 20"></svg>*/}
+                        <i className="pi pi-search ml-2"/>
+                    </span>
+                    <input
+                        className="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
+                        placeholder="Search table" type="text" name="search"/>
+                </label>
             </div>
         );
     }
@@ -115,10 +125,13 @@ const ManageUserList = () => {
                     onFilter={handleFilterChange}
                     onRowClick={handleRowClicked}
                     onSelectionChange={e => setTableSelection(e.value)}
+                    globalFilterFields={['id', 'username', 'email']}
+                    emptyMessage="No user has been registered"
+                    responsiveLayout="scroll"
                 >
                     <Column selectionmode="multiple" headerStyle={{width: '3em'}}></Column>
                     <Column field='id' header="User ID" filter filterField="id" filterPlaceholder="Search by ID"></Column>
-                    <Column field="username" header="Username" filter filterField='username' filterPlaceholder="Search by username"></Column>
+                    <Column field="username" sortable header="Username" filter filterField='username' filterPlaceholder="Search by username"></Column>
                     <Column field="email" header="Email" filter filterField='email' filterPlaceholder="Search by Email"></Column>
                     {/*<Column field=""*/}
                 </DataTable>
