@@ -6,14 +6,4 @@ const manageUserDatatable = () => {
     }
 }
 
-const fetchUserListData = (url, {tableParams, dtSearch}, successState) {
-    return async (dispatch) => {
-        try {
-            const  {data: resp} = await get(url, {
-
-            })
-        }
-    }
-}
-
 export {manageUserDatatable};
