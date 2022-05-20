@@ -23,7 +23,7 @@ function App() {
         <Route path="/settings/menu/:id" element={<RequireAuth><MenuEditPage /></RequireAuth>} />
         <Route path="/auth/signin" element={<SigninPage />} />
         <Route path="/auth/signup" element={<SignupPage />} />
-        <Route path="/manage-user/user-list" element={<RequireAuth><ManageUserList /></RequireAuth>} />
+        <Route path="/settings/manage-user/user-list" element={<RequireAuth><ManageUserList /></RequireAuth>} />
       </Routes>
     </BrowserRouter>
   );
