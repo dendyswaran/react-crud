@@ -8,7 +8,7 @@ import DrinkEditPage from "./modules/drink/DrinkEditPage";
 import DrinkPage from "./modules/drink/DrinkPage";
 import MenuEditPage from "./modules/menu/MenuEditPage";
 import MenuPage from "./modules/menu/MenuPage";
-import ManageUserList from "./modules/manage-user/pages/ManageUserList";
+import ManageUserPage from "./modules/manage-user/pages/ManageUserPage";
 
 function App() {
 
@@ -23,7 +23,7 @@ function App() {
         <Route path="/settings/menu/:id" element={<RequireAuth><MenuEditPage /></RequireAuth>} />
         <Route path="/auth/signin" element={<SigninPage />} />
         <Route path="/auth/signup" element={<SignupPage />} />
-        <Route path="/settings/manage-user/user-list" element={<RequireAuth><ManageUserList /></RequireAuth>} />
+        <Route path="/settings/manage-user/user-list" element={<RequireAuth><ManageUserPage /></RequireAuth>} />
       </Routes>
     </BrowserRouter>
   );

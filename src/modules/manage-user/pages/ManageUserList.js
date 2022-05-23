@@ -8,6 +8,9 @@ import {MANAGE_USER_ACTION} from "../../../configs/constant";
 import {useNavigate} from "react-router-dom";
 import {genFetchDatatable} from "../../../commons/GenericAction";
 import {HeaderBasic} from "../../../components/DatatableView";
+import Layout from "../../../components/Layout";
+import {Button} from "primereact/button";
+import {InputText} from "primereact/inputtext";
 
 const ManageUserList = () => {
 
@@ -29,6 +32,7 @@ const ManageUserList = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+
     const handleFilterChange = (filter) => {
         const idValue = filter.filters['id']?.value;
         const idMode = filter.filters['id']?.matchMode;
@@ -37,14 +41,23 @@ const ManageUserList = () => {
         const usernameMode = filter.filters['username']?.matchMode;
 
         const userEmailValue = filter.filters['email']?.value;
-        const userEmailMode = filter.filters['email'].matchMode;
+        const userEmailMode = filter.filters['email']?.matchMode;
+
 
         const filterObject = {
-            id: {value: idValue && idValue > 0 ? Number(idValue):null, matchMode: idMode || FilterMatchMode.EQUALS, type: "numeric" },
-            username: {value: usernameValue && usernameValue || '', matchMode: usernameMode || FilterMatchMode.CONTAINS, type: 'string'},
-            userEmail: {value: userEmailValue && userEmailValue || '', matchMode: userEmailMode || FilterMatchMode.CONTAINS, type: 'string'}
+            'id': {
+                value: idValue && idValue>0 ? Number(idValue) : null,
+                matchMode: idMode || FilterMatchMode.EQUALS,
+                type: "numeric",},
+            'username': {
+                value: usernameValue || '',
+                matchMode: usernameMode || FilterMatchMode.CONTAINS,
+                type: 'string',},
+            'email': {
+                value: userEmailValue ? userEmailValue : '',
+                matchMode: userEmailMode || FilterMatchMode.CONTAINS,
+                type: 'string',}
         }
-
         setTableFilters(filterObject);
         handleFetchDataTable(filterObject);
     }
@@ -68,7 +81,7 @@ const ManageUserList = () => {
     }
 
     const handleRowClicked = (opt) => {
-        navigate(`/user/edit/${opt.data.id}`);
+        // navigate(`/user/edit/${opt.data.id}`);
     };
 
     useEffect(() => handleFetchDataTable, [tableParams]);
@@ -80,6 +93,11 @@ const ManageUserList = () => {
         })
     }, [datatable]);
 
+
+    /** Body Section
+     * Anything related to body goes here
+     */
+
     /**
      * Header for datatable
      * @returns {JSX.Element}
@@ -88,37 +106,59 @@ const ManageUserList = () => {
         return (
             <div className="flex justify-between">
                 <h3 className="text-2xl font-bold">User List</h3>
-                <label className="relative block">
-                    <span className="sr-only">Search</span>
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-2">
-                        {/*<svg className="h-5 w-5 fill-slate-300" viewBox="0 0 20 20"></svg>*/}
-                        <i className="pi pi-search ml-2"/>
+                <div className="flex justify-end">
+                    {/*<label className="relative block mr-2">*/}
+                    {/*    <span className="absolute inset-y-0 left-0 flex items-center pl-2">*/}
+                    {/*        /!*<svg className="h-5 w-5 fill-slate-300" viewBox="0 0 20 20"></svg>*!/*/}
+                    {/*        <i className="pi pi-search ml-2"/>*/}
+                    {/*    </span>*/}
+                    {/*    <input*/}
+                    {/*        className="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"*/}
+                    {/*        placeholder="Search table" type="text" name="search"/>*/}
+                    {/*</label>*/}
+                    <span className="p-input-icon-left mr-2">
+                        <i className="pi pi-search" />
+                        <InputText placeholder="Keyword Search" />
                     </span>
-                    <input
-                        className="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-                        placeholder="Search table" type="text" name="search"/>
-                </label>
+                    <Button label="Delete All" icon="pi pi-trash" className="p-button-danger" />
+                </div>
             </div>
         );
     }
 
     const header = renderHeader();
 
+    const manageUserButtons = () => {
+        return(
+            <div>
+                <Button label="Delete" icon="pi pi-trash" iconPos="left" className="p-button-danger mr-2" />
+                <Button label="Edit" icon="pi pi-pencil" iconPos="left" className="p-button-help" />
+            </div>
+        );
+    }
+
+    /**
+     * Space that related to body ends here
+     */
+
+    // datatable default sortable are not compatible with lazy load on
+    // onSort must be included with lazy
     return(
-        <div className="flex justify-center">
+        <div className="pl-4">
             <Toast position='top-center' ref={toastRef}/>
             <div className="container mt-10">
                 <DataTable
                     paginator
                     paginatorTemplate="CurrentPageReport FistPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-                    dataKey="id"
                     selection={tableSelection}
                     rows={10}
+                    dataKey="id"
+                    filters={tableFilters}
+                    filterDisplay="row"
+                    lazy
                     totalRecords={tableData.totalElements}
                     first={tableParams.first}
-                    filters={tableFilters}
-                    lazy
                     header={header}
                     value={tableData.content}
                     onPage={handlePageChange}
@@ -129,10 +169,17 @@ const ManageUserList = () => {
                     emptyMessage="No user has been registered"
                     responsiveLayout="scroll"
                 >
-                    <Column selectionmode="multiple" headerStyle={{width: '3em'}}></Column>
-                    <Column field='id' header="User ID" filter filterField="id" filterPlaceholder="Search by ID"></Column>
-                    <Column field="username" sortable header="Username" filter filterField='username' filterPlaceholder="Search by username"></Column>
-                    <Column field="email" header="Email" filter filterField='email' filterPlaceholder="Search by Email"></Column>
+                    <Column selectionMode="multiple" headerStyle={{width: '3em'}}/>
+                    <Column field='id'
+                            header="User ID"
+                            filter
+                            filterField='id'
+                            filterPlaceholder="Search by ID"
+                            style={{width: '16em'}}
+                            />
+                    <Column field="username"  header="Username" filter filterField='username' filterPlaceholder="Search by username"/>
+                    <Column field="email" header="Email" filter filterField='email' filterPlaceholder="Search by Email"/>
+                    <Column header="Manage" body={manageUserButtons}/>
                     {/*<Column field=""*/}
                 </DataTable>
             </div>

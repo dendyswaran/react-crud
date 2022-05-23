@@ -17,6 +17,5 @@ const manageUserReducer = (state = initialState, action) => {
             return state;
     }
 }
-
 export default manageUserReducer;
 
