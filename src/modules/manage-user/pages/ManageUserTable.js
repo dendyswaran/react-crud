@@ -4,20 +4,22 @@ import {useDispatch, useSelector} from "react-redux";
 import {Column} from 'primereact/column'
 import {DataTable} from "primereact/datatable";
 import {Toast} from 'primereact/toast';
-import {MANAGE_USER_ACTION} from "../../../configs/constant";
+import {MANAGE_USER_ACTION} from "../configs/ManageUser.constant";
 import {useNavigate} from "react-router-dom";
-import {genFetchDatatable} from "../../../commons/GenericAction";
+import {genBulkDeleteData, genDeleteData, genFetchDatatable} from "../../../commons/GenericAction";
 import {HeaderBasic} from "../../../components/DatatableView";
 import Layout from "../../../components/Layout";
 import {Button} from "primereact/button";
 import {InputText} from "primereact/inputtext";
+import {ConfirmDialog} from "primereact/confirmdialog";
 
-const ManageUserList = () => {
+const ManageUserTable = () => {
 
     const {datatable} = useSelector(state => state.ManageUserReducer);
-    const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [tableSelection, setTableSelection] = useState(null);
     const [tableFilters, setTableFilters] = useState(null);
+    const [deleteRowId, setDeleteRowId] = useState(null);
     const [tableData, setTableData] = useState({
         content: [],
         totalElements: 0
@@ -107,15 +109,6 @@ const ManageUserList = () => {
             <div className="flex justify-between">
                 <h3 className="text-2xl font-bold">User List</h3>
                 <div className="flex justify-end">
-                    {/*<label className="relative block mr-2">*/}
-                    {/*    <span className="absolute inset-y-0 left-0 flex items-center pl-2">*/}
-                    {/*        /!*<svg className="h-5 w-5 fill-slate-300" viewBox="0 0 20 20"></svg>*!/*/}
-                    {/*        <i className="pi pi-search ml-2"/>*/}
-                    {/*    </span>*/}
-                    {/*    <input*/}
-                    {/*        className="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"*/}
-                    {/*        placeholder="Search table" type="text" name="search"/>*/}
-                    {/*</label>*/}
                     <span className="p-input-icon-left mr-2">
                         <i className="pi pi-search" />
                         <InputText placeholder="Keyword Search" />
@@ -128,13 +121,36 @@ const ManageUserList = () => {
 
     const header = renderHeader();
 
-    const manageUserButtons = () => {
+    const manageUserButtons = (rowData) => {
         return(
             <div>
-                <Button label="Delete" icon="pi pi-trash" iconPos="left" className="p-button-danger mr-2" />
-                <Button label="Edit" icon="pi pi-pencil" iconPos="left" className="p-button-help" />
+                <Button label="Delete" icon="pi pi-trash" iconPos="left" onClick={handleBeforeDelete} id={rowData.id}
+                        className="p-button-danger mr-2 uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" />
+                <Button label="Edit" icon="pi pi-pencil" iconPos="left"
+                        className="p-button-help mr-2 uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" />
             </div>
         );
+    }
+
+    const handleBeforeDelete = (e) => {
+        console.log(e.currentTarget.id);
+        if(e.currentTarget.id &&  e.currentTarget.id > 0) {
+            setShowDeleteDialog(true);
+            setDeleteRowId(e.target.id)
+        }
+    }
+
+    const handleDeleteUser = () => {
+        // console.log(e);
+        if(deleteRowId && deleteRowId > 0) {
+            dispatch(genDeleteData('api/manage-user',
+                deleteRowId,
+                (result) => {
+                    toastRef.current.show({ severity: 'success', summary: 'Success Message', detail: result.message || "Data has been deleted!", life: 3000 });
+                    handleFetchDataTable(tableFilters);
+                }
+            ));
+        }
     }
 
     /**
@@ -146,6 +162,8 @@ const ManageUserList = () => {
     return(
         <div className="pl-4">
             <Toast position='top-center' ref={toastRef}/>
+            <ConfirmDialog visible={showDeleteDialog} onHide={()=> setShowDeleteDialog(false)} message="Are you sure you want to delete this user?"
+            header="Confirmation" icon="pi pi-exclamation-triangle" reject={() => { setDeleteRowId(undefined) }} accept={handleDeleteUser}/>
             <div className="container mt-10">
                 <DataTable
                     paginator
@@ -187,5 +205,5 @@ const ManageUserList = () => {
     );
 }
 
-export default ManageUserList;
+export default ManageUserTable;
 

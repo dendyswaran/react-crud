@@ -1,4 +1,4 @@
-import {MANAGE_USER_ACTION} from "../../../configs/constant";
+import {MANAGE_USER_ACTION} from "../configs/ManageUser.constant";
 
 const initialState = {
     datatable: {},
