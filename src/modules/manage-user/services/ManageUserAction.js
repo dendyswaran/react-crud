@@ -9,16 +9,16 @@ const manageUserDatatable = () => {
     }
 }
 
-const editUser = (username, email, password, onSuccess, onError) => {
+const editUser = (userId, username, email, password, onSuccess, onError) => {
         return async(dispatch) => {
             dispatch({type: MANAGE_USER_ACTION.MANAGE_USER_PROCESSING, payload: true})
 
             try {
-                const {data:resp} = await put('api/auth/', {
+                const {data:resp} = await put('api/manage-user/edit/'+userId, {
+                    userId,
                     username,
                     email,
-                    password,
-                })
+                }, true)
                 if(resp.success) {
                     onSuccess(resp.data);
                 }

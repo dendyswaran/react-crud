@@ -23,7 +23,7 @@ const EditUserPage = (props) => {
 
     useEffect(() => {
         fetchUser(userId);
-    }, [formData]);
+    }, []);
 
     const fetchUser = (userId) => {
         dispatch(genGetDataById('api/manage-user/'+userId,
@@ -40,10 +40,10 @@ const EditUserPage = (props) => {
 
     const handleEditUser = (e) => {
         e.preventDefault();
-        dispatch(editUser(formData.username, formData.email, formData.password,
+        dispatch(editUser(userId, formData.username, formData.email, formData.password,
             ()=> {
                 toastRef.current.show({ severity: 'success', summary: 'Success Message', detail: "Success", life: 3000 });
-                navigate();
+                window.location.reload();
             }, (error) => {
                 toastRef.current.show({ severity: 'error', summary: 'Error Message', detail: error.message || "Failed to edit User", life: 3000});
             }));
