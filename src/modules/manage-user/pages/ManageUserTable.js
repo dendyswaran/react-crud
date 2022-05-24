@@ -13,7 +13,7 @@ import {Button} from "primereact/button";
 import {InputText} from "primereact/inputtext";
 import {ConfirmDialog} from "primereact/confirmdialog";
 import {Dialog} from 'primereact/dialog';
-import EditUserPage from "./EditUserPage";
+import EditUserPage, {EditUserPageWrapped} from "./EditUserPage";
 
 const ManageUserTable = () => {
 
@@ -141,6 +141,7 @@ const ManageUserTable = () => {
     const showEditDialog = (e) => {
         setDialogVisibility(true);
         setUserId(e.currentTarget.id);
+        // navigate("/manage-user/edit/"+e.currentTarget.id);
     }
 
     const handleBeforeDelete = (e) => {
@@ -171,16 +172,15 @@ const ManageUserTable = () => {
         );
     }
 
-    const renderEditContent = (id) => {
+    const renderEditContent = () => {
         return (
             <div>
-                <EditUserPage userId={id} />
+                <EditUserPage userId={userId} />
             </div>
         );
     }
 
     useEffect(() => {
-        renderEditContent(userId);
     }, [userId])
 
     /**

@@ -9,11 +9,11 @@ import {editUser} from  '../services/ManageUserAction';
 import {Toast} from 'primereact/toast';
 import {genGetDataById} from "../../../commons/GenericAction";
 
-const EditUserPage = () => {
+const EditUserPage = (props) => {
     const toastRef = useRef();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const {userId} = useParams();
+    const {userId} = props;
     const {isLoading} = useSelector(state => state.authReducer);
     const [formData, setFormData] = useState({
         username: "",
@@ -74,11 +74,19 @@ const EditUserPage = () => {
                     {/*           value={formData.confirmPassword}*/}
                     {/*           onChange={e => setFormData(_c => ({ ..._c, confirmPassword: e.target.value }))} />*/}
 
-                    <Button disabled={isLoading || formData.confirmPassword !== formData.password} label="Sign up" icon="pi pi-user" className="w-full" />
+                    <Button disabled={isLoading || formData.confirmPassword !== formData.password} label="Edit User" icon="pi pi-user" className="w-full" />
                 </form>
             </div>
         </>
     );
 }
 
+const EditUserPageWrapped = () => {
+    const {userId} = useParams();
+    return (
+        <EditUserPage userId={userId}/>
+    );
+}
+
+export {EditUserPageWrapped};
 export default EditUserPage;
