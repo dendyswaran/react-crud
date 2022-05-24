@@ -12,6 +12,8 @@ import Layout from "../../../components/Layout";
 import {Button} from "primereact/button";
 import {InputText} from "primereact/inputtext";
 import {ConfirmDialog} from "primereact/confirmdialog";
+import {Dialog} from 'primereact/dialog';
+import EditUserPage from "./EditUserPage";
 
 const ManageUserTable = () => {
 
@@ -20,6 +22,7 @@ const ManageUserTable = () => {
     const [tableSelection, setTableSelection] = useState(null);
     const [tableFilters, setTableFilters] = useState(null);
     const [deleteRowId, setDeleteRowId] = useState(null);
+    const [userId, setUserId] = useState(-1);
     const [tableData, setTableData] = useState({
         content: [],
         totalElements: 0
@@ -33,6 +36,8 @@ const ManageUserTable = () => {
     const toastRef = useRef();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [dialogVisibility, setDialogVisibility] = useState(false);
+
 
 
     const handleFilterChange = (filter) => {
@@ -121,22 +126,27 @@ const ManageUserTable = () => {
 
     const header = renderHeader();
 
+
     const manageUserButtons = (rowData) => {
         return(
             <div>
                 <Button label="Delete" icon="pi pi-trash" iconPos="left" onClick={handleBeforeDelete} id={rowData.id}
                         className="p-button-danger mr-2 uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" />
-                <Button label="Edit" icon="pi pi-pencil" iconPos="left"
+                <Button label="Edit" icon="pi pi-pencil" iconPos="left" onClick={showEditDialog} id={rowData.id}
                         className="p-button-help mr-2 uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" />
             </div>
         );
     }
 
+    const showEditDialog = (e) => {
+        setDialogVisibility(true);
+        setUserId(e.currentTarget.id);
+    }
+
     const handleBeforeDelete = (e) => {
-        console.log(e.currentTarget.id);
         if(e.currentTarget.id &&  e.currentTarget.id > 0) {
             setShowDeleteDialog(true);
-            setDeleteRowId(e.target.id)
+            setDeleteRowId(e.currentTarget.id)
         }
     }
 
@@ -153,8 +163,28 @@ const ManageUserTable = () => {
         }
     }
 
+    const renderFooter = () => {
+        return(
+            <div>
+                <Button label="Cancel" icon="pi pi-times" onClick={() => setDialogVisibility(false)} className="p-button-text" />
+            </div>
+        );
+    }
+
+    const renderEditContent = (id) => {
+        return (
+            <div>
+                <EditUserPage userId={id} />
+            </div>
+        );
+    }
+
+    useEffect(() => {
+        renderEditContent(userId);
+    }, [userId])
+
     /**
-     * Space that related to body ends here
+     * Content that related to body ends here
      */
 
     // datatable default sortable are not compatible with lazy load on
@@ -162,6 +192,12 @@ const ManageUserTable = () => {
     return(
         <div className="pl-4">
             <Toast position='top-center' ref={toastRef}/>
+
+            <Dialog header="Header" visible={dialogVisibility} style={{ width: '50vw' }} footer={renderFooter('displayBasic')} onHide={() => setDialogVisibility(false)}>
+               {renderEditContent()}
+            </Dialog>
+
+
             <ConfirmDialog visible={showDeleteDialog} onHide={()=> setShowDeleteDialog(false)} message="Are you sure you want to delete this user?"
             header="Confirmation" icon="pi pi-exclamation-triangle" reject={() => { setDeleteRowId(undefined) }} accept={handleDeleteUser}/>
             <div className="container mt-10">

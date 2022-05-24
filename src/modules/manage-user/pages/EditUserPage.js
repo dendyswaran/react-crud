@@ -9,7 +9,7 @@ import {editUser} from  '../services/ManageUserAction';
 import {Toast} from 'primereact/toast';
 import {genGetDataById} from "../../../commons/GenericAction";
 
-const EditUserPage = (props) => {
+const EditUserPage = () => {
     const toastRef = useRef();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -23,7 +23,7 @@ const EditUserPage = (props) => {
 
     useEffect(() => {
         fetchUser(userId);
-    }, [isLoading]);
+    }, [formData]);
 
     const fetchUser = (userId) => {
         dispatch(genGetDataById('api/manage-user/'+userId,
@@ -64,15 +64,15 @@ const EditUserPage = (props) => {
                                value={formData.email}
                                onChange={e => setFormData(_c => ({ ..._c, email: e.target.value }))} />
 
-                    <InputLabel>Password</InputLabel>
-                    <InputText id="password" type="password" className="w-full mb-3"
-                               value={formData.password}
-                               onChange={e => setFormData(_c => ({ ..._c, password: e.target.value }))} />
+                    {/*<InputLabel>Password</InputLabel>*/}
+                    {/*<InputText id="password" type="password" className="w-full mb-3"*/}
+                    {/*           value={formData.password}*/}
+                    {/*           onChange={e => setFormData(_c => ({ ..._c, password: e.target.value }))} />*/}
 
-                    <InputLabel>Confirm Password</InputLabel>
-                    <InputText id="confirmPassword" type="password" className="w-full mb-3"
-                               value={formData.confirmPassword}
-                               onChange={e => setFormData(_c => ({ ..._c, confirmPassword: e.target.value }))} />
+                    {/*<InputLabel>Confirm Password</InputLabel>*/}
+                    {/*<InputText id="confirmPassword" type="password" className="w-full mb-3"*/}
+                    {/*           value={formData.confirmPassword}*/}
+                    {/*           onChange={e => setFormData(_c => ({ ..._c, confirmPassword: e.target.value }))} />*/}
 
                     <Button disabled={isLoading || formData.confirmPassword !== formData.password} label="Sign up" icon="pi pi-user" className="w-full" />
                 </form>
