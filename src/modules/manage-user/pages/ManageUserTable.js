@@ -14,13 +14,16 @@ import {InputText} from "primereact/inputtext";
 import {ConfirmDialog} from "primereact/confirmdialog";
 import {Dialog} from 'primereact/dialog';
 import EditUserPage, {EditUserPageWrapped} from "./EditUserPage";
+import useAuthentication from "../../authentication/services/AuthenticationState";
 
 const ManageUserTable = () => {
 
     const {datatable} = useSelector(state => state.ManageUserReducer);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [showDeleteBulkDialog, setShowDeleteBulkDialog] = useState(false);
     const [tableSelection, setTableSelection] = useState(null);
     const [tableFilters, setTableFilters] = useState(null);
+    // const [globalFilterValue, setGlobalFilterValue] = useState('');
     const [deleteRowId, setDeleteRowId] = useState(null);
     const [userId, setUserId] = useState(-1);
     const [tableData, setTableData] = useState({
@@ -50,10 +53,9 @@ const ManageUserTable = () => {
         const userEmailValue = filter.filters['email']?.value;
         const userEmailMode = filter.filters['email']?.matchMode;
 
-
         const filterObject = {
             'id': {
-                value: idValue && idValue>0 ? Number(idValue) : null,
+                value: (idValue && idValue>0) ? Number(idValue) : null,
                 matchMode: idMode || FilterMatchMode.EQUALS,
                 type: "numeric",},
             'username': {
@@ -70,7 +72,7 @@ const ManageUserTable = () => {
     }
 
     const handleFetchDataTable = (filters) => {
-        dispatch(genFetchDatatable("/api/manage-user/datatable",
+        dispatch(genFetchDatatable("/api/manage-user/datatable-users",
             {
                 tableParams,
                 dtSearch: filters ? filters : null
@@ -91,7 +93,9 @@ const ManageUserTable = () => {
         // navigate(`/user/edit/${opt.data.id}`);
     };
 
-    useEffect(() => handleFetchDataTable, [tableParams]);
+    useEffect(() => {
+        handleFetchDataTable(tableFilters)
+    }, [tableParams]);
 
     useEffect(() => {
         setTableData({
@@ -99,6 +103,10 @@ const ManageUserTable = () => {
             totalElements: datatable?.totalElements || 0
         })
     }, [datatable]);
+
+    const handleBeforeBulkDelete = () => {
+        setShowDeleteBulkDialog(true);
+    }
 
 
     /** Body Section
@@ -114,11 +122,11 @@ const ManageUserTable = () => {
             <div className="flex justify-between">
                 <h3 className="text-2xl font-bold">User List</h3>
                 <div className="flex justify-end">
-                    <span className="p-input-icon-left mr-2">
-                        <i className="pi pi-search" />
-                        <InputText placeholder="Keyword Search" />
-                    </span>
-                    <Button label="Delete All" icon="pi pi-trash" className="p-button-danger" />
+                    {/*<span className="p-input-icon-left mr-2">*/}
+                    {/*    <i className="pi pi-search" />*/}
+                    {/*    <InputText placeholder="Keyword Search" value={globalFilterValue} onChange={onGlobalFilterChange}/>*/}
+                    {/*</span>*/}
+                    <Button label="Delete Selected" icon="pi pi-trash" className="p-button-danger" onClick = {handleBeforeBulkDelete}/>
                 </div>
             </div>
         );
@@ -164,6 +172,15 @@ const ManageUserTable = () => {
         }
     }
 
+    const handleBulkDelete = () => {
+        dispatch(genBulkDeleteData('api/manage-user/bulk-delete',
+            tableSelection.map(t=>t.id),
+            (result) => {
+                toastRef.current.show({ severity: 'success', summary: 'Success Message', detail: result.message || "Data has been deleted!", life: 3000 });
+                handleFetchDataTable(tableFilters);
+            }));
+    }
+
     const renderFooter = () => {
         return(
             <div>
@@ -180,9 +197,6 @@ const ManageUserTable = () => {
         );
     }
 
-    useEffect(() => {
-    }, [userId])
-
     /**
      * Content that related to body ends here
      */
@@ -197,9 +211,13 @@ const ManageUserTable = () => {
                {renderEditContent()}
             </Dialog>
 
+            <ConfirmDialog visible={showDeleteBulkDialog} onHide={() => setShowDeleteBulkDialog(false)} message="Are you sure you want to proceed?"
+                           header="Confirmation" icon="pi pi-exclamation-triangle" accept={handleBulkDelete} reject={() => { }} />
+
 
             <ConfirmDialog visible={showDeleteDialog} onHide={()=> setShowDeleteDialog(false)} message="Are you sure you want to delete this user?"
             header="Confirmation" icon="pi pi-exclamation-triangle" reject={() => { setDeleteRowId(undefined) }} accept={handleDeleteUser}/>
+
             <div className="container mt-10">
                 <DataTable
                     paginator
@@ -219,7 +237,7 @@ const ManageUserTable = () => {
                     onFilter={handleFilterChange}
                     onRowClick={handleRowClicked}
                     onSelectionChange={e => setTableSelection(e.value)}
-                    globalFilterFields={['id', 'username', 'email']}
+                    // globalFilterFields={['id', 'username', 'email']}
                     emptyMessage="No user has been registered"
                     responsiveLayout="scroll"
                 >
