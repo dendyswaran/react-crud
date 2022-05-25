@@ -72,7 +72,7 @@ const ManageUserTable = () => {
     }
 
     const handleFetchDataTable = (filters) => {
-        dispatch(genFetchDatatable("/api/manage-user/datatable-users",
+        dispatch(genFetchDatatable("/api/manage-user/datatable/users",
             {
                 tableParams,
                 dtSearch: filters ? filters : null
@@ -94,7 +94,7 @@ const ManageUserTable = () => {
     };
 
     useEffect(() => {
-        handleFetchDataTable(tableFilters)
+        handleFetchDataTable()
     }, [tableParams]);
 
     useEffect(() => {
