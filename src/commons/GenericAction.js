@@ -1,5 +1,6 @@
 import { GENERIC_ACTION } from "../configs/constant"
-import { del, get, post, put } from "../helpers/ApiHelper"
+import { del, get, post, put } from "../helpers/ApiHelper";
+import axios from "axios";
 
 export function genGetDataById(url, onSuccess) {
     return async (dispatch) => {
@@ -102,6 +103,21 @@ export function genBulkDeleteData(url, ids, onSuccess) {
             }
         } catch (e) {
             console.log(e)
+        }
+    }
+}
+
+export function genDeleteData(url, id, onSuccess) {
+    return async (dispatch) => {
+        if(id && id > 0) {
+            try {
+                const { data:resp } = await del(url + "/" + id, true);
+                if(resp.success) {
+                    onSuccess(resp.data);
+                }
+            } catch (e) {
+                console.log(e);
+            }
         }
     }
 }

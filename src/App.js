@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import RequireAuth from "./components/RequireAuth";
 import MyAccountPage from "./modules/account/MyAccountPage";
 import SigninPage from "./modules/authentication/SigninPage";
@@ -8,6 +8,8 @@ import DrinkEditPage from "./modules/drink/DrinkEditPage";
 import DrinkPage from "./modules/drink/DrinkPage";
 import MenuEditPage from "./modules/menu/MenuEditPage";
 import MenuPage from "./modules/menu/MenuPage";
+import ManageUserPage from "./modules/manage-user/pages/ManageUserPage";
+ import {EditUserPageWrapped} from "./modules/manage-user/pages/EditUserPage";
 
 function App() {
 
@@ -22,6 +24,8 @@ function App() {
         <Route path="/settings/menu/:id" element={<RequireAuth><MenuEditPage /></RequireAuth>} />
         <Route path="/auth/signin" element={<SigninPage />} />
         <Route path="/auth/signup" element={<SignupPage />} />
+        <Route path="/manage-user/user-list" element={<RequireAuth><ManageUserPage /></RequireAuth>} />
+        <Route path="/manage-user/edit/:userId" element={<RequireAuth><EditUserPageWrapped/></RequireAuth>}/>
       </Routes>
     </BrowserRouter>
   );

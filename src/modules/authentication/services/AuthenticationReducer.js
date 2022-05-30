@@ -6,7 +6,8 @@ const initialState = {
     isLoading: false
 }
 
-const authReducer = (state = initialState, action) => {
+const
+    authReducer = (state = initialState, action) => {
     switch (action.type) {
         case AUTHENTICATION_ACTION.AUTHENTICATION_PROCESSING:
             return {
