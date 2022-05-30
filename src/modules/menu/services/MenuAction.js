@@ -81,6 +81,10 @@ async function renderBaseMenu(menus) {
                 {
                     label: 'Menu',
                     template: <Link to={"/settings/menu"} className="p-menuitem-link">Menu</Link>
+                },
+                {
+                    label: 'Manage User',
+                    template: <Link to={"/manage-user/user-list"} className="p-menuitem-link">Manage User</Link>
                 }
             ]
         }
