@@ -6,6 +6,9 @@ import SignupPage from "./modules/authentication/SignupPage";
 import DashboardPage from "./modules/dashboard/DashboardPage";
 import DrinkEditPage from "./modules/drink/DrinkEditPage";
 import DrinkPage from "./modules/drink/DrinkPage";
+import IohTasklistPage from "./modules/tasklist/IohTasklistPage";
+import UserManagementPage from "./modules/UserManagement/UserManagementPage";
+import UserFormPage from "./modules/UserManagement/UserFormPage";
 import MenuEditPage from "./modules/menu/MenuEditPage";
 import MenuPage from "./modules/menu/MenuPage";
 import ManageUserPage from "./modules/manage-user/pages/ManageUserPage";
@@ -18,6 +21,9 @@ function App() {
       <Routes>
         <Route path="/" element={<RequireAuth><DashboardPage /></RequireAuth>} />
         <Route path="/my-account" element={<RequireAuth><MyAccountPage /></RequireAuth>} />
+        <Route path="/ioh-tasklist" element={<RequireAuth><IohTasklistPage /></RequireAuth>} />
+        <Route path="/user-management" element={<RequireAuth><UserManagementPage/></RequireAuth>} />
+        <Route path="/user-form" element={<RequireAuth><UserFormPage/></RequireAuth>} />
         <Route path="/drink" element={<RequireAuth><DrinkPage /></RequireAuth>} />
         <Route path="/drink/edit/:id" element={<RequireAuth><DrinkEditPage /></RequireAuth>} />
         <Route path="/settings/menu" element={<RequireAuth><MenuPage /></RequireAuth>} />

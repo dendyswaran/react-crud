@@ -1,41 +1,31 @@
-import { Sidebar } from 'primereact/sidebar'
-import { useState } from 'react'
-import Navbar from './Navbar'
-import NavbarLogo from './NavbarLogo'
+// import { Sidebar } from "primereact/sidebar";
+// import { useState } from "react";
+import Navbar from "./Navbar";
 
 export default function Layout({ children }) {
+  // const [visible, setVisible] = useState(true);
 
-    const [visible, setVisible] = useState(true)
+  return (
+    <div className="flex-col w-full h-full">
+      <Navbar></Navbar>
+      <br />
 
-    return (
-        <div className='flex w-full bg-gray-200 h-screen'>
-            <Sidebar visible={false} onHide={() => setVisible(false)} closeOnEscape>
+      {/* <Sidebar
+        visible={false}
+        onHide={() => setVisible(false)}
+        closeOnEscape
+      ></Sidebar> */}
 
-            </Sidebar>
-
-            <div className='flex flex-col w-full'>
-
-                {/* Navbar menu */}
-                <div className='flex p-5 w-full bg-white '>
-                    <NavbarLogo />
-                    <Navbar />
-                </div>
-
-                {/* Content */}
-                <div className='flex w-full'>
-                   
-                    {/* Side menu */}
-                    <div className='flex flex-col w-1/6'>
-                        
-                    </div>
-
-                    {/* Children */}
-                    <div className='flex flex-col w-5/6 m-6 p-3 bg-white rounded-sm'>
-                        {children}
-                    </div>
-
-                </div>
-            </div>
+      <div className="flex container mx-auto">
+        {/* Content */}
+        <div className="flex w-full">
+          {/* Side menu */}
+          <div className="flex flex-col w-1/12"></div>
+          {/* Children */}
+          <div className="flex flex-col w-10/12">{children}</div>
         </div>
-    )
+      </div>
+      {/* <select name="" id="" disabled="disabled"></select> */}
+    </div>
+  );
 }

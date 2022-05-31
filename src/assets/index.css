@@ -5,9 +5,182 @@
 /* hack */
 
 .p-button-primary {
-    background-color: #4F46E5;
+  background-color: #4f46e5;
 }
 
 .p-tabview-title {
-    padding-left: 10px;
+  padding-left: 10px;
+}
+
+/* Overriding color for switch button */
+.p-inputswitch-checked .p-inputswitch-slider {
+  background-color: rgb(252 165 165 / 1) !important;
+}
+
+/* Testing */
+/* .p-button:hover {
+  background-color: green !important;
+}	 */
+
+/* Standard theme for input bar */
+
+@layer components {
+  /* .p-inputswitch-checked .p-inputswitch-slider:checked {
+    @apply bg-red-300
+  } */
+
+  .login-background {
+    @apply h-full
+    w-full
+    rounded-l-2xl;
+  }
+
+  .standardInputText {
+    @apply disabled:bg-slate-300
+    border-secondary
+    w-full;
+  }
+
+  label {
+    @apply block 
+    uppercase
+    tracking-wide 
+    text-gray-700
+    text-xs 
+    font-bold
+    mb-2;
+  }
+
+  .btn {
+    @apply rounded-md
+    px-4
+    py-1 
+    m-1;
+  }
+
+  /* Button styles */
+  .btn.primary {
+    @apply bg-primary
+    text-white
+    border-white;
+  }
+
+  .btn.primary:hover {
+    @apply hover:bg-red-200
+    hover:text-secondary
+    hover:border-secondary;
+  }
+
+  .btn.secondary {
+    @apply bg-gray-800
+    text-white
+  }
+
+  .btn.secondary:hover {
+    @apply hover:bg-blue-200
+    hover:text-blue-900;
+  }
+
+  .btn.tertiary {
+    @apply bg-yellow-500
+    text-secondary
+    hover:bg-yellow-200
+    hover:text-black
+    rounded-full;
+  }
+
+  .btn-round {
+    @apply rounded-full
+    py-3;
+  }
+  .btn-round.green {
+    @apply hover:bg-gray-800
+    hover:text-white
+    text-gray-800
+    bg-yellow-200
+    border-2
+    border-slate-300;
+  }
+
+  .btn-round.red {
+    @apply bg-gray-800
+    text-white
+    hover:text-gray-800
+    hover:bg-white
+    border-2
+    border-red-300;
+  }
+
+  .card-secondary {
+    @apply rounded
+    container
+    bg-red-100
+    text-secondary
+    py-1
+    px-4;
+  }
+  .card-header-primary {
+    @apply text-xl 
+    text-primary;
+  }
+
+  input[type="radio"] {
+    @apply appearance-none
+    rounded-full
+    h-4 w-4 border
+  border-gray-300
+  bg-white
+  checked:border-primary
+  checked:bg-primary
+    focus:outline-none
+    transition 
+    duration-200
+    mt-1
+    align-top
+    bg-no-repeat
+    bg-center
+    bg-contain
+    float-left
+    mr-2
+    cursor-pointer;
+  }
+
+  /* Standard Styling for input bar */
+  .input-bar {
+    @apply appearance-none
+     block w-full 
+     bg-slate-50 
+     text-slate-700 
+     border-slate-400
+     border
+     rounded 
+     py-3 
+     px-4 
+     mb-3 
+     leading-tight;
+  }
+  .input-bar:disabled {
+    @apply bg-gray-200 
+     text-gray-500 
+     border-gray-200
+     shadow-none;
+  }
+  .input-bar:focus {
+    @apply outline-none 
+     bg-white 
+     border-gray-500;
+  }
+  .input-bar.text:invalid {
+    @apply border-primary
+    text-red-700;
+  }
+  .input-bar.text:invalid:focus {
+    @apply focus:invalid:ring-red-700;
+  }
+  .input-error-msg {
+    @apply text-primary
+    text-xs
+    italic
+    capitalize;
+  }
 }
