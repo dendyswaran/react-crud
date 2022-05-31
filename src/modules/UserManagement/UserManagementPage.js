@@ -69,6 +69,7 @@ const UserManagementPage = () => {
     <Layout>
       {/* <CardView></CardView> */}
       {/* TODO: key to be added */}
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {items.map((userInfo) => (
           <UserListingCardView key={userInfo.id} userDetails={userInfo} />

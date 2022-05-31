@@ -69,6 +69,7 @@ export default function Navbar() {
             ></MenuSimple>
             <MenuSimple children="File Upload" icon="pi pi-upload"></MenuSimple>
             <MenuSimple
+              href="/user-management"
               children="User Management"
               icon="pi pi-users"
             ></MenuSimple>
