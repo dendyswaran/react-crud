@@ -27,22 +27,6 @@ export default function SigninPage() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-
-        dispatch(authSignin(formData.username, formData.password,
-            (_respData) => {
-                /** on success */ 
-                toastRef.current.show({ severity: 'success', summary: 'Success Message', detail: _respData.message || "Welcome back!", life: 3000 });
-                navigate("/")
-                
-            },
-            (_respError) => {
-                /** on error */
-                toastRef.current.show({ severity: 'error', summary: 'Error Message', detail: _respError.message || "Invalid username or password", life: 3000 });
-            }
-        ))
-    }
-
-
     dispatch(
       authSignin(
         formData.username,
