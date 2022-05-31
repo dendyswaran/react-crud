@@ -17,12 +17,34 @@ export const DRINK_ACTION = {
     DRINK_SAVE_FAILED: "DRINK_SAVE_FAILED"
 }
 
+export const MENU_ACTION = {
+    MENU_LIST_SUCCESS: "MENU_LIST_SUCCESS",
+    MENU_NAVIGATION_SUCCESS: "MENU_NAVIGATION_SUCCESS",
+    MENU_NAVIGATION_ERROR: "MENU_NAVIGATION_ERROR"
+}
+
+export const GENERIC_ACTION = {
+    GEN_IS_LOADING: "GEN_IS_LOADING",
+    GEN_IS_SUCCESS: "GEN_IS_SUCCESS",
+    GEN_IS_FAILED: "GEN_IS_FAILED"
+}
+
 export const LOCALSTORAGE = {
-    ACCESS_TOKEN: "LOCALSTORAGE_ACCESS_TOKEN",
-    USER: "LOCAL_STORAGE_USER"
+    ACCESS_TOKEN: "LOCAL_STORAGE_ACCESS_TOKEN",
+    USER: "LOCAL_STORAGE_USER",
+    MENU: "LOCAL_STORAGE_MENU"
 }
 
 export const FORM_OP = {
     EDIT: "edit",
     CREATE: "create"
 }
+
+export const E_MENU_CLICKEVENT = [
+    { label: 'Open new tab', value: 'OPEN_NEW_TAB' },
+    { label: 'Open', value: 'OPEN' },
+    { label: 'Do nothing', value: 'DO_NOTHING' }
+];
+
+export const CONTENT_TYPES =
+    { APPLICATION_JSON: "application/json" }

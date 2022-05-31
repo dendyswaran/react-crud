@@ -1,4 +1,6 @@
-import { del, get, post, put } from "../helpers/ApiHelper"
+import { GENERIC_ACTION } from "../configs/constant"
+import { del, get, post, put } from "../helpers/ApiHelper";
+import axios from "axios";
 
 export function genGetDataById(url, onSuccess) {
     return async (dispatch) => {
@@ -48,15 +50,21 @@ export function genFetchDatatable(url, { tableParams, dtSearch }, successState) 
  * @param {Function} onSuccess 
  * @returns 
  */
-export function genCreateData(url, data, onSuccess) {
+export function genCreateData(url, data, onSuccess, onFailed) {
     return async (dispatch) => {
         try {
+            dispatch({ type: GENERIC_ACTION.GEN_IS_LOADING, payload: true })
+            
             const { data: resp } = await post(url, data, true)
             if (resp.success) {
                 onSuccess(resp.data)
             }
 
-        } catch (e) { }
+        } catch (e) {
+            onFailed(e)
+        } finally {
+            dispatch({ type: GENERIC_ACTION.GEN_IS_LOADING, payload: false })
+        }
     }
 }
 
@@ -95,6 +103,21 @@ export function genBulkDeleteData(url, ids, onSuccess) {
             }
         } catch (e) {
             console.log(e)
+        }
+    }
+}
+
+export function genDeleteData(url, id, onSuccess) {
+    return async (dispatch) => {
+        if(id && id > 0) {
+            try {
+                const { data:resp } = await del(url + "/" + id, true);
+                if(resp.success) {
+                    onSuccess(resp.data);
+                }
+            } catch (e) {
+                console.log(e);
+            }
         }
     }
 }

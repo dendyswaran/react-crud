@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import RequireAuth from "./components/RequireAuth";
 import MyAccountPage from "./modules/account/MyAccountPage";
 import SigninPage from "./modules/authentication/SigninPage";
@@ -9,8 +9,13 @@ import DrinkPage from "./modules/drink/DrinkPage";
 import IohTasklistPage from "./modules/tasklist/IohTasklistPage";
 import UserManagementPage from "./modules/UserManagement/UserManagementPage";
 import UserFormPage from "./modules/UserManagement/UserFormPage";
+import MenuEditPage from "./modules/menu/MenuEditPage";
+import MenuPage from "./modules/menu/MenuPage";
+import ManageUserPage from "./modules/manage-user/pages/ManageUserPage";
+ import {EditUserPageWrapped} from "./modules/manage-user/pages/EditUserPage";
 
 function App() {
+
   return (
     <BrowserRouter>
       <Routes>
@@ -21,8 +26,12 @@ function App() {
         <Route path="/user-form" element={<RequireAuth><UserFormPage/></RequireAuth>} />
         <Route path="/drink" element={<RequireAuth><DrinkPage /></RequireAuth>} />
         <Route path="/drink/edit/:id" element={<RequireAuth><DrinkEditPage /></RequireAuth>} />
+        <Route path="/settings/menu" element={<RequireAuth><MenuPage /></RequireAuth>} />
+        <Route path="/settings/menu/:id" element={<RequireAuth><MenuEditPage /></RequireAuth>} />
         <Route path="/auth/signin" element={<SigninPage />} />
         <Route path="/auth/signup" element={<SignupPage />} />
+        <Route path="/manage-user/user-list" element={<RequireAuth><ManageUserPage /></RequireAuth>} />
+        <Route path="/manage-user/edit/:userId" element={<RequireAuth><EditUserPageWrapped/></RequireAuth>}/>
       </Routes>
     </BrowserRouter>
   );

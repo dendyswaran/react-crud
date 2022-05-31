@@ -13,6 +13,7 @@ export default function Navbar() {
   const navigate = useNavigate();
   const { user } = useAuthentication();
 
+
   const handleSignout = () => {
     dispatch(
       authSignout(() => {
@@ -86,6 +87,7 @@ export default function Navbar() {
               <MenuDropdownItem onClick={handleSignout} icon="pi pi-sign-out">
                 Log out
               </MenuDropdownItem>
+
             </MenuDropdown>
           </div>
         </div>

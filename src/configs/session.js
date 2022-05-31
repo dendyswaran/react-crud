@@ -22,9 +22,20 @@ class Session {
         })
     }
 
+    /**
+     * Save menus into local storage
+     * 
+     * @param {Array} menus 
+     */
+    persistMenu(menus) {
+        this.ls.set(LOCALSTORAGE.MENU, menus)
+        console.log("saving menu into local storage")
+    }
+
     delete() {
         this.ls.remove(LOCALSTORAGE.ACCESS_TOKEN)
         this.ls.remove(LOCALSTORAGE.USER)
+        this.ls.remove(LOCALSTORAGE.MENU)
     }
 
     /**
@@ -41,6 +52,11 @@ class Session {
      */
     getUser() {
         return this.ls.get(LOCALSTORAGE.USER)
+    }
+
+    getMenu() {
+        console.log("get menu from local storage")
+        return this.ls.get(LOCALSTORAGE.MENU)
     }
 
     /**

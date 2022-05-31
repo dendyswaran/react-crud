@@ -2,7 +2,6 @@
 // import { useState } from "react";
 import Navbar from "./Navbar";
 
-
 export default function Layout({ children }) {
   // const [visible, setVisible] = useState(true);
 
