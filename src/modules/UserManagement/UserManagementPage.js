@@ -1,5 +1,8 @@
 import Layout from "../../components/Layout";
 import UserListingCardView from "../../components/CardView/UserListingCardView";
+import {fetchUserDatatable, getUserList} from "./services/ManageUserAction";
+import {useEffect, useState} from "react";
+import {useDispatch} from "react-redux";
 
 const items = [
   {
@@ -23,7 +26,7 @@ const items = [
     email: "Admin@gmail.com",
   },
   {
-    id: "1",
+    id: "3",
     userId: "SCP001",
     name: "Alexander",
     userGroup: "Scrap",
@@ -33,7 +36,7 @@ const items = [
     email: "SCP001@gmail.com",
   },
   {
-    id: "1",
+    id: "4",
     userId: "SCP001",
     name: "Alexander",
     userGroup: "Scrap",
@@ -43,7 +46,7 @@ const items = [
     email: "SCP001@gmail.com",
   },
   {
-    id: "1",
+    id: "5",
     userId: "SCP001",
     name: "Alexander",
     userGroup: "Scrap",
@@ -53,7 +56,7 @@ const items = [
     email: "SCP001@gmail.com",
   },
   {
-    id: "1",
+    id: "6",
     userId: "SCP001",
     name: "Alexander",
     userGroup: "Scrap",
@@ -65,13 +68,46 @@ const items = [
 ];
 
 const UserManagementPage = () => {
+
+  // fetch data from database
+  // send to the user management page
+  const [userList, setUserList] = useState();
+  const [userListState, setUserListState] = useState(false);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    handleGetUserList();
+  }, [userListState]);
+
+  const handleGetUserList = () => {
+    dispatch(getUserList(
+        (data) => {
+          setUserListState(true);
+           setUserList(data.map((user) => {
+            return {
+              id: user.userId,
+              userId: user.userId,
+              name: user.username,
+              userGroup: "Scrap",
+              team: 3,
+              organization: "B001762-PT-Dexter",
+              phone: "01260116677",
+              email: user.email,
+            };
+          }));
+        },
+        (error) => {
+          console.log(error.message);
+        }));
+  }
+
   return (
     <Layout>
       {/* <CardView></CardView> */}
       {/* TODO: key to be added */}
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {items.map((userInfo) => (
+        {userList && userList.map((userInfo) => (
           <UserListingCardView key={userInfo.id} userDetails={userInfo} />
         ))}
       </div>

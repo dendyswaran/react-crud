@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {Column} from 'primereact/column'
 import {DataTable} from "primereact/datatable";
 import {Toast} from 'primereact/toast';
-import {MANAGE_USER_ACTION} from "../configs/ManageUser.constant";
+import {MANAGE_USER_ACTION} from "../../UserManagement/configs/ManageUser.constant";
 import {useNavigate} from "react-router-dom";
 import {genBulkDeleteData, genDeleteData, genFetchDatatable} from "../../../commons/GenericAction";
 import {HeaderBasic} from "../../../components/DatatableView";

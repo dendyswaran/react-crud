@@ -23,7 +23,7 @@ function App() {
         <Route path="/my-account" element={<RequireAuth><MyAccountPage /></RequireAuth>} />
         <Route path="/ioh-tasklist" element={<RequireAuth><IohTasklistPage /></RequireAuth>} />
         <Route path="/user-management" element={<RequireAuth><UserManagementPage/></RequireAuth>} />
-        <Route path="/user-form" element={<RequireAuth><UserFormPage/></RequireAuth>} />
+        <Route path="/user-form/:id" element={<RequireAuth><UserFormPage/></RequireAuth>} />
         <Route path="/drink" element={<RequireAuth><DrinkPage /></RequireAuth>} />
         <Route path="/drink/edit/:id" element={<RequireAuth><DrinkEditPage /></RequireAuth>} />
         <Route path="/settings/menu" element={<RequireAuth><MenuPage /></RequireAuth>} />
