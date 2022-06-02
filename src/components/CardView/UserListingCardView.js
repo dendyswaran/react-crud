@@ -31,7 +31,6 @@ const UserListingCardView = (props) => {
               </div>
             </div>
             <PrimaryButton icon="pi pi-pencil"></PrimaryButton>
-            <PrimaryButton icon="pi pi-trash"></PrimaryButton>
           </div>
         </div>
 
