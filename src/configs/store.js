@@ -5,6 +5,7 @@ import drinkReducer from "../modules/drink/services/DrinkReducer";
 import menuReducer from "../modules/menu/services/MenuReducer";
 import genReducer from "../commons/GenericReducer";
 import ManageUserReducer from "../modules/manage-user/services/ManageUserReducer";
+import FileUploadReducer from "../modules/file-upload/services/FileUploadReducer";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const rootReducer = combineReducers({
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
     drinkReducer,
     menuReducer,
     genReducer,
-    ManageUserReducer
+    ManageUserReducer,
+    FileUploadReducer,
 })
 
 
