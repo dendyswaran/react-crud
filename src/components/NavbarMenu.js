@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export function MenuDropdown({ menu, icon, children }) {
   const [show, setShow] = useState(false);
@@ -10,7 +11,7 @@ export function MenuDropdown({ menu, icon, children }) {
       onMouseLeave={() => setShow(false)}
     >
       {/* Menu link */}
-      <a className="block mt-2 lg:inline-block lg:mt-0 text-black text-base box-border lg:h-5 h-10   w-full hover:text-red-400 mr-4  border-red-400 lg:text-center p-2 lg:p-0 hover:bg-slate-100 lg:hover:bg-white rounded-md">
+      <a className="menu">
         <i className={`${icon || "pi pi-user"} mr-2`}></i> {menu}
       </a>
 
@@ -26,20 +27,65 @@ export function MenuDropdown({ menu, icon, children }) {
   );
 }
 
-export function MenuDropdownItem({ children, icon, ...rest }) {
+// NOTE: this is with anchor, can work with onClick but is inefficient as it reloads page.
+
+// export function MenuDropdownItem({ children, icon, ...rest }) {
+//   return (
+//     <a
+//       {...rest}
+//       className="dropdown"
+//     >
+//       <i className={`${icon || "pi pi-user"} mr-2`}></i> {children}
+//     </a>
+//   );
+// }
+
+// NOTE: This is with Link only, cannot work with onClick properly
+
+// export function MenuDropdownItem({ children, icon, ...rest }) {
+//   return (
+//     <Link {...rest} className="dropdown">
+//       <i className={`${icon || "pi pi-user"} mr-2`}></i> {children}
+//     </Link>
+//   );
+// }
+
+export function MenuDropdownItem({ children, icon, href = "/", ...rest }) {
+  const myIcon = <i className={`${icon || "pi pi-user"} mr-2`}></i>;
+
+  // Use anchor if there is an onClick event
+  if ("onClick" in { ...rest }) {
+    return (
+      <a {...rest} className="dropdown">
+        {myIcon} {children}
+      </a>
+    );
+  }
+
+  // otherwise, for any path redirect don't reload page and use Link component instead.
   return (
-    <a {...rest} className="px-5 py-1 cursor-pointer hover:text-red-400 hover:bg-slate-100 rounded-md">
-      <i className={`${icon || "pi pi-user"} mr-2`}></i> {children}
-    </a>
+    <Link to={{ pathname: href }} {...rest} className="dropdown">
+      {myIcon} {children}
+    </Link>
   );
 }
 
-export function MenuSimple({ children, icon }) {
+// NOTE: this is old menusimple
+export function MenuSimple({ children, icon, href = "/" }) {
   return (
     <div>
-      <a className="block mt-2 lg:inline-block lg:mt-0 text-black text-base box-border lg:h-5 h-10   w-full hover:text-red-400 mr-4  border-red-400 lg:text-center p-2 lg:p-0 hover:bg-slate-100 lg:hover:bg-white rounded-md">
+      <Link
+        to={{
+          pathname: href,
+        }}
+        className="menu"
+      >
         <i className={`${icon || "pi pi-user"} mr-2`}></i> {children}
-      </a>
+      </Link>
     </div>
   );
 }
+
+// Approach 1, use anchor href to navigate --> PROBLEM: will trigger unnecessary page reload (bad practice)
+// Approach 2, use Link to navigate --> PROBLEM: cannot onClick() properly, will always navigate
+// Approach 3, use anchor and onClick event to navigate and use useNavigate to navigate between components. (best?)

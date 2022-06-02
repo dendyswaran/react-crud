@@ -13,11 +13,14 @@ export default function Navbar() {
   const navigate = useNavigate();
   const { user } = useAuthentication();
 
+  const [location, setLocation] = useState("");
 
   const handleSignout = () => {
     dispatch(
       authSignout(() => {
-        window.location = "/auth/signin";
+        // !!! TODO:can I use navigate here instead of window location?
+        // window.location = "/auth/signin";
+        navigate("/auth/signin");
       })
     );
   };
@@ -31,7 +34,7 @@ export default function Navbar() {
 
   const hiddenStr = hidden ? "hidden" : "";
   const myClass =
-    hiddenStr + " w-full block flex-grow lg:flex lg:items-center lg:w-auto";
+    hiddenStr + " w-full block flex-grow xl:flex xl:items-center xl:w-auto";
 
   // const navigate = useNavi gate();
 
@@ -44,7 +47,7 @@ export default function Navbar() {
           </div>
         </div>
         {/* Mobile Menu Button, TODO: to be moved into component*/}
-        <div className="block lg:hidden">
+        <div className="block xl:hidden">
           <button
             onClick={hideHandler}
             className="flex items-center px-3 py-2 border rounded text-gray-400 border-gray-400 hover:text-red-400 hover:border-red-400"
@@ -61,17 +64,33 @@ export default function Navbar() {
         </div>
         {/* TODO: switch anchor to react Link, maybe no need*/}
         <div className={myClass}>
-          <div className="text-sm lg:flex-grow lg:inline-flex">
-            <MenuSimple children="Tasklist" icon="pi pi-file"></MenuSimple>
+          <div className="text-sm xl:flex-grow xl:inline-flex text-left">
+            <MenuSimple children="Home" icon="pi pi-home"></MenuSimple>
+
+            <MenuDropdown
+              icon="pi pi-list"
+              className="flex-1"
+              menu={"Task List"}
+            >
+              <MenuDropdownItem href="/ioh-tasklist" icon="pi pi-file">
+                IOH
+              </MenuDropdownItem>
+              <MenuDropdownItem href="/decom-tasklist-detail" icon="pi pi-file">
+                DECOM
+              </MenuDropdownItem>
+            </MenuDropdown>
+
+            <MenuSimple children="File Upload" icon="pi pi-upload" />
+            <MenuSimple children="Assignment" icon="pi pi-check-square" />
             <MenuSimple
-              children="Enquiry"
+              children="Site Status Enquiry"
               icon="pi pi-info-circle"
-            ></MenuSimple>
-            <MenuSimple children="File Upload" icon="pi pi-upload"></MenuSimple>
+            />
             <MenuSimple
+              href="/user-management"
               children="User Management"
               icon="pi pi-users"
-            ></MenuSimple>
+            />
           </div>
           <div>
             <MenuDropdown
@@ -79,15 +98,21 @@ export default function Navbar() {
               menu={"Hi admin, " + user.username}
             >
               <MenuDropdownItem
+                // to={{ pathname: "user-management" }}
+                href="/user-management"
                 onClick={() => navigate("/")}
+                // onClick={() => window.location = "/"}
                 icon="pi pi-user-edit"
               >
                 Profile
               </MenuDropdownItem>
-              <MenuDropdownItem onClick={handleSignout} icon="pi pi-sign-out">
+              <MenuDropdownItem
+                href={location}
+                onClick={handleSignout}
+                icon="pi pi-sign-out"
+              >
                 Log out
               </MenuDropdownItem>
-
             </MenuDropdown>
           </div>
         </div>

@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-
-import { InputText } from "primereact/inputtext";
-import InputLabel from "../../../components/InputLabel";
-import "../../../assets/index.css";
-import { RadioButton } from "primereact/radiobutton";
-import IconCardHeader from "../../../components/UI/IconCardHeader";
-import { Dropdown } from "primereact/dropdown";
-import PrimaryButton from "../../../components/UI/PrimaryButton";
+import InputLabel from "../../../components/FormComponents/InputLabel";
+import InputTextBar from "../../../components/FormComponents/InputTextBar";
+import RadioButtonMain from "../../../components/Button/RadioButtonMain";
+import IconCardHeader from "../../../components/Header/IconCardHeader";
+import DropdownBar from "../../../components/FormComponents/DropdownBar";
+import PrimaryButton from "../../../components/Button/PrimaryButton";
+import RadioButtonWithLabel from "../../../components/Button/RadioButtonWithLabel";
 
 const UserManagementForm = (props) => {
   // IMPORTANT: need to preventDefault when submit form!
@@ -61,18 +60,20 @@ const UserManagementForm = (props) => {
     { name: "Team 20", value: "20" },
   ];
 
+  const myHeader = "Modify " + props.userId;
+
   return (
     <form class="w-full md:w-4/5 items-center bg-white rounded-lg mx-auto p-4 sm:p-10">
       {/* Form Header */}
       <div className="pt-4 pb-8">
-        <IconCardHeader icon="pi-pencil">Modify {props.userId}</IconCardHeader>
+        <IconCardHeader header={myHeader} icon="pi-pencil" />
       </div>
 
       {/* User ID */}
       <div class="flex flex-wrap -mx-3 mb-6">
         <div class="w-full px-3">
           <InputLabel>User ID</InputLabel>
-          <InputText className="standardInputText"></InputText>
+          <InputTextBar className="standardBar full" />
         </div>
       </div>
 
@@ -80,11 +81,11 @@ const UserManagementForm = (props) => {
       <div class="flex flex-wrap -mx-3 mb-6">
         <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>First Name</InputLabel>
-          <InputText className="standardInputText"></InputText>
+          <InputTextBar className="standardBar full" />
         </div>
         <div class="w-full md:w-1/2 px-3">
           <InputLabel>Last Name</InputLabel>
-          <InputText className="standardInputText"></InputText>
+          <InputTextBar className="standardBar full" />
         </div>
       </div>
 
@@ -93,58 +94,50 @@ const UserManagementForm = (props) => {
       <div className="flex flex-wrap -mx-3 mb-6">
         <div class="inline-flex mx-auto">
           <div className="inline-flex field-radiobutton">
-            <RadioButton
+            <RadioButtonWithLabel
+              label="IOH"
               inputId="ioh_group"
               name="group"
               value="ioh"
               onChange={(e) => setUserGroup(e.value)}
               checked={userGroup === "ioh"}
             />
-            <label className="pt-1 pl-2" htmlFor="ioh_group">
-              IOH
-            </label>
           </div>
         </div>
         <div class="inline-flex mx-auto">
           <div className="inline-flex field-radiobutton">
-            <RadioButton
+            <RadioButtonWithLabel
+              label="Decom"
               inputId="decom_group"
               name="group"
               value="decom"
               onChange={(e) => setUserGroup(e.value)}
               checked={userGroup === "decom"}
             />
-            <label className="pt-1 pl-2" htmlFor="decom_group">
-              Decom
-            </label>
           </div>
         </div>
         <div class="inline-flex mx-auto">
           <div className="inline-flex field-radiobutton">
-            <RadioButton
+            <RadioButtonWithLabel
+              label="Scrap"
               inputId="scrap_group"
               name="group"
               value="scrap"
               onChange={(e) => setUserGroup(e.value)}
               checked={userGroup === "scrap"}
             />
-            <label className="pt-1 pl-2" htmlFor="scrap_group">
-              Scrap
-            </label>
           </div>
         </div>
         <div class="inline-flex mx-auto">
           <div className="inline-flex field-radiobutton">
-            <RadioButton
+            <RadioButtonWithLabel
+              label="OEM"
               inputId="oem_group"
               name="group"
               value="oem"
               onChange={(e) => setUserGroup(e.value)}
               checked={userGroup === "oem"}
             />
-            <label className="pt-1 pl-2" htmlFor="oem_group">
-              OEM
-            </label>
           </div>
         </div>
       </div>
@@ -153,8 +146,7 @@ const UserManagementForm = (props) => {
       <div class="flex flex-wrap -mx-3 mb-6">
         <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>organization</InputLabel>
-          <Dropdown
-            className="standardInputText"
+          <DropdownBar
             value={selectedOrganization}
             options={organizations}
             onChange={onOrganizationChange}
@@ -164,8 +156,7 @@ const UserManagementForm = (props) => {
         </div>
         <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>team</InputLabel>
-          <Dropdown
-            className="standardInputText"
+          <DropdownBar
             value={selectedTeam}
             options={teams}
             onChange={onTeamChange}
@@ -179,17 +170,17 @@ const UserManagementForm = (props) => {
       <div class="flex flex-wrap -mx-3 mb-6">
         <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>Phone</InputLabel>
-          <InputText
-            className="standardInputText"
+          <InputTextBar
+            className="standardBar full"
             placeholder="e.g. 6212XXXXXXX"
-          ></InputText>
+          />
         </div>
         <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>Email</InputLabel>
-          <InputText
-            className="standardInputText"
+          <InputTextBar
+            className="standardBar full"
             placeholder="e.g. sample@xxxx.com"
-          ></InputText>
+          />
         </div>
       </div>
 

@@ -23,7 +23,7 @@ const items = [
     email: "Admin@gmail.com",
   },
   {
-    id: "1",
+    id: "3",
     userId: "SCP001",
     name: "Alexander",
     userGroup: "Scrap",
@@ -33,7 +33,7 @@ const items = [
     email: "SCP001@gmail.com",
   },
   {
-    id: "1",
+    id: "4",
     userId: "SCP001",
     name: "Alexander",
     userGroup: "Scrap",
@@ -43,7 +43,7 @@ const items = [
     email: "SCP001@gmail.com",
   },
   {
-    id: "1",
+    id: "5",
     userId: "SCP001",
     name: "Alexander",
     userGroup: "Scrap",
@@ -53,7 +53,7 @@ const items = [
     email: "SCP001@gmail.com",
   },
   {
-    id: "1",
+    id: "6",
     userId: "SCP001",
     name: "Alexander",
     userGroup: "Scrap",
@@ -67,7 +67,6 @@ const items = [
 const UserManagementPage = () => {
   return (
     <Layout>
-      {/* <CardView></CardView> */}
       {/* TODO: key to be added */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {items.map((userInfo) => (

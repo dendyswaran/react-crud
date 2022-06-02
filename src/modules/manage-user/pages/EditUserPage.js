@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import InputLabel from "../../../components/InputLabel";
+import InputLabel from "../../../components/FormComponents/InputLabel";
 import {InputText} from "primereact/inputtext";
 import {Button} from "primereact/button";
 import {useRef, useState} from "react";

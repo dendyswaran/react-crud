@@ -1,28 +1,25 @@
 import { useState } from "react";
 import UserInfoCardView from "./UserInfoCardView";
-import IconCardHeader from "../UI/IconCardHeader";
+import IconCardHeader from "../Header/IconCardHeader";
 import { InputSwitch } from "primereact/inputswitch";
-import PrimaryButton from "../UI/PrimaryButton";
-
-// field names
-const TEXT_NAME = "Name";
-const TEXT_USER_GROUP = "User Group";
-const TEXT_TEAM = "Team";
-const TEXT_ORGANIZATION = "Organization";
-const TEXT_PHONE_NUMBER = "Phone No";
-const TEXT_EMAIL_ADDRESS = "Email";
+import PrimaryButton from "../Button/PrimaryButton";
 
 const UserListingCardView = (props) => {
   const [checked, setChecked] = useState(true);
+
+  const TEXT_NAME = "Name";
+  const TEXT_USER_GROUP = "User Group";
+  const TEXT_TEAM = "Team";
+  const TEXT_ORGANIZATION = "Organization";
+  const TEXT_PHONE_NUMBER = "Phone No";
+  const TEXT_EMAIL_ADDRESS = "Email";
 
   return (
     // TODO: Change table structure to grid --> when phone screen is small --> split into 2 rows (until 320px can fit)
     <div className="p-1">
       <div className="rounded-lg container bg-white w-full p-4">
         <div className="container inline-flex flex-row pt-4 pb-8">
-          <IconCardHeader icon="pi-user">
-            {props.userDetails.userId}
-          </IconCardHeader>
+          <IconCardHeader icon="pi-user" header={props.userDetails.userId} />
 
           <div className="ml-auto flex">
             <div>
@@ -33,8 +30,8 @@ const UserListingCardView = (props) => {
                 />
               </div>
             </div>
-              <PrimaryButton icon="pi pi-pencil"></PrimaryButton>
-              <PrimaryButton icon="pi pi-trash"></PrimaryButton>
+            <PrimaryButton icon="pi pi-pencil"></PrimaryButton>
+            <PrimaryButton icon="pi pi-trash"></PrimaryButton>
           </div>
         </div>
 

@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { genCreateData, genUpdateData } from "../../../commons/GenericAction";
-import InputLabel from "../../../components/InputLabel";
+import InputLabel from "../../../components/FormComponents/InputLabel";
 import { FORM_OP } from "../../../configs/constant";
 
 

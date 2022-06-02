@@ -1,7 +1,5 @@
 import Layout from "../../components/Layout";
-import CardView from "../../components/CardView/CardView";
-import { isThisWeek } from "date-fns";
-
+import IohCardView from "../../components/CardView/IohCardView";
 
 const items = [
   {
@@ -27,13 +25,13 @@ const items = [
   },
 ];
 
-
+// TODO: rename IOH tasklist to camel case to match decom tasklist
 export default function IohTasklistPage() {
   return (
     <Layout>
         {/* <CardView></CardView> */}
         {/* TODO: key to be added */}
-        {items.map((properties) => (<CardView key={properties.id} item={properties}/>))}
+        {items.map((properties) => (<IohCardView key={properties.id} item={properties}/>))}
     </Layout>
   );
 }

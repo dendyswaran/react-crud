@@ -1,9 +1,9 @@
 import { Button } from "primereact/button";
 
-const PrimaryButton = (props) => {
+const PrimaryButton = ({ ...rest }) => {
   return (
     <div className="p-1">
-      <Button icon={props.icon} className="btn primary h-10"></Button>
+      <Button {...rest} className="btn primary"></Button>
     </div>
   );
 };
