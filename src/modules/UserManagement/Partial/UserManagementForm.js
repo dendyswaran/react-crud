@@ -63,27 +63,27 @@ const UserManagementForm = (props) => {
   const myHeader = "Modify " + props.userId;
 
   return (
-    <form class="w-full md:w-4/5 items-center bg-white rounded-lg mx-auto p-4 sm:p-10">
+    <form className="w-full md:w-4/5 items-center bg-white rounded-lg mx-auto p-4 sm:p-10">
       {/* Form Header */}
       <div className="pt-4 pb-8">
         <IconCardHeader header={myHeader} icon="pi-pencil" />
       </div>
 
       {/* User ID */}
-      <div class="flex flex-wrap -mx-3 mb-6">
-        <div class="w-full px-3">
+      <div className="flex flex-wrap -mx-3 mb-6">
+        <div className="w-full px-3">
           <InputLabel>User ID</InputLabel>
           <InputTextBar className="standardBar full" />
         </div>
       </div>
 
       {/* Name */}
-      <div class="flex flex-wrap -mx-3 mb-6">
-        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+      <div className="flex flex-wrap -mx-3 mb-6">
+        <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>First Name</InputLabel>
           <InputTextBar className="standardBar full" />
         </div>
-        <div class="w-full md:w-1/2 px-3">
+        <div className="w-full md:w-1/2 px-3">
           <InputLabel>Last Name</InputLabel>
           <InputTextBar className="standardBar full" />
         </div>
@@ -92,7 +92,7 @@ const UserManagementForm = (props) => {
       {/* User Group */}
       <InputLabel>User Group</InputLabel>
       <div className="flex flex-wrap -mx-3 mb-6">
-        <div class="inline-flex mx-auto">
+        <div className="inline-flex mx-auto">
           <div className="inline-flex field-radiobutton">
             <RadioButtonWithLabel
               label="IOH"
@@ -104,7 +104,7 @@ const UserManagementForm = (props) => {
             />
           </div>
         </div>
-        <div class="inline-flex mx-auto">
+        <div className="inline-flex mx-auto">
           <div className="inline-flex field-radiobutton">
             <RadioButtonWithLabel
               label="Decom"
@@ -116,7 +116,7 @@ const UserManagementForm = (props) => {
             />
           </div>
         </div>
-        <div class="inline-flex mx-auto">
+        <div className="inline-flex mx-auto">
           <div className="inline-flex field-radiobutton">
             <RadioButtonWithLabel
               label="Scrap"
@@ -128,7 +128,7 @@ const UserManagementForm = (props) => {
             />
           </div>
         </div>
-        <div class="inline-flex mx-auto">
+        <div className="inline-flex mx-auto">
           <div className="inline-flex field-radiobutton">
             <RadioButtonWithLabel
               label="OEM"
@@ -143,8 +143,8 @@ const UserManagementForm = (props) => {
       </div>
 
       {/* Contact Details */}
-      <div class="flex flex-wrap -mx-3 mb-6">
-        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+      <div className="flex flex-wrap -mx-3 mb-6">
+        <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>organization</InputLabel>
           <DropdownBar
             value={selectedOrganization}
@@ -154,7 +154,7 @@ const UserManagementForm = (props) => {
             placeholder="Select an Organization"
           />
         </div>
-        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+        <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>team</InputLabel>
           <DropdownBar
             value={selectedTeam}
@@ -167,15 +167,15 @@ const UserManagementForm = (props) => {
       </div>
 
       {/* Contact Details */}
-      <div class="flex flex-wrap -mx-3 mb-6">
-        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+      <div className="flex flex-wrap -mx-3 mb-6">
+        <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>Phone</InputLabel>
           <InputTextBar
             className="standardBar full"
             placeholder="e.g. 6212XXXXXXX"
           />
         </div>
-        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+        <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>Email</InputLabel>
           <InputTextBar
             className="standardBar full"
