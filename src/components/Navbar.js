@@ -3,24 +3,24 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { authSignout } from "../modules/authentication/services/AuthenticationAction";
 import useAuthentication from "../modules/authentication/services/AuthenticationState";
-import { MenuDropdown, MenuDropdownItem, MenuSimple } from "./NavbarMenu";
+import {
+  MenuDropdown,
+  MenuDropdownLink,
+  MenuDropdownButton,
+  MenuSimple,
+} from "./NavbarMenu";
 import { React, useState } from "react";
 import IohLogo from "./IohLogo";
 
 export default function Navbar() {
-  // const hidden = true;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useAuthentication();
 
-  const [location, setLocation] = useState("");
-
   const handleSignout = () => {
     dispatch(
       authSignout(() => {
-        // !!! TODO:can I use navigate here instead of window location?
-        // window.location = "/auth/signin";
-        navigate("/auth/signin");
+        window.location = "/auth/signin";
       })
     );
   };
@@ -35,8 +35,6 @@ export default function Navbar() {
   const hiddenStr = hidden ? "hidden" : "";
   const myClass =
     hiddenStr + " w-full block flex-grow xl:flex xl:items-center xl:w-auto";
-
-  // const navigate = useNavi gate();
 
   return (
     <nav className="bg-white w-full">
@@ -72,12 +70,12 @@ export default function Navbar() {
               className="flex-1"
               menu={"Task List"}
             >
-              <MenuDropdownItem href="/ioh-tasklist" icon="pi pi-file">
+              <MenuDropdownLink href="/ioh-tasklist" icon="pi pi-file">
                 IOH
-              </MenuDropdownItem>
-              <MenuDropdownItem href="/decom-tasklist-detail" icon="pi pi-file">
+              </MenuDropdownLink>
+              <MenuDropdownLink href="/decom-tasklist-detail" icon="pi pi-file">
                 DECOM
-              </MenuDropdownItem>
+              </MenuDropdownLink>
             </MenuDropdown>
 
             <MenuSimple children="File Upload" icon="pi pi-upload" />
@@ -97,22 +95,16 @@ export default function Navbar() {
               className="flex-1"
               menu={"Hi admin, " + user.username}
             >
-              <MenuDropdownItem
-                // to={{ pathname: "user-management" }}
-                href="/user-management"
-                onClick={() => navigate("/")}
-                // onClick={() => window.location = "/"}
+              <MenuDropdownButton
+                onClick={() => navigate("/profile")}
                 icon="pi pi-user-edit"
               >
                 Profile
-              </MenuDropdownItem>
-              <MenuDropdownItem
-                href={location}
-                onClick={handleSignout}
-                icon="pi pi-sign-out"
-              >
+              </MenuDropdownButton>
+
+              <MenuDropdownButton onClick={handleSignout} icon="pi pi-sign-out">
                 Log out
-              </MenuDropdownItem>
+              </MenuDropdownButton>
             </MenuDropdown>
           </div>
         </div>
