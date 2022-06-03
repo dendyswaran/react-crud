@@ -20,7 +20,7 @@ const MatchingCardView = (props) => {
           <ListingInfoCardView strInfo="RRUC09638" />
         </div>
         <div className="lg:col-span-2 inline-flex flex-row flex-wrap text-sm sm:mx-auto ml-auto col-span-2 lg:order-3 order-4">
-          <div class="md:inline-flex mx-auto md:pr-10">
+          <div className="md:inline-flex mx-auto md:pr-10">
             <div className="inline-flex field-radiobutton">
               <RadioButtonMain
                 inputId="ioh_group"
@@ -34,7 +34,7 @@ const MatchingCardView = (props) => {
               </label>
             </div>
           </div>
-          <div class="inline-flex mx-auto">
+          <div className="inline-flex mx-auto">
             <div className="inline-flex field-radiobutton">
               <RadioButtonMain
                 inputId="decom_group"

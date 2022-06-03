@@ -1,6 +1,6 @@
 const IohLogo = (props) => {
-  const defaultWidth = "155";
-  const defaultHeight = "54";
+  const defaultWidth = "120";
+  const defaultHeight = "40";
 
   const width = props.width ? props.width : defaultWidth;
   const height = props.height ? props.height : defaultHeight;

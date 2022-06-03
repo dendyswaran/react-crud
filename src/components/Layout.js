@@ -8,15 +8,14 @@ export default function Layout({ children }) {
   return (
     <div className="flex-col w-full h-full">
       <Navbar></Navbar>
-      <br />
-
+      
       {/* <Sidebar
         visible={false}
         onHide={() => setVisible(false)}
         closeOnEscape
       ></Sidebar> */}
 
-      <div className="flex container mx-auto">
+      <div className="flex container mx-auto pt-36">
         {/* Content */}
         <div className="flex w-full">
           {/* Side menu */}

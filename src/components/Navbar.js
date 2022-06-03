@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { getByTestId } from "@testing-library/react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +10,6 @@ import {
   MenuDropdownButton,
   MenuSimple,
 } from "./NavbarMenu";
-import { React, useState } from "react";
 import IohLogo from "./IohLogo";
 
 export default function Navbar() {
@@ -37,7 +37,7 @@ export default function Navbar() {
     hiddenStr + " w-full block flex-grow xl:flex xl:items-center xl:w-auto";
 
   return (
-    <nav className="bg-white w-full">
+    <nav className="bg-white w-full fixed z-50 drop-shadow-lg">
       <div className="container flex items-center justify-between flex-wrap p-6 w-full mx-auto">
         <div className="flex items-center flex-shrink-0 mr-6">
           <div className="md:flex ">
@@ -96,7 +96,7 @@ export default function Navbar() {
               menu={"Hi admin, " + user.username}
             >
               <MenuDropdownButton
-                onClick={() => navigate("/profile")}
+                // onClick={test}
                 icon="pi pi-user-edit"
               >
                 Profile
