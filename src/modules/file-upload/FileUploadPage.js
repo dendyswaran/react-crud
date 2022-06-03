@@ -1,22 +1,37 @@
 import Layout from "../../components/Layout";
-import { TabView, TabPanel } from 'primereact/tabview';
 import { useState } from "react";
-import FileUploadTable from "./partial/FileUploadTable";
-import FileUploadForm from "./partial/FileUploadForm";
+import FileUploadedCardView from "../../components/CardView/FileUploadedCardView"
+import FileUploaderPanel from "../../components/FormComponents/FileUploaderPanel"
 
 export default function FileUploadPage() {
     const [activeIndex, setActiveIndex] = useState(0)
 
+    const items = [
+      {
+        id: 1,
+        fileName: "ScrapList_North3",
+        timestamp: "10-May-22 4:32pm",
+        author: "Irwan Sarif",
+      },
+      {
+        id: 2,
+        fileName: "ScrapList_North4",
+        timestamp: "10-May-22 3:30pm",
+        author: "Alex Susanto",
+      },
+      {
+        id: 3,
+        fileName: "ScrapList_North5",
+        timestamp: "10-May-22 2:55pm",
+        author: "Handry Antalius",
+      },
+    ];
+
     return (
+        //template on card view. MUST BE RECURRING
         <Layout>
-            <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)}>
-                <TabPanel header="List" leftIcon="pi pi-list">
-                    <FileUploadTable />
-                </TabPanel>
-                <TabPanel header="Add New" leftIcon="pi pi-plus">
-                    <FileUploadForm />
-                </TabPanel>
-            </TabView>
+            <FileUploaderPanel></FileUploaderPanel>
+            {items.map((properties) => (<FileUploadedCardView key={properties.id} item={properties}/>))}
         </Layout>
     )
 }
