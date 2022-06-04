@@ -1,5 +1,5 @@
 import { InputText } from "primereact/inputtext";
-import InputLabel from "../../components/InputLabel";
+import InputLabel from "../../components/FormComponents/InputLabel";
 import Layout from "../../components/Layout";
 import useAuthentication from "../authentication/services/AuthenticationState";
 

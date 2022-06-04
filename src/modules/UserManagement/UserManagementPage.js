@@ -103,7 +103,6 @@ const UserManagementPage = () => {
 
   return (
     <Layout>
-      {/* <CardView></CardView> */}
       {/* TODO: key to be added */}
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">

@@ -12,16 +12,17 @@ import UserFormPage from "./modules/UserManagement/UserFormPage";
 import MenuEditPage from "./modules/menu/MenuEditPage";
 import MenuPage from "./modules/menu/MenuPage";
 import ManageUserPage from "./modules/manage-user/pages/ManageUserPage";
- import {EditUserPageWrapped} from "./modules/manage-user/pages/EditUserPage";
+import {EditUserPageWrapped} from "./modules/manage-user/pages/EditUserPage";
+import DecomTaskListDetail from "./modules/tasklist/tasklist_details/DecomTasklistDetail";
 
 function App() {
-
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<RequireAuth><DashboardPage /></RequireAuth>} />
         <Route path="/my-account" element={<RequireAuth><MyAccountPage /></RequireAuth>} />
         <Route path="/ioh-tasklist" element={<RequireAuth><IohTasklistPage /></RequireAuth>} />
+        <Route path="/decom-tasklist-detail" element={<RequireAuth><DecomTaskListDetail /></RequireAuth>} />
         <Route path="/user-management" element={<RequireAuth><UserManagementPage/></RequireAuth>} />
         <Route path="/user-form/:id" element={<RequireAuth><UserFormPage/></RequireAuth>} />
         <Route path="/drink" element={<RequireAuth><DrinkPage /></RequireAuth>} />

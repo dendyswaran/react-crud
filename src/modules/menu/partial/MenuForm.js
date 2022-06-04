@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { genCreateData, genUpdateData } from "../../../commons/GenericAction";
 import useGenAction from "../../../commons/GenericState";
-import InputLabel from "../../../components/InputLabel";
+import InputLabel from "../../../components/FormComponents/InputLabel";
 import { E_MENU_CLICKEVENT, FORM_OP } from "../../../configs/constant";
 import { fetchMenuParents } from "../services/MenuAction";
 

@@ -1,21 +1,8 @@
 import {useRef, useState} from "react";
 import UserInfoCardView from "./UserInfoCardView";
-import IconCardHeader from "../UI/IconCardHeader";
+import IconCardHeader from "../Header/IconCardHeader";
 import { InputSwitch } from "primereact/inputswitch";
-import PrimaryButton from "../UI/PrimaryButton";
-import {useNavigate} from "react-router-dom";
-import {genDeleteData} from "../../commons/GenericAction";
-import {useDispatch} from "react-redux";
-import {ConfirmDialog} from "primereact/confirmdialog";
-import {Toast} from "primereact/toast";
-
-// field names
-const TEXT_NAME = "Name";
-const TEXT_USER_GROUP = "User Group";
-const TEXT_TEAM = "Team";
-const TEXT_ORGANIZATION = "Organization";
-const TEXT_PHONE_NUMBER = "Phone No";
-const TEXT_EMAIL_ADDRESS = "Email";
+import PrimaryButton from "../Button/PrimaryButton";
 
 const UserListingCardView = (props) => {
   const [checked, setChecked] = useState(true);
@@ -46,10 +33,19 @@ const UserListingCardView = (props) => {
   }
 
 
+  const TEXT_NAME = "Name";
+  const TEXT_USER_GROUP = "User Group";
+  const TEXT_TEAM = "Team";
+  const TEXT_ORGANIZATION = "Organization";
+  const TEXT_PHONE_NUMBER = "Phone No";
+  const TEXT_EMAIL_ADDRESS = "Email";
+
   return (
-      // TODO: Change table structure to grid --> when phone screen is small --> split into 2 rows (until 320px can fit)
-      <>
-        <Toast position='top-center' ref={toastRef}/>
+    // TODO: Change table structure to grid --> when phone screen is small --> split into 2 rows (until 320px can fit)
+    <div className="p-1">
+      <div className="rounded-lg container bg-white w-full p-4">
+        <div className="container inline-flex flex-row pt-4 pb-8">
+          <IconCardHeader icon="pi-user" header={props.userDetails.userId} />
 
         <ConfirmDialog visible={showDeleteDialog} onHide={()=> setShowDeleteDialog(false)} message="Are you sure you want to delete this user?"
                        header="Confirmation" icon="pi pi-exclamation-triangle" reject={() => { setShowDeleteDialog(false) }} accept={handleDeleteUser}/>
@@ -73,54 +69,12 @@ const UserListingCardView = (props) => {
                 <PrimaryButton icon="pi pi-trash" onClick={handleBeforeDelete}></PrimaryButton>
               </div>
             </div>
-
-            <table className="w-full table-auto text-slate-500 text-sm">
-              <tbody>
-              <tr>
-                <td className="w-1/3">{TEXT_NAME}</td>
-                <td className="flex">
-                  <UserInfoCardView>{props.userDetails.name}</UserInfoCardView>
-                </td>
-              </tr>
-              <tr>
-                <td className="w-1/3">{TEXT_USER_GROUP}</td>
-                <td className="flex">
-                  <UserInfoCardView>
-                    {props.userDetails.userGroup}
-                  </UserInfoCardView>
-                </td>
-              </tr>
-              <tr>
-                <td className="w-1/3">{TEXT_ORGANIZATION}</td>
-                <td className="flex">
-                  <UserInfoCardView>
-                    {props.userDetails.organization}
-                  </UserInfoCardView>
-                </td>
-              </tr>
-              <tr>
-                <td className="w-1/3">{TEXT_TEAM}</td>
-                <td className="flex">
-                  <UserInfoCardView>{props.userDetails.team}</UserInfoCardView>
-                </td>
-              </tr>
-              <tr>
-                <td className="w-1/3">{TEXT_PHONE_NUMBER}</td>
-                <td className="flex">
-                  <UserInfoCardView>{props.userDetails.phone}</UserInfoCardView>
-                </td>
-              </tr>
-              <tr>
-                <td className="w-1/3">{TEXT_EMAIL_ADDRESS}</td>
-                <td className="flex">
-                  <UserInfoCardView>{props.userDetails.email}</UserInfoCardView>
-                </td>
-              </tr>
-              </tbody>
-            </table>
+            <PrimaryButton icon="pi pi-pencil"></PrimaryButton>
           </div>
         </div>
-      </>
+      </div>
+      </div>
+      </div>
   );
 };
 

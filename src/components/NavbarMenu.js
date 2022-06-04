@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export function MenuDropdown({ menu, icon, children }) {
   const [show, setShow] = useState(false);
@@ -10,9 +11,9 @@ export function MenuDropdown({ menu, icon, children }) {
       onMouseLeave={() => setShow(false)}
     >
       {/* Menu link */}
-      <a className="block mt-2 lg:inline-block lg:mt-0 text-black text-base box-border lg:h-5 h-10   w-full hover:text-red-400 mr-4  border-red-400 lg:text-center p-2 lg:p-0 hover:bg-slate-100 lg:hover:bg-white rounded-md">
+      <span className="menu">
         <i className={`${icon || "pi pi-user"} mr-2`}></i> {menu}
-      </a>
+      </span>
 
       {/* Dropdown menu items */}
       <div
@@ -26,21 +27,41 @@ export function MenuDropdown({ menu, icon, children }) {
   );
 }
 
-export function MenuDropdownItem({ children, icon, ...rest }) {
+export function MenuDropdownLink({ children, icon, href = "/", ...rest }) {
+  const myIcon = <i className={`${icon || "pi pi-user"} mr-2`}></i>;
+
   return (
-    <a {...rest} className="px-5 py-1 cursor-pointer hover:text-red-400 hover:bg-slate-100 rounded-md">
-      <i className={`${icon || "pi pi-user"} mr-2`}></i> {children}
-    </a>
+    <Link to={{ pathname: href }} {...rest} className="dropdown">
+      {myIcon} {children}
+    </Link>
   );
 }
 
-export function MenuSimple({ children, icon, href="/" }) {
+export function MenuDropdownButton({ children, icon, onClick }) {
+  const myIcon = <i className={`${icon || "pi pi-user"} mr-2`}></i>;
+
+  return (
+    <span onClick={onClick} className="dropdown">
+      {myIcon} {children}
+    </span>
+  );
+}
+
+
+export function MenuSimple({ children, icon, href = "/" }) {
+  const myIcon = <i className={`${icon || "pi pi-user"} mr-2`}></i>;
+
   return (
     <div>
-      <a className="block mt-2 lg:inline-block lg:mt-0 text-black text-base box-border lg:h-5 h-10   w-full hover:text-red-400 mr-4  border-red-400 lg:text-center p-2 lg:p-0 hover:bg-slate-100 lg:hover:bg-white rounded-md" 
-      href={href}>
-        <i className={`${icon || "pi pi-user"} mr-2`}></i> {children}
-      </a>
+      <Link
+        to={{
+          pathname: href,
+        }}
+        className="menu"
+      >
+        {myIcon} {children}
+      </Link>
     </div>
   );
 }
+

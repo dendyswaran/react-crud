@@ -4,7 +4,7 @@ import { Toast } from 'primereact/toast'
 import { useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import InputLabel from '../../components/InputLabel'
+import InputLabel from '../../components/FormComponents/InputLabel'
 import { authSignup } from './services/AuthenticationAction'
 
 export default function SignupPage() {

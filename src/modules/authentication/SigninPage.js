@@ -1,17 +1,16 @@
-import { Button } from "primereact/button";
-import { Checkbox } from "primereact/checkbox";
-import { InputText } from "primereact/inputtext";
+import CheckboxMain from "../../components/FormComponents/CheckboxMain";
+import InputTextBar from "../../components/FormComponents/InputTextBar";
 import { Toast } from "primereact/toast";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import InputLabel from "../../components/InputLabel";
+import InputLabel from "../../components/FormComponents/InputLabel";
 import session from "../../configs/session";
 import { authSignin } from "./services/AuthenticationAction";
 import IohLogo from "../../components/IohLogo";
-import PrimaryHeader from "../../components/UI/PrimaryHeader";
+import PrimaryHeader from "../../components/Header/PrimaryHeader";
+import SecondaryButton from "../../components/Button/SecondaryButton";
 import loginBackground from "../../images/login_bg01.jpeg";
-import "../../assets/index.css";
 
 export default function SigninPage() {
   const navigate = useNavigate();
@@ -71,13 +70,13 @@ export default function SigninPage() {
               <div className="flex flex-col text-center mb-5">
                 <IohLogo width="200" height="90" />
                 <div className="pt-5">
-                  <PrimaryHeader secondary="Sign in to your account"></PrimaryHeader>
+                  <PrimaryHeader secondary="Sign in to your account" />
                 </div>
               </div>
               <form onSubmit={handleLogin}>
                 <div className="pb-5">
                   <InputLabel>User ID</InputLabel>
-                  <InputText
+                  <InputTextBar
                     placeholder="Enter User ID"
                     id="email"
                     type="text"
@@ -93,7 +92,7 @@ export default function SigninPage() {
                 </div>
                 <div className="py-5">
                   <InputLabel>Password</InputLabel>
-                  <InputText
+                  <InputTextBar
                     placeholder="Enter Password"
                     id="password"
                     type="password"
@@ -112,7 +111,7 @@ export default function SigninPage() {
                 </div>
                 <div className="inline-flex flex-wrap items-center justify-between pt-5">
                   <div className="flex align-items-center">
-                    <Checkbox
+                    <CheckboxMain
                       id="rememberme"
                       binary
                       className="mr-2"
@@ -129,12 +128,7 @@ export default function SigninPage() {
                     </label>
                   </div>
                 </div>
-                <Button
-                  disabled={isLoading}
-                  label="Sign In"
-                  icon="pi pi-sign-in"
-                  className="w-full btn secondary"
-                />
+                <SecondaryButton disabled={isLoading} />
                 <div className="inline-flex flex-wrap">
                   <div className="flex pr-10 md:pr-0">
                     <a
