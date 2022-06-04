@@ -15,10 +15,35 @@ const UserManagementForm = (props) => {
   // Change User Group state
   const [userGroup, setUserGroup] = useState(null);
 
+  const navigate = useNavigate();
+
   // Change organization state.
   // https://www.primefaces.org/primereact/selectbutton/
   const [selectedOrganization, setOrganization] = useState(null);
   const [selectedTeam, setTeam] = useState(null);
+  const [formData, setFormData] = useState({
+    username: "",
+    email: ""
+  });
+  const dispatch = useDispatch();
+  const toastRef = useRef();
+
+  useEffect(() => {
+    fetchUser(props.userId);
+  }, [""]);
+
+  const fetchUser = (userId) => {
+    dispatch(genGetDataById('api/manage-user/'+userId,
+        (result) => {
+          setFormData(prevState => ({
+            ...prevState,
+            username: result.username,
+            email: result.email,
+            password: result.password
+          }));
+        }
+    ));
+  }
 
   const onOrganizationChange = (e) => {
     setOrganization(e.value);
@@ -184,13 +209,120 @@ const UserManagementForm = (props) => {
         </div>
       </div>
 
-      <div className="container inline-flex flex-row pt-2">
-        <div className="ml-auto flex">
-          <PrimaryButton icon="pi pi-save"></PrimaryButton>
-          <PrimaryButton icon="pi pi-trash"></PrimaryButton>
-        </div>
-      </div>
-    </form>
+          {/* User Group */}
+          <InputLabel>User Group</InputLabel>
+          <div className="flex flex-wrap -mx-3 mb-6">
+            <div className="inline-flex mx-auto">
+              <div className="inline-flex field-radiobutton">
+                <RadioButton
+                    inputId="ioh_group"
+                    name="group"
+                    value="ioh"
+                    onChange={(e) => setUserGroup(e.value)}
+                    checked={userGroup === "ioh"}
+                />
+                <label className="pt-1 pl-2" htmlFor="ioh_group">
+                  IOH
+                </label>
+              </div>
+            </div>
+            <div className="inline-flex mx-auto">
+              <div className="inline-flex field-radiobutton">
+                <RadioButton
+                    inputId="decom_group"
+                    name="group"
+                    value="decom"
+                    onChange={(e) => setUserGroup(e.value)}
+                    checked={userGroup === "decom"}
+                />
+                <label className="pt-1 pl-2" htmlFor="decom_group">
+                  Decom
+                </label>
+              </div>
+            </div>
+            <div className="inline-flex mx-auto">
+              <div className="inline-flex field-radiobutton">
+                <RadioButton
+                    inputId="scrap_group"
+                    name="group"
+                    value="scrap"
+                    onChange={(e) => setUserGroup(e.value)}
+                    checked={userGroup === "scrap"}
+                />
+                <label className="pt-1 pl-2" htmlFor="scrap_group">
+                  Scrap
+                </label>
+              </div>
+            </div>
+            <div className="inline-flex mx-auto">
+              <div className="inline-flex field-radiobutton">
+                <RadioButton
+                    inputId="oem_group"
+                    name="group"
+                    value="oem"
+                    onChange={(e) => setUserGroup(e.value)}
+                    checked={userGroup === "oem"}
+                />
+                <label className="pt-1 pl-2" htmlFor="oem_group">
+                  OEM
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Details */}
+          <div className="flex flex-wrap -mx-3 mb-6">
+            <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <InputLabel>organization</InputLabel>
+              <Dropdown
+                  className="standardInputText"
+                  value={selectedOrganization}
+                  options={organizations}
+                  onChange={onOrganizationChange}
+                  optionLabel="name"
+                  placeholder="Select an Organization"
+              />
+            </div>
+            <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <InputLabel>team</InputLabel>
+              <Dropdown
+                  className="standardInputText"
+                  value={selectedTeam}
+                  options={teams}
+                  onChange={onTeamChange}
+                  optionLabel="name"
+                  placeholder="Select a Team"
+              />
+            </div>
+          </div>
+
+          {/* Contact Details */}
+          <div className="flex flex-wrap -mx-3 mb-6">
+            <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <InputLabel>Phone</InputLabel>
+              <InputText
+                  className="standardInputText"
+                  placeholder="e.g. 6212XXXXXXX"
+              ></InputText>
+            </div>
+            <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <InputLabel>Email</InputLabel>
+              <InputText
+                  className="standardInputText"
+                  placeholder="e.g. sample@xxxx.com"
+                  value={formData.email}
+                  onChange={e => setFormData(prevState => ({...prevState, email: e.target.value}))}
+              ></InputText>
+            </div>
+          </div>
+
+          <div className="container inline-flex flex-row pt-2">
+            <div className="ml-auto flex">
+              <PrimaryButton icon="pi pi-save"></PrimaryButton>
+              <PrimaryButton icon="pi pi-trash"></PrimaryButton>
+            </div>
+          </div>
+        </form>
   );
 };
 

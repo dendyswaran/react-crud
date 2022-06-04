@@ -5,7 +5,7 @@ import {Button} from "primereact/button";
 import {useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate, useParams} from "react-router-dom";
-import {editUser} from  '../services/ManageUserAction';
+import {editUser} from '../../UserManagement/services/ManageUserAction';
 import {Toast} from 'primereact/toast';
 import {genGetDataById} from "../../../commons/GenericAction";
 

@@ -26,7 +26,6 @@ export default function SigninPage() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-
     dispatch(
       authSignin(
         formData.username,
