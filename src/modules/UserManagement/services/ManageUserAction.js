@@ -53,7 +53,7 @@ const getUserList = (onSuccess, onError) => {
     return async(dispatch) => {
         dispatch({type: MANAGE_USER_ACTION.MANAGE_USER_PROCESSING, payload: true});
         try {
-            const {data:resp} = await get("/api/manage-user/user-list", true);
+            const {data:resp} = await get("/api/org-user/user-list", true);
             if(resp.success) {
                 onSuccess(resp.data);
             }

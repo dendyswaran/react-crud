@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import InputLabel from "../../../components/FormComponents/InputLabel";
 import InputTextBar from "../../../components/FormComponents/InputTextBar";
 import RadioButtonMain from "../../../components/Button/RadioButtonMain";
@@ -9,7 +9,6 @@ import RadioButtonWithLabel from "../../../components/Button/RadioButtonWithLabe
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { genGetDataById } from "../../../commons/GenericAction";
-
 
 const UserManagementForm = (props) => {
   // IMPORTANT: need to preventDefault when submit form!

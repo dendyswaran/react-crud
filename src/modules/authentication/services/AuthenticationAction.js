@@ -13,7 +13,7 @@ export function authSignin(username, password, onSuccess, onError) {
         dispatch({ type: AUTHENTICATION_ACTION.AUTHENTICATION_PROCESSING, payload: true })
 
         try {
-            const { data: resp } = await post("/api/auth/signin", {
+            const { data: resp } = await post("/api/org-auth/signIn", {
                 username,
                 password
             })

@@ -4,8 +4,9 @@ import IconCardHeader from "../Header/IconCardHeader";
 import { InputSwitch } from "primereact/inputswitch";
 import PrimaryButton from "../Button/PrimaryButton";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { genDeleteData } from "../../commons/GenericAction";
+import { ConfirmDialog } from "primereact/confirmdialog";
+import { useDispatch } from "react-redux";
 
 const UserListingCardView = (props) => {
   const [checked, setChecked] = useState(true);
@@ -13,6 +14,8 @@ const UserListingCardView = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const toastRef = useRef();
+
+  console.log(props.userDetails);
 
   const handleEditButton = () => {
     navigate("/user-form/" + props.userDetails.userId);

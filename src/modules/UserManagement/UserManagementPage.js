@@ -84,13 +84,14 @@ const UserManagementPage = () => {
         (data) => {
           setUserListState(true);
            setUserList(data.map((user) => {
+            //  console.log(user.org != null);
             return {
-              id: user.userId,
-              userId: user.userId,
-              name: user.username,
-              userGroup: "Scrap",
-              team: 3,
-              organization: "B001762-PT-Dexter",
+              id: user.id,
+              userId: (user.code && user.code != null) ? user.code : "",
+              name: user.name,
+              userGroup: (user.orgUsrGroups && user.orgUsrGroups.length>0) ? (user.orgUsrGroups[0].code ?? user.orgUsrGroups[0].code) : "",
+              team: (user.orgTeams && user.orgTeams.length > 0) ? user.orgTeams[0].name : "",
+              organization: (user.org && user.org.code) ? user.org.code : "",
               phone: "01260116677",
               email: user.email,
             };
@@ -106,7 +107,7 @@ const UserManagementPage = () => {
       {/* TODO: key to be added */}
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {userList && userList.map((userInfo) => (
+        {userList && items.map((userInfo) => (
           <UserListingCardView key={userInfo.id} userDetails={userInfo} />
         ))}
       </div>
