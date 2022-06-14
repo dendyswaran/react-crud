@@ -4,6 +4,7 @@ import { Toast } from 'primereact/toast'
 import { useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import PrimaryButton from '../../components/Button/PrimaryButton'
 import InputLabel from '../../components/FormComponents/InputLabel'
 import { authSignup } from './services/AuthenticationAction'
 
@@ -41,11 +42,11 @@ export default function SignupPage() {
             <Toast position='top-center' ref={toastRef} />
 
             <div className="flex flex-col lg:w-1/4 mx-auto sm:w-full">
-                <div className="flex flex-col text-center mb-5">
+                {/* <div className="flex flex-col text-center mb-5">
                     <div className="text-900 text-3xl font-medium mb-3">Welcome</div>
                     <span className="text-600 font-medium line-height-3">Already have have an account?</span>
                     <a className="font-medium no-underline ml-2 text-blue-500 cursor-pointer" onClick={() => navigate("/auth/signin")}>Sign in now!</a>
-                </div>
+                </div> */}
 
                 <form onSubmit={handleSignup}>
                     <InputLabel>Username</InputLabel>
@@ -68,7 +69,7 @@ export default function SignupPage() {
                         value={formData.confirmPassword}
                         onChange={e => setFormData(_c => ({ ..._c, confirmPassword: e.target.value }))} />
 
-                    <Button disabled={isLoading || formData.confirmPassword !== formData.password} label="Sign up" icon="pi pi-user" className="w-full" />
+                    <PrimaryButton disabled={isLoading || formData.confirmPassword !== formData.password} label="Sign up" icon="pi pi-user" className="w-full" />
                 </form>
             </div>
         </div>

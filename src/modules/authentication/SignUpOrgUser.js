@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
-import InputLabel from "../../../components/FormComponents/InputLabel";
-import InputTextBar from "../../../components/FormComponents/InputTextBar";
-import IconCardHeader from "../../../components/Header/IconCardHeader";
-import DropdownBar from "../../../components/FormComponents/DropdownBar";
-import PrimaryButton from "../../../components/Button/PrimaryButton";
-import RadioButtonWithLabel from "../../../components/Button/RadioButtonWithLabel";
+import InputLabel from "../../components/FormComponents/InputLabel";
+import InputTextBar from "../../components/FormComponents/InputTextBar";
+import IconCardHeader from "../../components/Header/IconCardHeader";
+import DropdownBar from "../../components/FormComponents/DropdownBar";
+import PrimaryButton from "../../components/Button/PrimaryButton";
+import RadioButtonWithLabel from "../../components/Button/RadioButtonWithLabel";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { genGetDataById } from "../../../commons/GenericAction";
-import { editUser } from "../services/ManageUserAction";
 import { Toast } from 'primereact/toast';
-import { getOrganizationsList } from "../services/OrganizationAction";
-import { getTeamList } from "../services/TeamAction";
+import { getOrganizationsList } from "../UserManagement/services/OrganizationAction";
+import { getTeamList } from "../UserManagement/services/TeamAction";
+import Layout from "../../components/Layout";
+import { authSignup } from "./services/OrgAuthentication";
 
 
-const UserManagementForm = (props) => {
+const SignUpOrgContent = (props) => {
   // IMPORTANT: need to preventDefault when submit form!
   // TODO: fix the id and input type of each respective fields have not been assigned.
   // TODO: Create a class called FormField that wrap all form input together with their labels --> then apply consistent padding.
@@ -22,7 +22,6 @@ const UserManagementForm = (props) => {
   // Change User Group state
   const [userGroup, setUserGroup] = useState(null);
   const navigate = useNavigate();
-  const userId = props.userId;
 
 
   // Change organization state.
@@ -38,35 +37,12 @@ const UserManagementForm = (props) => {
   const toastRef = useRef();
   const [organizationsList, setOrganizationList] = useState([]);
   const [teamList, setTeamList] = useState([]);
-  const [user, setUser] = useState();
 
   useEffect(() => {
-    fetchUser(userId);
     fetchOrganizationList();
     fetchTeamList();
 
   }, []);
-
-  useEffect(() => {
-    if (user) {
-      if (user.org && user.org.id) {
-        console.log(user);
-        organizationsList.map(organization => {
-          if (organization.id == user.org.id) {
-            setOrganization(organization.id);
-          }
-        });
-      }
-      if(user.orgTeams && user.orgTeams.length > 0) {
-        console.log(teamList);
-        teamList.map(team => {
-          if(team.id == user.orgTeams[user.orgTeams.length-1].id) {
-            setTeam(team.id);
-          }
-        });
-      }
-    }
-  }, [user]);
 
   const fetchOrganizationList = () => {
     dispatch(getOrganizationsList(
@@ -89,22 +65,6 @@ const UserManagementForm = (props) => {
     ))
   }
 
-  const fetchUser = (userId) => {
-    dispatch(genGetDataById('api/org-user/get/' + userId,
-      (data) => {
-        // console.log(data);
-        setUser(data);
-        setFormData(prevState => ({
-          ...prevState,
-          id: data.id,
-          name: data.name,
-          email: data.email,
-          password: data.password
-        }));
-
-      }
-    ));
-  }
 
   const onOrganizationChange = (e) => {
     setOrganization(e.value);
@@ -124,11 +84,11 @@ const UserManagementForm = (props) => {
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
-    dispatch(editUser(formData,
+    dispatch(authSignup(formData,
       () => {
-        toastRef.current.show({ severity: 'success', summary: 'Update Success', detail: "Success updating user", life: 3000 });
-        // window.location.reload();
-
+        toastRef.current.show({ severity: 'success', summary: 'Register Success', detail: "New User Succesfully added", life: 3000 });
+        // window.location.reload("");
+        navigate("/user-management");
       },
       (error) => {
         toastRef.current.show({ severity: 'error', summary: 'Error Message', detail: error.message || "Failed to edit User", life: 3000 });
@@ -145,13 +105,6 @@ const UserManagementForm = (props) => {
       };
     }
   ));
-  // [
-  // { name: "PT Cellsite", value: "NY" },
-  // { name: "PT Dexter", value: "RM" },
-  // { name: "Dummy 1", value: "LDN" },
-  // { name: "Dummy 2", value: "IST" },
-  // { name: "Dummy 3", value: "PRS" },
-  // ];
 
   const teams = Array.from(teamList.map(
     team => ({
@@ -159,30 +112,8 @@ const UserManagementForm = (props) => {
       value: team.id
     })
   ));
-  // [
-  //   { name: "Team 1", value: "1" },
-  //   { name: "Team 2", value: "2" },
-  //   { name: "Team 3", value: "3" },
-  //   { name: "Team 4", value: "4" },
-  //   { name: "Team 5", value: "5" },
-  //   { name: "Team 6", value: "6" },
-  //   { name: "Team 7", value: "7" },
-  //   { name: "Team 8", value: "8" },
-  //   { name: "Team 9", value: "9" },
-  //   { name: "Team 10", value: "10" },
-  //   { name: "Team 11", value: "11" },
-  //   { name: "Team 12", value: "12" },
-  //   { name: "Team 13", value: "13" },
-  //   { name: "Team 14", value: "14" },
-  //   { name: "Team 15", value: "15" },
-  //   { name: "Team 16", value: "16" },
-  //   { name: "Team 17", value: "17" },
-  //   { name: "Team 18", value: "18" },
-  //   { name: "Team 19", value: "19" },
-  //   { name: "Team 20", value: "20" },
-  // ];
 
-  const myHeader = "Modify " + userId;
+  const myHeader = "Add User";
 
 
   return (
@@ -194,18 +125,18 @@ const UserManagementForm = (props) => {
       </div>
 
       {/* User ID */}
-      <div className="flex flex-wrap -mx-3 mb-6">
+      {/* <div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-full px-3">
           <InputLabel>User ID</InputLabel>
-          <InputTextBar className="standardBar full" value={formData.id} disabled />
+          <InputTextBar className="standardBar full" disabled />
         </div>
-      </div>
+      </div> */}
 
       {/* Name */}
       <div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-full md:w-full px-3 mb-6 md:mb-0">
           <InputLabel>Name</InputLabel>
-          <InputTextBar className="standardBar full" value={formData.name}
+          <InputTextBar className="standardBar full"
             onChange={e => setFormData(prevState => ({ ...prevState, name: e.target.value }))} />
         </div>
         {/* <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
@@ -217,6 +148,14 @@ const UserManagementForm = (props) => {
           <InputLabel>Last Name</InputLabel>
           <InputTextBar className="standardBar full" />
         </div> */}
+      </div>
+
+      <div className="flex flex-wrap -mx-3 mb-6">
+        <div className="w-full md:w-full px-3 mb-6 md:mb-0">
+          <InputLabel>Password</InputLabel>
+          <InputTextBar type="password" className="standardBar full"
+            onChange={e => setFormData(prevState => ({ ...prevState, password: e.target.value }))} />
+        </div>
       </div>
 
       {/* User Group */}
@@ -310,7 +249,6 @@ const UserManagementForm = (props) => {
           <InputTextBar
             className="standardBar full"
             placeholder="e.g. sample@xxxx.com"
-            value={formData.email}
             onChange={e => setFormData(prevState => ({ ...prevState, email: e.target.value }))}
           />
         </div>
@@ -326,4 +264,12 @@ const UserManagementForm = (props) => {
   );
 };
 
-export default UserManagementForm;
+const SignUpOrgUser  = () => {
+    return (
+        <Layout>
+            <SignUpOrgContent />
+        </Layout>
+    );
+}
+
+export default SignUpOrgUser;

@@ -84,11 +84,22 @@ export default function Navbar() {
               children="Site Status Enquiry"
               icon="pi pi-info-circle"
             />
-            <MenuSimple
+            {/* <MenuSimple
               href="/user-management"
               children="User Management"
               icon="pi pi-users"
-            />
+            /> */}
+            <MenuDropdown
+              icon="pi pi-users"
+              className="flex-1"
+              menu={"User Management"}>
+              <MenuDropdownLink href="/user-management" icon="pi pi-user-edit">
+                Users List
+              </MenuDropdownLink>
+              <MenuDropdownLink href="/auth/signup" icon="pi pi-user-plus">
+                New User
+              </MenuDropdownLink>
+            </MenuDropdown>
           </div>
           <div>
             <MenuDropdown
