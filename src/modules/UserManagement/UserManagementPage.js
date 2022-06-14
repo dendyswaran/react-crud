@@ -1,8 +1,8 @@
 import Layout from "../../components/Layout";
 import UserListingCardView from "../../components/CardView/UserListingCardView";
-import {fetchUserDatatable, getUserList} from "./services/ManageUserAction";
-import {useEffect, useState} from "react";
-import {useDispatch} from "react-redux";
+import { fetchUserDatatable, getUserList } from "./services/ManageUserAction";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 const items = [
   {
@@ -77,37 +77,36 @@ const UserManagementPage = () => {
 
   useEffect(() => {
     handleGetUserList();
+    console.log("test-in-usermanagementpage");
   }, [userListState]);
 
   const handleGetUserList = () => {
     dispatch(getUserList(
-        (data) => {
-          setUserListState(true);
-           setUserList(data.map((user) => {
-            //  console.log(user.org != null);
-            return {
-              id: user.id,
-              userId: (user.code && user.code != null) ? user.code : "",
-              name: user.name,
-              userGroup: (user.orgUsrGroups && user.orgUsrGroups.length>0) ? (user.orgUsrGroups[0].code ?? user.orgUsrGroups[0].code) : "",
-              team: (user.orgTeams && user.orgTeams.length > 0) ? user.orgTeams[0].name : "",
-              organization: (user.org && user.org.code) ? user.org.code : "",
-              phone: "01260116677",
-              email: user.email,
-            };
-          }));
-        },
-        (error) => {
-          console.log(error.message);
+      (data) => {
+        setUserListState(true);
+        setUserList(data.map((user) => {
+          return {
+            id: user.id,
+            userId: (user.code && user.code != null) ? user.code : "",
+            name: user.name,
+            userGroup: (user.orgUsrGroups && user.orgUsrGroups.length > 0) ? (user.orgUsrGroups[0].code ?? user.orgUsrGroups[0].code) : "",
+            team: (user.orgTeams && user.orgTeams.length > 0) ? user.orgTeams[0].name : "",
+            organization: (user.org && user.org.code) ? user.org.code : "",
+            phone: "",
+            email: user.email,
+          };
         }));
+      },
+      (error) => {
+        console.log(error.message);
+      }));
   }
 
   return (
     <Layout>
       {/* TODO: key to be added */}
-      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {userList && items.map((userInfo) => (
+        {userList && userList.map((userInfo) => (
           <UserListingCardView key={userInfo.id} userDetails={userInfo} />
         ))}
       </div>

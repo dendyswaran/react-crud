@@ -1,11 +1,15 @@
 import Layout from "../../components/Layout";
 import UserManagementForm from "./Partial/UserManagementForm";
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 
-const DUMMY_USER_ID = "DEC001";
+// const DUMMY_USER_ID = "DEC001";
 
 const UserFormPage = () => {
-    const {id} = useParams();
+  const { id } = useParams();
+  useEffect(() => {
+    console.log("test-from-userformpage");
+  }, []);
   return (
     <Layout>
       <UserManagementForm userId={id} />

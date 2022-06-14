@@ -12,7 +12,7 @@ const rootReducer = combineReducers({
     drinkReducer,
     menuReducer,
     genReducer,
-    ManageUserReducer
+    ManageUserReducer    
 })
 
 

@@ -40,7 +40,7 @@ const EditUserPage = (props) => {
 
     const handleEditUser = (e) => {
         e.preventDefault();
-        dispatch(editUser(userId, formData.username, formData.email, formData.password,
+        dispatch(editUser(userId, formData.username, formData.email, 
             ()=> {
                 toastRef.current.show({ severity: 'success', summary: 'Success Message', detail: "Success", life: 3000 });
                 window.location.reload();

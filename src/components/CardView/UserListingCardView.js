@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { genDeleteData } from "../../commons/GenericAction";
 import { ConfirmDialog } from "primereact/confirmdialog";
 import { useDispatch } from "react-redux";
+import md5 from 'crypto-js/md5';
 
 const UserListingCardView = (props) => {
   const [checked, setChecked] = useState(true);
@@ -15,10 +16,9 @@ const UserListingCardView = (props) => {
   const dispatch = useDispatch();
   const toastRef = useRef();
 
-  console.log(props.userDetails);
-
-  const handleEditButton = () => {
-    navigate("/user-form/" + props.userDetails.userId);
+  const handleEditButton = (e) => {
+    // console.log(e.currentTarget.id);
+    navigate("/user-form/" + e.currentTarget.id);
   }
 
 
@@ -51,7 +51,9 @@ const UserListingCardView = (props) => {
     <div className="p-1">
       <div className="rounded-lg container bg-white w-full p-4">
         <div className="container inline-flex flex-row pt-4 pb-8">
-          <IconCardHeader icon="pi-user" header={props.userDetails.userId} />
+          {/* <IconCardHeader icon="pi-user" header={props.userDetails.id} /> */}
+          <IconCardHeader icon="pi-user" header={props.userDetails.id.substring(0,18)+"..."} />
+          {/* <IconCardHeader icon="pi-user" header={md5(props.userDetails.id).toString().substring(0,18)+"..."} /> */}
 
           <div className="ml-auto flex">
             <div>
@@ -62,7 +64,7 @@ const UserListingCardView = (props) => {
                 />
               </div>
             </div>
-            <PrimaryButton icon="pi pi-pencil"></PrimaryButton>
+            <PrimaryButton icon="pi pi-pencil" onClick={handleEditButton} id={props.userDetails.id}></PrimaryButton>
           </div>
         </div>
 
