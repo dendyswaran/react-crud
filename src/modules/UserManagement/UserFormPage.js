@@ -7,9 +7,6 @@ import { useEffect } from "react";
 
 const UserFormPage = () => {
   const { id } = useParams();
-  useEffect(() => {
-    console.log("test-from-userformpage");
-  }, []);
   return (
     <Layout>
       <UserManagementForm userId={id} />

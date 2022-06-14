@@ -52,18 +52,15 @@ const UserManagementForm = (props) => {
       if (user.org && user.org.id) {
         console.log(user);
         organizationsList.map(organization => {
-          if (organization.id == user.org.id) {
+          if (organization.id === user.org.id) {
             setOrganization(organization.id);
           }
         });
       }
-      if(user.orgTeams && user.orgTeams.length > 0) {
-        console.log(teamList);
-        teamList.map(team => {
-          if(team.id == user.orgTeams[user.orgTeams.length-1].id) {
-            setTeam(team.id);
-          }
-        });
+      if(user.orgUsrTeams && user.orgUsrTeams.length > 0) {
+        setTeam(teamList.find(team => {
+          return team.id === user.orgUsrTeams[0].orgTeam.id;
+        }).id);
       }
     }
   }, [user]);

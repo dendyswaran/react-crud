@@ -87,11 +87,11 @@ const UserManagementPage = () => {
         setUserList(data.map((user) => {
           return {
             id: user.id,
-            userId: (user.code && user.code != null) ? user.code : "",
+            userId: (user.id && user.id != null) ? user.id : "",
             name: user.name,
             userGroup: (user.orgUsrGroups && user.orgUsrGroups.length > 0) ? (user.orgUsrGroups[0].code ?? user.orgUsrGroups[0].code) : "",
-            team: (user.orgTeams && user.orgTeams.length > 0) ? user.orgTeams[0].name : "",
-            organization: (user.org && user.org.code) ? user.org.code : "",
+            team: (user.orgUsrTeams && user.orgUsrTeams.length > 0) ? user.orgUsrTeams[0].orgTeam.name : "",
+            organization: (user.org && user.org.name) ? user.org.name : "",
             phone: "",
             email: user.email,
           };
