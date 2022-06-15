@@ -57,10 +57,12 @@ const UserManagementForm = (props) => {
           }
         });
       }
-      if(user.orgUsrTeams && user.orgUsrTeams.length > 0) {
-        setTeam(teamList.find(team => {
+      if(user.orgUsrTeams && user.orgUsrTeams.length > 0 && teamList.length > 0) {
+        let team = teamList.find(team => {
           return team.id === user.orgUsrTeams[0].orgTeam.id;
-        }).id);
+        });
+        console.log(team);
+        setTeam(team.id);
       }
     }
   }, [user]);
