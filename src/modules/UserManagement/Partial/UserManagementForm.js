@@ -7,7 +7,7 @@ import PrimaryButton from "../../../components/Button/PrimaryButton";
 import RadioButtonWithLabel from "../../../components/Button/RadioButtonWithLabel";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { genGetDataById } from "../../../commons/GenericAction";
+import { genGetDataById, genGetAllData } from "../../../commons/GenericAction";
 import { editUser } from "../services/ManageUserAction";
 import { Toast } from 'primereact/toast';
 import { getOrganizationsList } from "../services/OrganizationAction";
@@ -39,18 +39,18 @@ const UserManagementForm = (props) => {
   const [organizationsList, setOrganizationList] = useState([]);
   const [teamList, setTeamList] = useState([]);
   const [user, setUser] = useState();
+  const [userGroupList, setUserGroupList] = useState([]);
 
   useEffect(() => {
     fetchUser(userId);
     fetchOrganizationList();
     fetchTeamList();
-
+    fetchUserGroupList();
   }, []);
 
   useEffect(() => {
     if (user) {
       if (user.org && user.org.id) {
-        console.log(user);
         organizationsList.map(organization => {
           if (organization.id === user.org.id) {
             setOrganization(organization.id);
@@ -61,11 +61,18 @@ const UserManagementForm = (props) => {
         let team = teamList.find(team => {
           return team.id === user.orgUsrTeams[0].orgTeam.id;
         });
-        console.log(team);
         setTeam(team.id);
       }
     }
   }, [user]);
+
+  const fetchUserGroupList = () => {
+    dispatch(genGetAllData("/api/org-group",
+      false,
+      (e) => {
+        setUserGroupList(e);
+      }));
+  }
 
   const fetchOrganizationList = () => {
     dispatch(getOrganizationsList(
@@ -146,10 +153,6 @@ const UserManagementForm = (props) => {
   ));
   // [
   // { name: "PT Cellsite", value: "NY" },
-  // { name: "PT Dexter", value: "RM" },
-  // { name: "Dummy 1", value: "LDN" },
-  // { name: "Dummy 2", value: "IST" },
-  // { name: "Dummy 3", value: "PRS" },
   // ];
 
   const teams = Array.from(teamList.map(
@@ -160,26 +163,38 @@ const UserManagementForm = (props) => {
   ));
   // [
   //   { name: "Team 1", value: "1" },
-  //   { name: "Team 2", value: "2" },
-  //   { name: "Team 3", value: "3" },
-  //   { name: "Team 4", value: "4" },
-  //   { name: "Team 5", value: "5" },
-  //   { name: "Team 6", value: "6" },
-  //   { name: "Team 7", value: "7" },
-  //   { name: "Team 8", value: "8" },
-  //   { name: "Team 9", value: "9" },
-  //   { name: "Team 10", value: "10" },
-  //   { name: "Team 11", value: "11" },
-  //   { name: "Team 12", value: "12" },
-  //   { name: "Team 13", value: "13" },
-  //   { name: "Team 14", value: "14" },
-  //   { name: "Team 15", value: "15" },
-  //   { name: "Team 16", value: "16" },
-  //   { name: "Team 17", value: "17" },
-  //   { name: "Team 18", value: "18" },
-  //   { name: "Team 19", value: "19" },
-  //   { name: "Team 20", value: "20" },
-  // ];
+  // ]
+
+  const viewUserGroups = () => {
+    if(userGroupList && userGroupList.length > 0) {
+      return userGroupList.map(
+        element => {
+          return(
+            <div className="inline-flex mx-auto" key={element.id}>
+              <div className="inline-flex field-radiobutton">
+                <RadioButtonWithLabel
+                  label= {element.name}
+                  inputId={element.id + "_group"}
+                  name={element.name}
+                  value={element.id}
+                  onChange={(e) => {
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      orgUsrGroupId: e.value
+                    }));
+                    return setUserGroup(e.value);
+                  }}
+                  checked={userGroup === element.id}
+                />
+              </div>
+            </div>
+          );
+        }
+      );
+
+    }
+  }
+
 
   const myHeader = "Modify " + userId;
 
@@ -221,7 +236,10 @@ const UserManagementForm = (props) => {
       {/* User Group */}
       <InputLabel>User Group</InputLabel>
       <div className="flex flex-wrap -mx-3 mb-6">
-        <div className="inline-flex mx-auto">
+
+        {userGroupList && viewUserGroups()}
+
+        {/*<div className="inline-flex mx-auto">
           <div className="inline-flex field-radiobutton">
             <RadioButtonWithLabel
               label="IOH"
@@ -232,8 +250,8 @@ const UserManagementForm = (props) => {
               checked={userGroup === "ioh"}
             />
           </div>
-        </div>
-        <div className="inline-flex mx-auto">
+        </div>*/}
+        {/*<div className="inline-flex mx-auto">
           <div className="inline-flex field-radiobutton">
             <RadioButtonWithLabel
               label="Decom"
@@ -244,20 +262,8 @@ const UserManagementForm = (props) => {
               checked={userGroup === "decom"}
             />
           </div>
-        </div>
-        <div className="inline-flex mx-auto">
-          <div className="inline-flex field-radiobutton">
-            <RadioButtonWithLabel
-              label="Scrap"
-              inputId="scrap_group"
-              name="group"
-              value="scrap"
-              onChange={(e) => setUserGroup(e.value)}
-              checked={userGroup === "scrap"}
-            />
-          </div>
-        </div>
-        <div className="inline-flex mx-auto">
+        </div>*/}
+        {/*<div className="inline-flex mx-auto">
           <div className="inline-flex field-radiobutton">
             <RadioButtonWithLabel
               label="OEM"
@@ -268,7 +274,19 @@ const UserManagementForm = (props) => {
               checked={userGroup === "oem"}
             />
           </div>
-        </div>
+        </div>*/}
+        {/*<div className="inline-flex mx-auto">
+          <div className="inline-flex field-radiobutton">
+            <RadioButtonWithLabel
+              inputId="scrap_group"
+              label="Scrap"
+              name="group"
+              value="scrap"
+              onChange={(e) => setUserGroup(e.value)}
+              checked={userGroup === "scrap"}
+            />
+          </div>
+        </div>*/}
       </div>
 
       {/* Contact Details */}

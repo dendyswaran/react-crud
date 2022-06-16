@@ -15,6 +15,7 @@ import ManageUserPage from "./modules/manage-user/pages/ManageUserPage";
 import {EditUserPageWrapped} from "./modules/manage-user/pages/EditUserPage";
 import DecomTaskListDetail from "./modules/tasklist/tasklist_details/DecomTasklistDetail";
 import SignUpOrgUser from "./modules/authentication/SignUpOrgUser";
+ import {AddOrganizationGroupPage} from "./modules/UserManagement/temp/AddOrganizationGroupPage";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route path="/auth/signup" element={<RequireAuth><SignUpOrgUser/></RequireAuth>}/>
         <Route path="/manage-user/user-list" element={<RequireAuth><ManageUserPage /></RequireAuth>} />
         <Route path="/manage-user/edit/:userId" element={<RequireAuth><EditUserPageWrapped/></RequireAuth>}/>
+        <Route path="/add-org-group" element={<RequireAuth><AddOrganizationGroupPage/></RequireAuth>}/>
       </Routes>
     </BrowserRouter>
   );

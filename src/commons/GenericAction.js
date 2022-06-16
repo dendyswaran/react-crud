@@ -121,3 +121,14 @@ export function genDeleteData(url, id, onSuccess) {
         }
     }
 }
+
+export function genGetAllData(url, token = false, onSuccess) {
+    return async (dispatch) => {
+        const {data:resp} = await get(url, token);
+        if(resp.success) {
+            onSuccess(resp.data);
+        }else {
+            console.log(resp)
+        }
+    }
+}

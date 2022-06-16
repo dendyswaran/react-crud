@@ -77,19 +77,19 @@ const UserManagementPage = () => {
 
   useEffect(() => {
     handleGetUserList();
-    console.log("test-in-usermanagementpage");
   }, [userListState]);
 
   const handleGetUserList = () => {
     dispatch(getUserList(
       (data) => {
         setUserListState(true);
+        // console.log(data);
         setUserList(data.map((user) => {
           return {
             id: user.id,
             userId: (user.id && user.id != null) ? user.id : "",
             name: user.name,
-            userGroup: (user.orgUsrGroups && user.orgUsrGroups.length > 0) ? (user.orgUsrGroups[0].code ?? user.orgUsrGroups[0].code) : "",
+            userGroup: (user.orgUsrUsrGroups && user.orgUsrUsrGroups.length > 0) ? user.orgUsrUsrGroups[0].orgUsrGroup.name : "",
             team: (user.orgUsrTeams && user.orgUsrTeams.length > 0) ? user.orgUsrTeams[0].orgTeam.name : "",
             organization: (user.org && user.org.name) ? user.org.name : "",
             phone: "",
