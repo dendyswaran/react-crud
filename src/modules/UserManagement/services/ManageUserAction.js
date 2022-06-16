@@ -1,5 +1,5 @@
 import { MANAGE_USER_ACTION } from "../configs/ManageUser.constant";
-import { put, get } from "../../../helpers/ApiHelper";
+import {put, get, post} from "../../../helpers/ApiHelper";
 import { genFetchDatatable } from "../../../commons/GenericAction";
 
 const manageUserDatatable = () => {
@@ -63,4 +63,34 @@ const getUserList = (onSuccess, onError) => {
     };
 }
 
-export { manageUserDatatable, editUser, fetchUserDatatable, getUserList };
+const deactivateUser = (id, onSuccess, onError) => {
+    return async (dispatch) => {
+        try {
+            const {data:resp} = await post("/api/org-user/deactivate/" + id, {}, true);
+            if(resp.success) {
+                onSuccess(resp.data);
+            }else {
+                onError(resp.error);
+            }
+        }catch (e) {
+            onError(e);
+        }
+    }
+}
+
+const activateUser = (id, onSuccess, onError) => {
+    return async (dispatch) => {
+        try {
+            const {data:resp} = await post("/api/org-user/activate/" + id, {}, true);
+            if(resp.success) {
+                onSuccess(resp.data);
+            }else {
+                onError(resp.error);
+            }
+        }catch (e) {
+            onError(e);
+        }
+    }
+}
+
+export { manageUserDatatable, editUser, fetchUserDatatable, getUserList, deactivateUser, activateUser };

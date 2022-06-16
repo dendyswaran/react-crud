@@ -109,7 +109,7 @@ export function genBulkDeleteData(url, ids, onSuccess) {
 
 export function genDeleteData(url, id, onSuccess) {
     return async (dispatch) => {
-        if(id && id > 0) {
+        if(id && id.length > 0) {
             try {
                 const { data:resp } = await del(url + "/" + id, true);
                 if(resp.success) {

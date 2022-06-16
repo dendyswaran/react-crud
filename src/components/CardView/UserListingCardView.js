@@ -1,13 +1,12 @@
-import {useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import UserInfoCardView from "./UserInfoCardView";
 import IconCardHeader from "../Header/IconCardHeader";
 import { InputSwitch } from "primereact/inputswitch";
 import PrimaryButton from "../Button/PrimaryButton";
 import { useNavigate } from "react-router-dom";
 import { genDeleteData } from "../../commons/GenericAction";
-import { ConfirmDialog } from "primereact/confirmdialog";
 import { useDispatch } from "react-redux";
-import md5 from 'crypto-js/md5';
+import {activateUser, deactivateUser} from "../../modules/UserManagement/services/ManageUserAction";
 
 const UserListingCardView = (props) => {
   const [checked, setChecked] = useState(true);
@@ -36,6 +35,28 @@ const UserListingCardView = (props) => {
 
   const handleBeforeDelete = (e) => {
     setShowDeleteDialog(true);
+  }
+
+  const handleActivateUser = (id) => {
+    console.log(id);
+    if(id && id.length > 0) {
+      if(props.userDetails.mtStatus) {
+        dispatch(deactivateUser(id, () => {
+          console.log("reload");
+          // navigate("/user-management");
+          window.location.reload();
+        }, (error) => {
+          console.log(error);
+        }));
+      }else {
+        dispatch(activateUser(id, () => {
+          console.log("reload");
+          window.location.reload();
+        }, (error) => {
+          console.log(error);
+        }));
+      }
+    }
   }
 
 
@@ -108,6 +129,11 @@ const UserListingCardView = (props) => {
               <td className="w-1/3">{TEXT_EMAIL_ADDRESS}</td>
               <td className="flex">
                 <UserInfoCardView>{props.userDetails.email}</UserInfoCardView>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <PrimaryButton icon="" label={(props.userDetails.mtStatus) ? "Deactivate" : "Activate"} onClick={(e) => {e.preventDefault();return handleActivateUser(props.userDetails.id);}}></PrimaryButton>
               </td>
             </tr>
           </tbody>

@@ -94,6 +94,7 @@ const UserManagementPage = () => {
             organization: (user.org && user.org.name) ? user.org.name : "",
             phone: "",
             email: user.email,
+            mtStatus: user.mtStatus.code === "01"
           };
         }));
       },
