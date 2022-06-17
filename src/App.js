@@ -1,4 +1,4 @@
- import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import RequireAuth from "./components/RequireAuth";
 import MyAccountPage from "./modules/account/MyAccountPage";
 import SigninPage from "./modules/authentication/SigninPage";
