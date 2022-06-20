@@ -34,7 +34,8 @@ const UserForm = (props) => {
   const [formData, setFormData] = useState({
     id: "",
     name: "",
-    email: ""
+    email: "",
+    orgUsrGroupIds: []
   });
   const dispatch = useDispatch();
   const toastRef = useRef();
@@ -43,6 +44,7 @@ const UserForm = (props) => {
   const [user, setUser] = useState();
   const [userGroupList, setUserGroupList] = useState([]);
   const [showActivateDialog, setShowActivateDialog] = useState(false);
+  const [validateError, setValidateError] =  useState("");
 
   useEffect(() => {
     if(userId) {
@@ -56,7 +58,7 @@ const UserForm = (props) => {
   useEffect(() => {
     if (user) {
       if (user.org && user.org.id) {
-        organizationsList.map(organization => {
+        organizationsList.forEach(organization => {
           if (organization.id === user.org.id) {
             setOrganization(organization.id);
           }
@@ -68,7 +70,11 @@ const UserForm = (props) => {
         });
         setTeam(team.id);
       }
-    }
+      if(formData.orgUsrGroupIds.length > 0) {
+        // console.log(formData.orgUsrGroupIds);
+        setUserGroup(formData.orgUsrGroupIds[0]);
+      }
+    };
   }, [user]);
 
   const fetchUserGroupList = () => {
@@ -124,6 +130,7 @@ const UserForm = (props) => {
   const fetchUser = (userId) => {
     dispatch(genGetDataById('api/org-user/get/' + userId,
       (data) => {
+      // console.log(data);
         setUser(data);
         setFormData(prevState => ({
           ...prevState,
@@ -131,12 +138,31 @@ const UserForm = (props) => {
           name: data.name,
           email: data.email,
           password: data.password,
-          mtStatus: data.mtStatus.code === "01"
+          mtStatus: data.mtStatus.code === "01",
+          orgUsrGroupIds: (data.orgUsrUsrGroups && data.orgUsrUsrGroups.length > 0)
+            ? Array.from(data.orgUsrUsrGroups.map(orgUsrUsrGroup =>  (orgUsrUsrGroup.orgUsrGroup.id)))
+            : [],
         }));
-
       }
     ));
   }
+
+  const onNameChange = (e) => {
+    setFormData(prevState => ({
+      ...prevState,
+      name: e.target.value
+    }))
+    formValidation();
+  }
+
+  const onPasswordChange = (e) => {
+    setFormData(prevState => ({
+      ...prevState, password: e.target.value
+    }));
+    formValidation();
+  }
+
+
 
   const onOrganizationChange = (e) => {
     setOrganization(e.value);
@@ -144,6 +170,7 @@ const UserForm = (props) => {
       ...prevState,
       orgId: e.value
     }));
+    formValidation();
   };
 
   const onTeamChange = (e) => {
@@ -152,10 +179,30 @@ const UserForm = (props) => {
       ...prevState,
       orgTeamId: e.value
     }));
+    formValidation();
   };
+
+  const onUserGroupChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      orgUsrGroupId: e.value
+    }));
+    formValidation();
+    return setUserGroup(e.value);
+  }
+
+  const onEmailChange = e => {
+    setFormData(prevState => ({...prevState, email: e.target.value}));
+    formValidation();
+  }
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
+    if(!formValidation()) {
+      toastRef.current.show({ severity: 'error', summary: 'Warning', detail: validateError, life: 3000 });
+      return false;
+    }
+
     if(userId) {
     dispatch(editUser(formData,
       () => {
@@ -170,7 +217,7 @@ const UserForm = (props) => {
     } else {
       dispatch(authSignup(formData,
           () => {
-            toastRef.current.show({ severity: 'success', summary: 'Register Success', detail: "New User Succesfully added", life: 3000 });
+            toastRef.current.show({ severity: 'success', summary: 'Register Success', detail: "New User Successfully added", life: 3000 });
             // window.location.reload("");
             navigate("/user-management");
           },
@@ -179,6 +226,42 @@ const UserForm = (props) => {
           })
       );
     }
+  }
+
+  const formValidation = () => {
+    let isFormValid = false;
+    if(!formData.orgId && !selectedOrganization) {
+      setValidateError("Please choose an organization");
+      return isFormValid;
+    }
+    if(!formData.orgTeamId && !selectedTeam ) {
+      setValidateError("Please choose a team");
+      return isFormValid;
+    }
+    if(!formData.name && formData.name.length < 0) {
+      setValidateError("Please fill in the name");
+      return isFormValid;
+    }
+    if(window.location.pathname.indexOf("signup") > 0 && formData.password.length < 0) {
+      setValidateError("Please fill in password");
+      return isFormValid;
+    }
+    if(!formData.email && formData.email.length < 0) {
+      setValidateError("Please fill in email");
+      return isFormValid;
+    }
+    if(formData.email.length > 0) {
+      const regex = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+      if(regex.test(formData.email) === false){
+        setValidateError("Please make sure email is correct");
+        return isFormValid;
+      }
+    }
+    if(!formData.orgUsrGroupId && !userGroup) {
+      setValidateError("Please choose a user group");
+      return isFormValid;
+    }
+    return true;
   }
 
   const handleActivateUser = () => {
@@ -246,16 +329,11 @@ const UserForm = (props) => {
                 <RadioButtonWithLabel
                   label= {element.name}
                   inputId={element.id + "_group"}
-                  name={element.name}
+                  name={"orgUsrGroup"}
                   value={element.id}
-                  onChange={(e) => {
-                    setFormData((prevState) => ({
-                      ...prevState,
-                      orgUsrGroupId: e.value
-                    }));
-                    return setUserGroup(e.value);
-                  }}
+                  onChange={onUserGroupChange}
                   checked={userGroup === element.id}
+                  required
                 />
               </div>
             </div>
@@ -293,7 +371,7 @@ const UserForm = (props) => {
         <div className="w-full md:w-full px-3 mb-6 md:mb-0">
           <InputLabel>Name</InputLabel>
           <InputTextBar className="standardBar full" value={formData.name}
-            onChange={e => setFormData(prevState => ({ ...prevState, name: e.target.value }))} />
+            onChange={onNameChange} required/>
         </div>
         {/* <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>First Name</InputLabel>
@@ -307,11 +385,11 @@ const UserForm = (props) => {
       </div>
 
       {/*Password*/}
-      {window.location.pathname.indexOf("signup") && (<div className="flex flex-wrap -mx-3 mb-6">
+      {window.location.pathname.indexOf("signup") > 0 && (<div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-full md:w-full px-3 mb-6 md:mb-0">
           <InputLabel>Password</InputLabel>
           <InputTextBar type="password" className="standardBar full"
-                        onChange={e => setFormData(prevState => ({...prevState, password: e.target.value}))}/>
+                        onChange={onPasswordChange} required/>
         </div>
       </div>)}
 
@@ -362,14 +440,15 @@ const UserForm = (props) => {
             className="standardBar full"
             placeholder="e.g. sample@xxxx.com"
             value={formData.email}
-            onChange={e => setFormData(prevState => ({ ...prevState, email: e.target.value }))}
+            onChange={onEmailChange}
+            required
           />
         </div>
       </div>
 
       <div className="container inline-flex flex-row pt-2">
         <div className="ml-auto flex">
-          <PrimaryButton icon="pi pi-save" label={"Save"} type={"submit"}></PrimaryButton>
+          <PrimaryButton icon="pi pi-save" label={"Save"} type={"submit"} disabled={false}></PrimaryButton>
           {userId &&
               <PrimaryButton icon="" label={(formData.mtStatus) ? "Deactivate" : "Activate"} onClick={(e) => {
                 e.preventDefault();
