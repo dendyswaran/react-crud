@@ -6,6 +6,7 @@ import IconCardHeader from "../../../components/Header/IconCardHeader";
 import DropdownBar from "../../../components/FormComponents/DropdownBar";
 import PrimaryButton from "../../../components/Button/PrimaryButton";
 import RadioButtonWithLabel from "../../../components/Button/RadioButtonWithLabel";
+import SecondaryButton from "../../../components/Button/SecondaryButton";
 
 const UserManagementForm = (props) => {
   // IMPORTANT: need to preventDefault when submit form!
@@ -186,8 +187,10 @@ const UserManagementForm = (props) => {
 
       <div className="container inline-flex flex-row pt-2">
         <div className="ml-auto flex">
-          <PrimaryButton icon="pi pi-save"></PrimaryButton>
-          <PrimaryButton icon="pi pi-trash"></PrimaryButton>
+          {/* <PrimaryButton icon="pi pi-save"></PrimaryButton>
+          <PrimaryButton icon="pi pi-trash"></PrimaryButton> */}
+          <SecondaryButton></SecondaryButton>
+          <SecondaryButton></SecondaryButton>
         </div>
       </div>
     </form>

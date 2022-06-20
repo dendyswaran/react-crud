@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { fetchAllTAppSites } from "./services/TasklistAction";
 import useTasklistAction from "./services/TasklistState";
 
-const IohTasklistPage = () => {
+const OemTasklistPage = () => {
   const dispatch = useDispatch();
   const { tasklists } = useTasklistAction();
 
@@ -18,14 +18,14 @@ const IohTasklistPage = () => {
       {tasklists.map((properties) => (
         <TasklistCardView
           key={properties.id}
-          href={`/ioh-tasklist/details/${properties.id}`}
+          href={`/oem-tasklist/details/${properties.id}`}
           primary={properties.cd}
           secondary="SITE ID"
-          data={[properties.eqpCount + " Equipments", properties.nm]}
+          data={[properties.dtOem, properties.eqpCount + " Equipments"]}
         />
       ))}
     </Fragment>
   );
 };
 
-export default IohTasklistPage;
+export default OemTasklistPage;

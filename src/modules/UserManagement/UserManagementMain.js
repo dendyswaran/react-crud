@@ -1,5 +1,8 @@
 import Layout from "../../components/Layout";
 import UserListingCardView from "../../components/CardView/UserListingCardView";
+import PrimaryButton from "../../components/Button/PrimaryButton";
+import { useNavigate } from "react-router-dom";
+import { Fragment } from "react";
 
 const items = [
   {
@@ -64,17 +67,39 @@ const items = [
   },
 ];
 
-const UserManagementPage = () => {
+const UserManagementMain = () => {
+  const navigate = useNavigate();
+
   return (
-    <Layout>
+    // <Layout>
+    //   {/* TODO: key to be added */}
+    //   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+    //     {items.map((userInfo) => (
+    //       <UserListingCardView key={userInfo.id} userDetails={userInfo} />
+    //     ))}
+    //   </div>
+    //   <div className="ml-auto">
+    //     <PrimaryButton
+    //       icon="pi pi-user-plus"
+    //       onClick={() => navigate("/user-management/form")}
+    //     />
+    //   </div>
+    // </Layout>
+    <Fragment>
       {/* TODO: key to be added */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {items.map((userInfo) => (
           <UserListingCardView key={userInfo.id} userDetails={userInfo} />
         ))}
       </div>
-    </Layout>
+      <div className="ml-auto">
+        <PrimaryButton
+          icon="pi pi-user-plus"
+          onClick={() => navigate("/user-management/form")}
+        />
+      </div>
+    </Fragment>
   );
 };
 
-export default UserManagementPage;
+export default UserManagementMain;

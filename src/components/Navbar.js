@@ -70,11 +70,20 @@ export default function Navbar() {
               className="flex-1"
               menu={"Task List"}
             >
+              <MenuDropdownLink href="/ioh-tasklist-old" icon="pi pi-file">
+                IOH (OLD)
+              </MenuDropdownLink>
               <MenuDropdownLink href="/ioh-tasklist" icon="pi pi-file">
                 IOH
               </MenuDropdownLink>
-              <MenuDropdownLink href="/decom-tasklist-detail" icon="pi pi-file">
+              <MenuDropdownLink href="/decom-tasklist" icon="pi pi-file">
                 DECOM
+              </MenuDropdownLink>
+              <MenuDropdownLink href="/scrap-tasklist" icon="pi pi-file">
+                SCRAP
+              </MenuDropdownLink>
+              <MenuDropdownLink href="/oem-tasklist" icon="pi pi-file">
+                OEM
               </MenuDropdownLink>
             </MenuDropdown>
 
