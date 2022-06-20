@@ -9,7 +9,6 @@ import PrimaryButton from "../../../components/Button/PrimaryButton";
 import CheckboxMain from "../../../components/FormComponents/CheckboxMain";
 
 export default function AssignTeamPage() {
-
   //Site ID Search Query Logic
   const { searchSite } = window.location;
   const siteQuery = new URLSearchParams(searchSite).get("s");
@@ -120,7 +119,6 @@ export default function AssignTeamPage() {
   };
 
   const filteredPostCode = filterPostCode(items, searchPostCodeQuery);
-  
 
   return (
     <Layout>
@@ -160,7 +158,9 @@ export default function AssignTeamPage() {
           <CheckboxMain
             name="allSelect"
             className="mr-2"
-            checked={!filteredPostCode.some((props) => props?.isChecked !== true)}
+            checked={
+              !filteredPostCode.some((props) => props?.isChecked !== true)
+            }
             onChange={handleChange}
           />
           <label className="pt-1">Select All</label>
