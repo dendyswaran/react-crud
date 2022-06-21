@@ -111,7 +111,6 @@
     h-10
     w-full
     hover:text-primary
-    mr-4
     xl:text-center
     text-left
     p-2 lg:p-0
@@ -121,7 +120,9 @@
   }
 
   .dropdown {
-    @apply px-5
+    @apply
+    px-4
+    w-full
     py-1
     cursor-pointer
     hover:text-primary

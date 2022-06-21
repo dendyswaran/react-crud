@@ -1,7 +1,6 @@
-import { useState } from "react";
-import { getByTestId } from "@testing-library/react";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { authSignout } from "../modules/authentication/services/AuthenticationAction";
 import useAuthentication from "../modules/authentication/services/AuthenticationState";
 import {
@@ -16,6 +15,7 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useAuthentication();
+  const location = useLocation();
 
   const handleSignout = () => {
     dispatch(
@@ -28,9 +28,15 @@ export default function Navbar() {
   const [hidden, setHidden] = useState(true);
 
   // flip hidden flag
-  const hideHandler = () => {
+  const flipHideHandler = () => {
     setHidden(!hidden);
   };
+
+  useEffect(() => {
+    setHidden(true);
+  }, [location]);
+
+  // TODO: also at NavMenu --> show arrow open and close conditionally !!!
 
   const hiddenStr = hidden ? "hidden" : "";
   const myClass =
@@ -39,16 +45,10 @@ export default function Navbar() {
   return (
     <nav className="bg-white w-full fixed z-50 drop-shadow-lg">
       <div className="container flex items-center justify-between flex-wrap p-6 w-full mx-auto">
-        <div className="flex items-center flex-shrink-0 mr-6">
-          <div className="md:flex ">
-            <IohLogo />
-          </div>
-        </div>
-        {/* Mobile Menu Button, TODO: to be moved into component*/}
         <div className="block xl:hidden">
           <button
-            onClick={hideHandler}
-            className="flex items-center px-3 py-2 border rounded text-gray-400 border-gray-400 hover:text-red-400 hover:border-red-400"
+            onClick={flipHideHandler}
+            className="flex items-center px-3 py-2 border rounded text-gray-400 border-gray-400 hover:text-primary hover:border-primary"
           >
             <svg
               className="fill-current h-3 w-3"
@@ -60,7 +60,23 @@ export default function Navbar() {
             </svg>
           </button>
         </div>
-        {/* TODO: switch anchor to react Link, maybe no need*/}
+        <div className="flex mx-auto flex-shrink-0 xl:mr-6 md:flex">
+          <IohLogo />
+        </div>
+        <div className="block xl:hidden">
+          <MenuDropdown>
+            <MenuDropdownButton
+              // onClick={test}
+              icon="pi pi-user-edit"
+            >
+              Profile
+            </MenuDropdownButton>
+            <MenuDropdownButton onClick={handleSignout} icon="pi pi-sign-out">
+              Log out
+            </MenuDropdownButton>
+          </MenuDropdown>
+        </div>
+
         <div className={myClass}>
           <div className="text-sm xl:flex-grow xl:inline-flex text-left">
             <MenuSimple children="Home" icon="pi pi-home"></MenuSimple>
@@ -69,6 +85,7 @@ export default function Navbar() {
               icon="pi pi-list"
               className="flex-1"
               menu={"Task List"}
+              width="w-full"
             >
               <MenuDropdownLink href="/ioh-tasklist-old" icon="pi pi-file">
                 IOH (OLD)
@@ -99,7 +116,7 @@ export default function Navbar() {
               icon="pi pi-users"
             />
           </div>
-          <div>
+          <div className="hidden xl:block">
             <MenuDropdown
               className="flex-1"
               menu={"Hi admin, " + user.username}
