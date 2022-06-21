@@ -35,6 +35,7 @@ const UserForm = (props) => {
     id: "",
     name: "",
     email: "",
+    code: "",
     orgUsrGroupIds: []
   });
   const dispatch = useDispatch();
@@ -130,12 +131,13 @@ const UserForm = (props) => {
   const fetchUser = (userId) => {
     dispatch(genGetDataById('api/org-user/get/' + userId,
       (data) => {
-      // console.log(data);
+      console.log(data);
         setUser(data);
         setFormData(prevState => ({
           ...prevState,
           id: data.id,
           name: data.name,
+          code: data.code,
           email: data.email,
           password: data.password,
           mtStatus: data.mtStatus.code === "01",
@@ -193,6 +195,11 @@ const UserForm = (props) => {
 
   const onEmailChange = e => {
     setFormData(prevState => ({...prevState, email: e.target.value}));
+    formValidation();
+  }
+
+  const onCodeChange = (e) => {
+    setFormData(prevState => ({...prevState, code: e.target.value}));
     formValidation();
   }
 
@@ -359,12 +366,20 @@ const UserForm = (props) => {
       </div>
 
       {/* User ID */}
-      {userId && (<div className="flex flex-wrap -mx-3 mb-6">
+      {/*{userId && (<div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-full px-3">
           <InputLabel>User ID</InputLabel>
           <InputTextBar className="standardBar full" value={formData.id} disabled />
         </div>
-      </div>)}
+      </div>)}*/}
+
+      {/* User Code*/}
+      <div className="flex flex-wrap -mx-3 mb-6">
+        <div className="w-full px-3">
+          <InputLabel>User Code</InputLabel>
+          <InputTextBar className="standardBar full" value={formData.code} onChange={onCodeChange} required />
+        </div>
+      </div>
 
       {/* Name */}
       <div className="flex flex-wrap -mx-3 mb-6">
