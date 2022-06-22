@@ -1,7 +1,6 @@
 import { Fragment } from "react";
 import { Link } from "react-router-dom";
 
-
 // const ClickableHeader = ({header, href, secondary=""}) => {
 //   return (
 //       <Fragment>
@@ -19,19 +18,19 @@ import { Link } from "react-router-dom";
 // };
 
 // TODO: make clickable link easily distinguishable from non clickable counterparts (i.e. apply different styling.)
-const ClickableHeader = ({header, href, secondary=""}) => {
+const ClickableHeader = ({ header, href, data = "", secondary = "" }) => {
   return (
     <Fragment>
       <Link
-        to={{ pathname: href }}
-        // className="font-normal capitalize text-secondary hover:text-red-400 text-2xl"
-        className="font-normal capitalize text-blue-900 text-2xl hover:font-semibold hover:border-blue-900 border-b-2 border-blue-100 "
+        to={href}
+        state={data}
+        className="font-normal capitalize text-blue-900 text-2xl hover:font-semibold"
       >
         {header}
       </Link>
       <br />
       <span className="font-light capitalize text-black text-2sm">
-        { secondary }
+        {secondary}
       </span>
     </Fragment>
   );

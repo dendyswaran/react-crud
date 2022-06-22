@@ -8,13 +8,33 @@
   background-color: #4f46e5;
 }
 
+/* Style hack for prime react tabview  */
+.p-tabview-nav-link {
+  margin-right: 2px !important;
+}
+
 .p-tabview-title {
-  padding-left: 10px;
+  color: rgb(30 58 138 / 1);
+  font-weight: 500;
+}
+
+.p-tabview-nav {
+  background-color: rgb(229 231 235 / 1) !important;
+}
+
+.p-tabview-ink-bar {
+  background-color: rgb(30 58 138 / 1) !important;
+}
+
+.p-tabview-panels {
+  background-color: rgb(229 231 235 / 1) !important;
+  padding: 0 !important;
+  padding-top: 4px !important;
 }
 
 /* Overriding color for switch button */
 .p-inputswitch-checked .p-inputswitch-slider {
-  background-color: rgb(252 165 165 / 1) !important;
+  background-color: rgb(190 242 100 / 1) !important;
 }
 
 @layer components {
@@ -61,7 +81,7 @@
   }
 
   .btn.primary:hover {
-    @apply !bg-red-200
+    @apply !bg-tertiary
     !text-secondary
     !border-secondary;
   }
@@ -74,8 +94,8 @@
 
   /* TODO: rename to sign in btn */
   .btn.secondary:hover {
-    @apply !bg-blue-200
-    !text-blue-900;
+    @apply !bg-tertiary
+    !text-secondary;
   }
 
   /* Menu Simple */
@@ -90,9 +110,7 @@
     xl:h-5
     h-10
     w-full
-    hover:text-red-400
-    mr-4
-    border-red-400
+    hover:text-primary
     xl:text-center
     text-left
     p-2 lg:p-0
@@ -102,10 +120,12 @@
   }
 
   .dropdown {
-    @apply px-5
+    @apply
+    px-4
+    w-full
     py-1
     cursor-pointer
-    hover:text-red-400
+    hover:text-primary
     hover:bg-slate-100
     rounded-md;
   }
@@ -118,7 +138,7 @@
   }
 
   .card.secondary {
-    @apply bg-red-100
+    @apply bg-tertiary
     text-secondary;
   }
 
@@ -131,7 +151,7 @@
   /* TODO: standardise style for them */
   .card.scrap {
     @apply bg-red-100
-    text-secondary
+    text-red-900
     /* rounded-none */
     px-2;
   }

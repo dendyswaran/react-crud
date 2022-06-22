@@ -70,7 +70,7 @@ const UserListingCardView = (props) => {
   return (
     // TODO: Change table structure to grid --> when phone screen is small --> split into 2 rows (until 320px can fit)
     <div className="p-1">
-      <div className="rounded-lg container bg-white w-full p-4">
+      <div className="rounded-lg container bg-white w-full p-4 drop-shadow-lg">
         <div className="container inline-flex flex-row pt-4 pb-8">
           {/* <IconCardHeader icon="pi-user" header={props.userDetails.id} /> */}
           <IconCardHeader icon="pi-user" header={props.userDetails.id.substring(0,18)+"..."} />

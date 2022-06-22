@@ -128,7 +128,11 @@ export default function SigninPage() {
                     </label>
                   </div>
                 </div>
-                <SecondaryButton disabled={isLoading} />
+                <SecondaryButton
+                  disabled={isLoading}
+                  label="Sign In"
+                  icon="pi pi-sign-in"
+                />
                 <div className="inline-flex flex-wrap">
                   <div className="flex pr-10 md:pr-0">
                     <a

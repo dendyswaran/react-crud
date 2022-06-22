@@ -3,7 +3,6 @@ import InputLabel from "../../components/FormComponents/InputLabel";
 import InputTextBar from "../../components/FormComponents/InputTextBar";
 import IconCardHeader from "../../components/Header/IconCardHeader";
 import DropdownBar from "../../components/FormComponents/DropdownBar";
-import PrimaryButton from "../../components/Button/PrimaryButton";
 import RadioButtonWithLabel from "../../components/Button/RadioButtonWithLabel";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -12,6 +11,9 @@ import { getOrganizationsList } from "../UserManagement/services/OrganizationAct
 import { getTeamList } from "../UserManagement/services/TeamAction";
 import Layout from "../../components/Layout";
 import { authSignup } from "./services/OrgAuthentication";
+import PrimaryButton from "../../../components/Button/PrimaryButton";
+import RadioButtonWithLabel from "../../../components/Button/RadioButtonWithLabel";
+import SecondaryButton from "../../../components/Button/SecondaryButton";
 
 
 const SignUpOrgContent = (props) => {
@@ -256,8 +258,10 @@ const SignUpOrgContent = (props) => {
 
       <div className="container inline-flex flex-row pt-2">
         <div className="ml-auto flex">
-          <PrimaryButton icon="pi pi-save"></PrimaryButton>
-          <PrimaryButton icon="pi pi-trash"></PrimaryButton>
+          {/* <PrimaryButton icon="pi pi-save"></PrimaryButton>
+          <PrimaryButton icon="pi pi-trash"></PrimaryButton> */}
+          <SecondaryButton></SecondaryButton>
+          <SecondaryButton></SecondaryButton>
         </div>
       </div>
     </form>

@@ -3,6 +3,9 @@ import UserListingCardView from "../../components/CardView/UserListingCardView";
 import { fetchUserDatatable, getUserList } from "./services/ManageUserAction";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import PrimaryButton from "../../components/Button/PrimaryButton";
+import { useNavigate } from "react-router-dom";
+import { Fragment } from "react";
 
 const items = [
   {
@@ -67,13 +70,14 @@ const items = [
   },
 ];
 
-const UserManagementPage = () => {
+const UserManagementMain = () => {
 
   // fetch data from database
   // send to the user management page
   const [userList, setUserList] = useState();
   const [userListState, setUserListState] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     handleGetUserList();
@@ -104,15 +108,35 @@ const UserManagementPage = () => {
   }
 
   return (
-    <Layout>
+    // <Layout>
+    //   {/* TODO: key to be added */}
+    //   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+    //     {items.map((userInfo) => (
+    //       <UserListingCardView key={userInfo.id} userDetails={userInfo} />
+    //     ))}
+    //   </div>
+    //   <div className="ml-auto">
+    //     <PrimaryButton
+    //       icon="pi pi-user-plus"
+    //       onClick={() => navigate("/user-management/form")}
+    //     />
+    //   </div>
+    // </Layout>
+    <Fragment>
       {/* TODO: key to be added */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {userList && userList.map((userInfo) => (
           <UserListingCardView key={userInfo.id} userDetails={userInfo} />
         ))}
       </div>
-    </Layout>
+      <div className="ml-auto">
+        <PrimaryButton
+          icon="pi pi-user-plus"
+          onClick={() => navigate("/user-management/form")}
+        />
+      </div>
+    </Fragment>
   );
 };
 
-export default UserManagementPage;
+export default UserManagementMain;

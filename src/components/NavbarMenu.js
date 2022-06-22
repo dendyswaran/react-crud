@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-export function MenuDropdown({ menu, icon, children }) {
+export function MenuDropdown({ menu, icon, width = "w-40", children }) {
   const [show, setShow] = useState(false);
+
+  const right = <i className="pl-2 pi pi-angle-right"></i>;
+  const down = <i className="pl-2 pi pi-angle-down"></i>;
 
   return (
     <div
@@ -11,15 +14,16 @@ export function MenuDropdown({ menu, icon, children }) {
       onMouseLeave={() => setShow(false)}
     >
       {/* Menu link */}
-      <span className="menu">
+      <span className={`menu mx-2`}>
         <i className={`${icon || "pi pi-user"} mr-2`}></i> {menu}
+        {show ? down : right}
       </span>
 
       {/* Dropdown menu items */}
       <div
-        className={`flex-col z-10 py-5 shadow-sm rounded-sm absolute bg-white w-36 lg:w-36 rounded-md left-1 ${
+        className={`flex-col z-10 py-5 shadow-md rounded-sm absolute bg-white lg:w-40 rounded-md right-0 items-center ${
           show ? "flex" : "hidden"
-        }`}
+        } ${width}`}
       >
         {children}
       </div>
@@ -39,14 +43,12 @@ export function MenuDropdownLink({ children, icon, href = "/", ...rest }) {
 
 export function MenuDropdownButton({ children, icon, onClick }) {
   const myIcon = <i className={`${icon || "pi pi-user"} mr-2`}></i>;
-
   return (
     <span onClick={onClick} className="dropdown">
       {myIcon} {children}
     </span>
   );
 }
-
 
 export function MenuSimple({ children, icon, href = "/" }) {
   const myIcon = <i className={`${icon || "pi pi-user"} mr-2`}></i>;
@@ -57,11 +59,10 @@ export function MenuSimple({ children, icon, href = "/" }) {
         to={{
           pathname: href,
         }}
-        className="menu"
+        className="menu mx-2"
       >
         {myIcon} {children}
       </Link>
     </div>
   );
 }
-

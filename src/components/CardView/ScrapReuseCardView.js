@@ -14,11 +14,4 @@ const ReuseCard = () => {
   );
 };
 
-const ScrapReuseCard = (reuse) => {
-  if (reuse) {
-    return <ReuseCard />;
-  }
-  return <ScrapCard />;
-};
-
-export default ScrapReuseCard;
+export {ReuseCard, ScrapCard};
