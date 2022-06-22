@@ -17,7 +17,7 @@ const UserListingCardView = (props) => {
 
   const handleEditButton = (e) => {
     // console.log(e.currentTarget.id);
-    navigate("/user-form/" + e.currentTarget.id);
+    navigate("/user-management/form/" + e.currentTarget.id);
   }
 
 

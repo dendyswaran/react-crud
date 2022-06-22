@@ -8,13 +8,13 @@ import DrinkPage from "./modules/drink/DrinkPage";
 import IohTasklistPageOld from "./modules/tasklist/IohTasklistPageOld";
 import UserManagementMain from "./modules/UserManagement/UserManagementMain";
 import UserFormPage from "./modules/UserManagement/UserFormPage";
-import UserManagementForm from "./modules/UserManagement/Partial/UserManagementForm";
+// import UserManagementForm from "./modules/UserManagement/Partial/UserManagementForm";
 import MenuEditPage from "./modules/menu/MenuEditPage";
 import MenuPage from "./modules/menu/MenuPage";
 import ManageUserPage from "./modules/manage-user/pages/ManageUserPage";
 
-import DecomTaskListDetail from "./modules/tasklist/tasklist_details/DecomTasklistDetail";
- import {AddOrganizationGroupPage} from "./modules/UserManagement/temp/AddOrganizationGroupPage";
+// import DecomTaskListDetail from "./modules/tasklist/tasklist_details/DecomTasklistDetail";
+// import { AddOrganizationGroupPage } from "./modules/UserManagement/temp/AddOrganizationGroupPage";
 import { EditUserPageWrapped } from "./modules/manage-user/pages/EditUserPage";
 import DecomTaskListDetails from "./modules/tasklist/tasklist_details/DecomTasklistDetails";
 import IohTaskListDetailOld from "./modules/tasklist/tasklist_details/IohTasklistDetailsOld";
@@ -65,14 +65,15 @@ function App() {
               }
             />
             <Route
-              path="form"
+              path="form/:id"
               element={
                 <RequireAuth>
-                  <UserManagementForm />
+                  <UserFormPage />
                 </RequireAuth>
               }
             />
           </Route>
+
           <Route
             path="ioh-tasklist-old"
             element={<PageLayout text="IOH Task List (OLD)" />}
@@ -221,8 +222,22 @@ function App() {
             </RequireAuth>
           }
         />
+
         <Route path="/auth/signin" element={<SigninPage />} />
-        <Route path="/auth/signup" element={<SignupPage />} />
+        <Route 
+          path="/auth/signup" 
+          element={<Layout />}
+          >
+          <Route
+            path=""
+            element={
+              <RequireAuth>
+                <PageLayout text="Register New User" />
+                <UserFormPage />
+              </RequireAuth>
+            }
+          />
+        </Route>
         <Route
           path="/manage-user/user-list"
           element={

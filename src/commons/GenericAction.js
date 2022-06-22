@@ -14,21 +14,21 @@ export function genGetDataById(url, onSuccess) {
   };
 }
 
-export function genGetAllData(url, onSuccess) {
-  return async (dispatch) => {
-    try {
-      const { data: resp } = await get(url, true);
+// export function genGetAllData(url, onSuccess) {
+//   return async (dispatch) => {
+//     try {
+//       const { data: resp } = await get(url, true);
 
-      console.log(resp);
+//       console.log(resp);
 
-      if (resp.success) {
-        onSuccess(resp.data);
-      }
-    } catch (e) {
-      console.error(e, e.stack);
-    }
-  };
-}
+//       if (resp.success) {
+//         onSuccess(resp.data);
+//       }
+//     } catch (e) {
+//       console.error(e, e.stack);
+//     }
+//   };
+// }
 
 /**
  * A generic method to fetch datatables from API
