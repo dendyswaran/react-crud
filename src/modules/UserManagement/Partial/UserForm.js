@@ -45,7 +45,7 @@ const UserForm = (props) => {
   const [user, setUser] = useState();
   const [userGroupList, setUserGroupList] = useState([]);
   const [showActivateDialog, setShowActivateDialog] = useState(false);
-  const [validateError, setValidateError] =  useState("");
+  const [validateError, setValidateError] =  useState({});
 
   useEffect(() => {
     if(userId) {
@@ -153,15 +153,13 @@ const UserForm = (props) => {
     setFormData(prevState => ({
       ...prevState,
       name: e.target.value
-    }))
-    formValidation();
+    }));
   }
 
   const onPasswordChange = (e) => {
     setFormData(prevState => ({
       ...prevState, password: e.target.value
     }));
-    formValidation();
   }
 
 
@@ -172,7 +170,6 @@ const UserForm = (props) => {
       ...prevState,
       orgId: e.value
     }));
-    formValidation();
   };
 
   const onTeamChange = (e) => {
@@ -181,32 +178,32 @@ const UserForm = (props) => {
       ...prevState,
       orgTeamId: e.value
     }));
-    formValidation();
   };
 
   const onUserGroupChange = (e) => {
+    setUserGroup(e.value);
     setFormData((prevState) => ({
       ...prevState,
       orgUsrGroupId: e.value
     }));
-    formValidation();
-    return setUserGroup(e.value);
   }
 
   const onEmailChange = e => {
     setFormData(prevState => ({...prevState, email: e.target.value}));
-    formValidation();
+    // formValidation();
   }
 
   const onCodeChange = (e) => {
     setFormData(prevState => ({...prevState, code: e.target.value}));
-    formValidation();
+    // formValidation();
   }
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
-    if(!formValidation()) {
-      toastRef.current.show({ severity: 'error', summary: 'Warning', detail: validateError, life: 3000 });
+    formValidation();
+
+    if(Object.keys(validateError).length !== 0) {
+      console.log("hasError");
       return false;
     }
 
@@ -236,39 +233,39 @@ const UserForm = (props) => {
   }
 
   const formValidation = () => {
-    let isFormValid = false;
+    // let isFormValid = false;
+    setValidateError({});
     if(!formData.orgId && !selectedOrganization) {
-      setValidateError("Please choose an organization");
-      return isFormValid;
+      setValidateError(prevState => ({...prevState, orgId: "Please choose an organization"}));
     }
     if(!formData.orgTeamId && !selectedTeam ) {
-      setValidateError("Please choose a team");
-      return isFormValid;
+      setValidateError(prevState => ({...prevState, orgTeamId: "Please choose a team"}));
     }
     if(!formData.name && formData.name.length < 0) {
-      setValidateError("Please fill in the name");
-      return isFormValid;
+      setValidateError(prevState => ({...prevState, name: "Please fill in the name"}));
     }
-    if(window.location.pathname.indexOf("signup") > 0 && formData.password.length < 0) {
-      setValidateError("Please fill in password");
-      return isFormValid;
+    if((window.location.pathname.indexOf("signup") > 0 && !formData.password) || (formData.password && formData.password.length <= 0)) {
+      setValidateError(prevState => ({...prevState, password: "Please fill in password"}));
     }
     if(!formData.email && formData.email.length < 0) {
-      setValidateError("Please fill in email");
-      return isFormValid;
+      setValidateError(prevState => ({...prevState, email: "Please fill in email"}));
     }
     if(formData.email.length > 0) {
       const regex = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
       if(regex.test(formData.email) === false){
-        setValidateError("Please make sure email is correct");
-        return isFormValid;
+        setValidateError(prevState => ({...prevState, email: "Please make sure email is correct"}));
       }
     }
     if(!formData.orgUsrGroupId && !userGroup) {
-      setValidateError("Please choose a user group");
-      return isFormValid;
+      setValidateError(prevState => ({...prevState , orgUsrGroupId : "Please choose a user group"}));
     }
-    return true;
+    console.log(validateError);
+
+    // console.log(Object.keys(validateError).length === 0);
+    // if(Object.keys(validateError).length === 0) {
+    //   isFormValid = true;
+    // }
+    // return isFormValid;
   }
 
   const handleActivateUser = () => {
@@ -340,7 +337,7 @@ const UserForm = (props) => {
                   value={element.id}
                   onChange={onUserGroupChange}
                   checked={userGroup === element.id}
-                  required
+                  // required
                 />
               </div>
             </div>
@@ -377,7 +374,11 @@ const UserForm = (props) => {
       <div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-full px-3">
           <InputLabel>User Code</InputLabel>
-          <InputTextBar className="standardBar full" value={formData.code} onChange={onCodeChange} required />
+          <InputTextBar className="standardBar full"
+                        value={formData.code}
+                        onChange={onCodeChange}
+                        // required
+          />
         </div>
       </div>
 
@@ -385,8 +386,8 @@ const UserForm = (props) => {
       <div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-full md:w-full px-3 mb-6 md:mb-0">
           <InputLabel>Name</InputLabel>
-          <InputTextBar className="standardBar full" value={formData.name}
-            onChange={onNameChange} required/>
+          <InputTextBar className={"standardBar full ".concat(() => {if(validateError.name) return validateError.name})} value={formData.name}
+            onChange={onNameChange}/>
         </div>
         {/* <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>First Name</InputLabel>
@@ -404,7 +405,7 @@ const UserForm = (props) => {
         <div className="w-full md:w-full px-3 mb-6 md:mb-0">
           <InputLabel>Password</InputLabel>
           <InputTextBar type="password" className="standardBar full"
-                        onChange={onPasswordChange} required/>
+                        onChange={onPasswordChange}/>
         </div>
       </div>)}
 
@@ -456,7 +457,7 @@ const UserForm = (props) => {
             placeholder="e.g. sample@xxxx.com"
             value={formData.email}
             onChange={onEmailChange}
-            required
+            // required
           />
         </div>
       </div>
