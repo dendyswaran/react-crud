@@ -5,16 +5,16 @@ import IconCardHeader from "../../../components/Header/IconCardHeader";
 import DropdownBar from "../../../components/FormComponents/DropdownBar";
 import PrimaryButton from "../../../components/Button/PrimaryButton";
 import RadioButtonWithLabel from "../../../components/Button/RadioButtonWithLabel";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import {genGetDataById, genGetAllData, genDeleteData} from "../../../commons/GenericAction";
+import {genGetDataById, genGetAllData} from "../../../commons/GenericAction";
 import {activateUser, deactivateUser, editUser} from "../services/ManageUserAction";
 import { Toast } from 'primereact/toast';
 import { getOrganizationsList } from "../services/OrganizationAction";
 import { getTeamList } from "../services/TeamAction";
 import {ConfirmDialog} from "primereact/confirmdialog";
 import {authSignup} from "../../authentication/services/OrgAuthentication";
-
+import {classNames} from "primereact/utils";
 
 const UserForm = (props) => {
   // IMPORTANT: need to preventDefault when submit form!
@@ -22,15 +22,12 @@ const UserForm = (props) => {
   // TODO: Create a class called FormField that wrap all form input together with their labels --> then apply consistent padding.
 
   // Change User Group state
-  const [userGroup, setUserGroup] = useState(null);
   const navigate = useNavigate();
   const userId = props.userId ?? undefined;
 
 
   // Change organization state.
   // https://www.primefaces.org/primereact/selectbutton/
-  const [selectedOrganization, setOrganization] = useState();
-  const [selectedTeam, setTeam] = useState(null);
   const [formData, setFormData] = useState({
     id: "",
     name: "",
@@ -45,7 +42,9 @@ const UserForm = (props) => {
   const [user, setUser] = useState();
   const [userGroupList, setUserGroupList] = useState([]);
   const [showActivateDialog, setShowActivateDialog] = useState(false);
-  const [validateError, setValidateError] =  useState({});
+  const [validateError, setValidateError] =  useState({
+    btnDisabled: true
+  });
 
   useEffect(() => {
     if(userId) {
@@ -61,22 +60,26 @@ const UserForm = (props) => {
       if (user.org && user.org.id) {
         organizationsList.forEach(organization => {
           if (organization.id === user.org.id) {
-            setOrganization(organization.id);
+            setFormData(prevState => ({...prevState, orgId: organization.id}));
           }
         });
       }
       if(user.orgUsrTeams && user.orgUsrTeams.length > 0 && teamList.length > 0) {
-        let team = teamList.find(team => {
-          return team.id === user.orgUsrTeams[0].orgTeam.id;
+        teamList.forEach(team => {
+          if(team.id === user.orgUsrTeams[0].orgTeam.id) {
+            setFormData(prevState => ({...prevState, orgTeamId: team.id}));
+          }
         });
-        setTeam(team.id);
+        // setTeam(team.id);
       }
       if(formData.orgUsrGroupIds.length > 0) {
         // console.log(formData.orgUsrGroupIds);
-        setUserGroup(formData.orgUsrGroupIds[0]);
+        setFormData(prevState => ({
+          ...prevState,
+          orgUsrGroupId: formData.orgUsrGroupIds[0]}));
       }
     };
-  }, [user]);
+  },[user]);
 
   const fetchUserGroupList = () => {
     dispatch(genGetAllData("/api/org-group",
@@ -131,7 +134,7 @@ const UserForm = (props) => {
   const fetchUser = (userId) => {
     dispatch(genGetDataById('api/org-user/get/' + userId,
       (data) => {
-      console.log(data);
+      // console.log(data);
         setUser(data);
         setFormData(prevState => ({
           ...prevState,
@@ -140,7 +143,7 @@ const UserForm = (props) => {
           code: data.code,
           email: data.email,
           password: data.password,
-          mtStatus: data.mtStatus.code === "01",
+          mtStatus:  data.mtStatus ? data.mtStatus.code === "01" : false,
           orgUsrGroupIds: (data.orgUsrUsrGroups && data.orgUsrUsrGroups.length > 0)
             ? Array.from(data.orgUsrUsrGroups.map(orgUsrUsrGroup =>  (orgUsrUsrGroup.orgUsrGroup.id)))
             : [],
@@ -149,63 +152,17 @@ const UserForm = (props) => {
     ));
   }
 
-  const onNameChange = (e) => {
-    setFormData(prevState => ({
+
+  const onInputChange = (e) => {
+    console.log(e);
+    setFormData((prevState => ({
       ...prevState,
-      name: e.target.value
-    }));
-  }
-
-  const onPasswordChange = (e) => {
-    setFormData(prevState => ({
-      ...prevState, password: e.target.value
-    }));
-  }
-
-
-
-  const onOrganizationChange = (e) => {
-    setOrganization(e.value);
-    setFormData(prevState => ({
-      ...prevState,
-      orgId: e.value
-    }));
-  };
-
-  const onTeamChange = (e) => {
-    setTeam(e.value);
-    setFormData(prevState => ({
-      ...prevState,
-      orgTeamId: e.value
-    }));
-  };
-
-  const onUserGroupChange = (e) => {
-    setUserGroup(e.value);
-    setFormData((prevState) => ({
-      ...prevState,
-      orgUsrGroupId: e.value
-    }));
-  }
-
-  const onEmailChange = e => {
-    setFormData(prevState => ({...prevState, email: e.target.value}));
-    // formValidation();
-  }
-
-  const onCodeChange = (e) => {
-    setFormData(prevState => ({...prevState, code: e.target.value}));
-    // formValidation();
+      [e.target.name] : e.target.value
+    })))
   }
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
-    formValidation();
-
-    if(Object.keys(validateError).length !== 0) {
-      console.log("hasError");
-      return false;
-    }
 
     if(userId) {
     dispatch(editUser(formData,
@@ -232,40 +189,50 @@ const UserForm = (props) => {
     }
   }
 
+  useEffect(() => {
+    formValidation();
+  }, [formData])
+
   const formValidation = () => {
     // let isFormValid = false;
-    setValidateError({});
-    if(!formData.orgId && !selectedOrganization) {
-      setValidateError(prevState => ({...prevState, orgId: "Please choose an organization"}));
-    }
-    if(!formData.orgTeamId && !selectedTeam ) {
-      setValidateError(prevState => ({...prevState, orgTeamId: "Please choose a team"}));
-    }
-    if(!formData.name && formData.name.length < 0) {
+    setValidateError({
+      btnDisabled: true
+    });
+    // if(!formData.orgId) {
+    //   setValidateError(prevState => ({...prevState, orgId: "Please choose an organization"}));
+    // }
+    // if(!formData.orgTeamId) {
+    //   setValidateError(prevState => ({...prevState, orgTeamId: "Please choose a team"}));
+    // }
+    // if(!formData.orgUsrGroupId) {
+    //   setValidateError(prevState => ({...prevState , orgUsrGroupId : "Please choose a user group"}));
+    // }
+    if(!(formData.name.length > 0) === true) {
+      console.log("please fill in the name");
       setValidateError(prevState => ({...prevState, name: "Please fill in the name"}));
     }
     if((window.location.pathname.indexOf("signup") > 0 && !formData.password) || (formData.password && formData.password.length <= 0)) {
       setValidateError(prevState => ({...prevState, password: "Please fill in password"}));
     }
-    if(!formData.email && formData.email.length < 0) {
+    if(!formData.email && !(formData.email.length > 0)) {
       setValidateError(prevState => ({...prevState, email: "Please fill in email"}));
     }
     if(formData.email.length > 0) {
-      const regex = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+      const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
       if(regex.test(formData.email) === false){
         setValidateError(prevState => ({...prevState, email: "Please make sure email is correct"}));
       }
     }
-    if(!formData.orgUsrGroupId && !userGroup) {
-      setValidateError(prevState => ({...prevState , orgUsrGroupId : "Please choose a user group"}));
-    }
-    console.log(validateError);
 
-    // console.log(Object.keys(validateError).length === 0);
-    // if(Object.keys(validateError).length === 0) {
-    //   isFormValid = true;
-    // }
-    // return isFormValid;
+    if(!formData.code || !(formData.code.length > 0)) {
+      setValidateError(prevState => ({...prevState, code: "Please fill in user code"}));
+    }
+
+    // console.log(validateError);
+    // console.log(formData);
+    if(Object.keys(validateError).filter((key) => key !== "btnDisabled").length === 0) {
+      setValidateError(prevState => ({...prevState, btnDisabled: false}))
+    }
   }
 
   const handleActivateUser = () => {
@@ -313,12 +280,12 @@ const UserForm = (props) => {
   // { name: "PT Cellsite", value: "NY" },
   // ];
 
-  const teams = Array.from(teamList.map(
+  const teams = teamList ? Array.from(teamList.map(
     team => ({
       name: team.name,
       value: team.id
     })
-  ));
+  )) : [];
   // [
   //   { name: "Team 1", value: "1" },
   // ]
@@ -333,10 +300,10 @@ const UserForm = (props) => {
                 <RadioButtonWithLabel
                   label= {element.name}
                   inputId={element.id + "_group"}
-                  name={"orgUsrGroup"}
+                  name={"orgUsrGroupId"}
                   value={element.id}
-                  onChange={onUserGroupChange}
-                  checked={userGroup === element.id}
+                  onChange={onInputChange}
+                  checked={formData.orgUsrGroupId === element.id}
                   // required
                 />
               </div>
@@ -348,6 +315,9 @@ const UserForm = (props) => {
     }
   }
 
+  const invalidInput = (fieldName) => {
+    return classNames((validateError[fieldName] ? "p-invalid" : ""));
+  }
 
   const myHeader = userId ? "Modify " + userId : "Register New User";
 
@@ -374,11 +344,18 @@ const UserForm = (props) => {
       <div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-full px-3">
           <InputLabel>User Code</InputLabel>
-          <InputTextBar className="standardBar full"
+          <InputTextBar className={`standardBar full ${invalidInput("code")}`}
                         value={formData.code}
-                        onChange={onCodeChange}
+                        name={"code"}
+                        onChange={onInputChange}
+                        // onChange={onCodeChange}
                         // required
           />
+          {validateError.code &&
+            <p className="mt-2 text-pink-600 text-sm">
+              {validateError.code}
+            </p>
+          }
         </div>
       </div>
 
@@ -386,8 +363,15 @@ const UserForm = (props) => {
       <div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-full md:w-full px-3 mb-6 md:mb-0">
           <InputLabel>Name</InputLabel>
-          <InputTextBar className={"standardBar full ".concat(() => {if(validateError.name) return validateError.name})} value={formData.name}
-            onChange={onNameChange}/>
+          <InputTextBar className={`standardBar full ${invalidInput("name")}`} //`standardBar full `
+                        value={formData.name}
+                        name={"name"}
+            onChange={onInputChange}/>
+          {validateError.name &&
+            <p className="mt-2 text-pink-600 text-sm">
+              {validateError.name}
+            </p>
+          }
         </div>
         {/* <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>First Name</InputLabel>
@@ -404,8 +388,15 @@ const UserForm = (props) => {
       {window.location.pathname.indexOf("signup") > 0 && (<div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-full md:w-full px-3 mb-6 md:mb-0">
           <InputLabel>Password</InputLabel>
-          <InputTextBar type="password" className="standardBar full"
-                        onChange={onPasswordChange}/>
+          <InputTextBar type="password"
+                        className={`standardBar full ${invalidInput("password")}`}
+                        name={"password"}
+                        onChange={onInputChange}/>
+          {validateError.password &&
+            <p className="mt-2 text-pink-600 text-sm">
+              {validateError.password}
+            </p>
+          }
         </div>
       </div>)}
 
@@ -422,9 +413,11 @@ const UserForm = (props) => {
         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>organization</InputLabel>
           <DropdownBar
-            value={selectedOrganization}
+            value={formData.orgId}
             options={organizations}
-            onChange={onOrganizationChange}
+            name={"orgId"}
+            // onChange={onInputChange}
+            onChange={onInputChange}
             optionLabel="name"
             placeholder="Select an Organization"
           />
@@ -432,9 +425,10 @@ const UserForm = (props) => {
         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>team</InputLabel>
           <DropdownBar
-            value={selectedTeam}
+            value={formData.orgTeamId}
             options={teams}
-            onChange={onTeamChange}
+            onChange={onInputChange}
+            name={"orgTeamId"}
             optionLabel="name"
             placeholder="Select a Team"
           />
@@ -446,26 +440,31 @@ const UserForm = (props) => {
         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>Phone</InputLabel>
           <InputTextBar
-            className="standardBar full"
+            className="standardBar full" name={"phoneNumber"} onChange={onInputChange}
             placeholder="e.g. 6212XXXXXXX"
           />
         </div>
         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>Email</InputLabel>
           <InputTextBar
-            className="standardBar full"
+            className={`standardBar full ${invalidInput("email")}`}
             placeholder="e.g. sample@xxxx.com"
-            value={formData.email}
-            onChange={onEmailChange}
+            value={formData.email} name={"email"}
+            onChange={onInputChange}
             // required
           />
+          {validateError.email &&
+            <p className="mt-2 text-pink-600 text-sm">
+              {validateError.email}
+            </p>
+          }
         </div>
       </div>
 
       <div className="container inline-flex flex-row pt-2">
         <div className="ml-auto flex">
-          <PrimaryButton icon="pi pi-save" label={"Save"} type={"submit"} disabled={false}></PrimaryButton>
-          {userId &&
+          <PrimaryButton icon="pi pi-save" label={"Save"} type={"submit"} disabled={validateError.btnDisabled}></PrimaryButton>
+          {user &&
               <PrimaryButton icon="" label={(formData.mtStatus) ? "Deactivate" : "Activate"} onClick={(e) => {
                 e.preventDefault();
                 return handleActivateUser();
