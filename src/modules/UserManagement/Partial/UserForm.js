@@ -223,7 +223,6 @@ const UserForm = (props) => {
         setValidateError(prevState => ({...prevState, email: "Please make sure email is correct"}));
       }
     }
-
     if(!formData.code || !(formData.code.length > 0)) {
       setValidateError(prevState => ({...prevState, code: "Please fill in user code"}));
     }

@@ -224,17 +224,19 @@ function App() {
         />
 
         <Route path="/auth/signin" element={<SigninPage />} />
-        <Route 
-          path="/auth/signup" 
+        <Route
+          path="/auth/signup"
           element={<Layout />}
           >
           <Route
             path=""
             element={
-              <RequireAuth>
+              <>
+              {/*<RequireAuth>*/}
                 <PageLayout text="Register New User" />
                 <UserFormPage />
-              </RequireAuth>
+              {/*</RequireAuth>*/}
+              </>
             }
           />
         </Route>
