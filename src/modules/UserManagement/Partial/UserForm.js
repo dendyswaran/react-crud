@@ -44,10 +44,8 @@ const UserForm = (props) => {
   const [user, setUser] = useState();
   const [userGroupList, setUserGroupList] = useState([]);
   const [showActivateDialog, setShowActivateDialog] = useState(false);
-  const [validateError, setValidateError] =  useState({
-    btnDisabled: true
-  });
-  const formError = useSelector((state) => state.ValidatorReducer);
+  const [validateError, setValidateError] =  useState({});
+  const [submitBtnDisableState, setSubmitBtnState] = useState(false);
 
   useEffect(() => {
     if(userId) {
@@ -56,6 +54,7 @@ const UserForm = (props) => {
     fetchOrganizationList();
     fetchTeamList();
     fetchUserGroupList();
+    formValidation();
   }, []);
 
   useEffect(() => {
@@ -81,7 +80,7 @@ const UserForm = (props) => {
           ...prevState,
           orgUsrGroupId: formData.orgUsrGroupIds[0]}));
       }
-    };
+    }
   },[user]);
 
   const fetchUserGroupList = () => {
@@ -197,66 +196,57 @@ const UserForm = (props) => {
 
   useEffect(() => {
     console.log(validateError);
+    if(Object.keys(validateError).length > 0) {
+      let flag = false;
+      for(const key in validateError) {
+        flag = validateError[key].length !== 0;
+        if(flag) {
+          break;
+        }
+      }
+      setSubmitBtnState(flag);
+    }
   }, [validateError])
 
   const formValidation = () => {
-    setValidateError({
-      btnDisabled: true
-    });
+    /**
+     * This array is to be constructed to use with the FormValidator
+     * @type {[{types: string[], fieldName: string, payload: string},{types: (string)[], fieldName: string, payload: string},{types: string[], fieldName: string, payload: string}]}
+     */
+    let checkVal = [
+      {
+        types: [FORM_VALIDATOR.REQUIRED],
+        payload: formData.name,
+        fieldName: "name"
+      },
+      {
+        types: [FORM_VALIDATOR.REQUIRED, FORM_VALIDATOR.EMAIL],
+        payload: formData.email,
+        fieldName: "email"
+      },
+      {
+        types: [FORM_VALIDATOR.REQUIRED],
+        payload: formData.code,
+        fieldName: "code"
+      },
 
-    dispatch({type: FORM_VALIDATOR.VALIDATE, types: [FORM_VALIDATOR.REQUIRED], payload: formData.name, fieldName:"name"})
-    dispatch({type: FORM_VALIDATOR.VALIDATE, types: [FORM_VALIDATOR.REQUIRED, FORM_VALIDATOR.EMAIL], payload: formData.email, fieldName: "email"})
-    let formValidators =  formError.validator ?? [];
-
-    console.log(formValidators);
-    formValidators.map(formValidator => {
-      if(formValidator.isValid === false) {
-        console.log(formValidator.isValid);
-        setValidateError(prevState => ({
-          ...prevState,
-          [formValidator.fieldName] : formValidator.messageError
-        }))
-      }
-    });
-
-
-
-    // let isFormValid = false;
-
-    // if(!formData.orgId) {
-    //   setValidateError(prevState => ({...prevState, orgId: "Please choose an organization"}));
-    // }
-    // if(!formData.orgTeamId) {
-    //   setValidateError(prevState => ({...prevState, orgTeamId: "Please choose a team"}));
-    // }
-    // if(!formData.orgUsrGroupId) {
-    //   setValidateError(prevState => ({...prevState , orgUsrGroupId : "Please choose a user group"}));
-    // // }
-    // if(!(formData.name.length > 0) === true) {
-    //   console.log("please fill in the name");
-    //   setValidateError(prevState => ({...prevState, name: "Please fill in the name"}));
-    // }
-    // if((window.location.pathname.indexOf("signup") > 0 && !formData.password) || (formData.password && formData.password.length <= 0)) {
-    //   setValidateError(prevState => ({...prevState, password: "Please fill in password"}));
-    // }
-    // if(!formData.email && !(formData.email.length > 0)) {
-    //   setValidateError(prevState => ({...prevState, email: "Please fill in email"}));
-    // }
-    // if(formData.email.length > 0) {
-    //   const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    //   if(regex.test(formData.email) === false){
-    //     setValidateError(prevState => ({...prevState, email: "Please make sure email is correct"}));
-    //   }
-    // }
-    // if(!formData.code || !(formData.code.length > 0)) {
-    //   setValidateError(prevState => ({...prevState, code: "Please fill in user code"}));
-    // }
-
-    // console.log(validateError);
-    // console.log(formData);
-    if(Object.keys(validateError).filter((key) => key !== "btnDisabled").length === 0) {
-      setValidateError(prevState => ({...prevState, btnDisabled: false}))
+    ];
+    if(window.location.pathname.indexOf("signup") > 0) {
+      checkVal = [
+        ...checkVal,
+        {
+          types: [FORM_VALIDATOR.REQUIRED, FORM_VALIDATOR.MIN_LENGTH],
+          payload: formData.password,
+          fieldName: "password",
+          adds: [{
+            minLength:3
+          }]
+        }
+      ]
     }
+    dispatch(FormValidator(checkVal, (validateResponse) => {
+      setValidateError(validateResponse);
+    }));
   }
 
   const handleActivateUser = () => {
@@ -300,9 +290,6 @@ const UserForm = (props) => {
       };
     }
   )): [];
-  // [
-  // { name: "PT Cellsite", value: "NY" },
-  // ];
 
   const teams = teamList ? Array.from(teamList.map(
     team => ({
@@ -310,9 +297,6 @@ const UserForm = (props) => {
       value: team.id
     })
   )) : [];
-  // [
-  //   { name: "Team 1", value: "1" },
-  // ]
 
   const viewUserGroups = () => {
     if(userGroupList && userGroupList.length > 0) {
@@ -487,7 +471,7 @@ const UserForm = (props) => {
 
       <div className="container inline-flex flex-row pt-2">
         <div className="ml-auto flex">
-          <PrimaryButton icon="pi pi-save" label={"Save"} type={"submit"} disabled={validateError.btnDisabled}></PrimaryButton>
+          <PrimaryButton icon="pi pi-save" label={"Save"} type={"submit"} disabled={submitBtnDisableState}></PrimaryButton>
           {user &&
               <PrimaryButton icon="" label={(formData.mtStatus) ? "Deactivate" : "Activate"} onClick={(e) => {
                 e.preventDefault();

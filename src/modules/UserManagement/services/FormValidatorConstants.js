@@ -19,7 +19,7 @@ export const FORM_VALIDATOR_MESSAGE = {
     REQUIRED: "Please fill in the field",
     NUMERIC: "Please enter number only",
     MAX: "Please enter less than ",
-    MIN: "Please enter more than",
+    MIN: "Please enter more than ",
     MAX_INCLUDED: "Please  enter less than ",
     MIN_INCLUDED: "Please enter more than ",
     EMAIL: "Please enter correct email format",
