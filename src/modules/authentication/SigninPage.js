@@ -11,6 +11,7 @@ import IohLogo from "../../components/IohLogo";
 import PrimaryHeader from "../../components/Header/PrimaryHeader";
 import SecondaryButton from "../../components/Button/SecondaryButton";
 import loginBackground from "../../images/login_bg01.jpeg";
+import { fetchMenuParents } from "../menu/services/MenuAction";
 
 export default function SigninPage() {
   const navigate = useNavigate();
@@ -27,6 +28,9 @@ export default function SigninPage() {
   const handleLogin = (e) => {
     e.preventDefault();
 
+    // TODO: fetch menu from backend upon login
+    dispatch(fetchMenuParents());
+    
     dispatch(
       authSignin(
         formData.username,

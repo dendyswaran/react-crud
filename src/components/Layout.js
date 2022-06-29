@@ -10,8 +10,9 @@ import { useDispatch } from "react-redux";
 import { authSignout } from "../modules/authentication/services/AuthenticationAction";
 
 export default function Layout(props, { children }) {
-  const timeoutWarn = 20000;
-  const timeoutLogout = 12000;
+  // TODO: design a flag to disable the timeout
+  const timeoutWarn = 200000; // TODO: move into Spring config
+  const timeoutLogout = 12000; // Warning additional 2 seconds for loading timer!!!, TODO: add 2 seconds on react 10 sec in Spring config
   const [isIdle, setIsIdle] = useState(false);
   const dispatch = useDispatch();
 
@@ -58,7 +59,7 @@ export default function Layout(props, { children }) {
           {/* Children */}
 
           <div className="flex flex-col w-10/12">
-            <NavPath />
+            {/* <NavPath /> */}
             <TimeoutModal
               isTimeout={isIdle}
               timeoutLogout={timeoutLogout}

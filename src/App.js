@@ -25,8 +25,17 @@ import OemTasklistPage from "./modules/tasklist/OemTasklistPage";
 import OemTasklistDetails from "./modules/tasklist/tasklist_details/OemTasklistDetails";
 import IohTasklistPage from "./modules/tasklist/IohTasklistPage";
 import IohTasklistDetails from "./modules/tasklist/tasklist_details/IohTasklistDetails";
+import useMenuAction from "./modules/menu/services/MenuState";
 
 function App() {
+  //TODO: Maybe we can define a menu-code to JSX binding!!!
+  // Then we can use this binding to control which layout to register for the user!!!
+  // This ensure that we only pull and register specific view for specific users!!!
+  // HOWEVER this feature is highly likely to be doable with RequireAuth configuration to prevent user from!!!
+  // specific authentication to access them --> no need to use this code to JSX mapping !!!
+
+  const { menu_breadcrumb } = useMenuAction();
+
   return (
     <BrowserRouter>
       <Routes>
@@ -77,89 +86,79 @@ function App() {
               }
             />
           </Route>
-          <Route
-            path="ioh-tasklist"
-            element={<PageLayout text="IOH Task List" />}
-          >
-            <Route
-              path=""
-              element={
-                <RequireAuth>
-                  <IohTasklistPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="details/:id"
-              element={
-                <RequireAuth>
-                  <IohTasklistDetails />
-                </RequireAuth>
-              }
-            />
-          </Route>
-          <Route
-            path="decom-tasklist"
-            element={<PageLayout text="Decom Task List" />}
-          >
-            <Route
-              path=""
-              element={
-                <RequireAuth>
-                  <DecomTasklistPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="details/:id"
-              element={
-                <RequireAuth>
-                  <DecomTaskListDetails />
-                </RequireAuth>
-              }
-            />
-          </Route>
-          <Route
-            path="scrap-tasklist"
-            element={<PageLayout text="Scrap Task List" />}
-          >
-            <Route
-              path=""
-              element={
-                <RequireAuth>
-                  <ScrapTasklistPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="details/:id"
-              element={
-                <RequireAuth>
-                  <ScrapTaskListDetails />
-                </RequireAuth>
-              }
-            />
-          </Route>
-          <Route
-            path="oem-tasklist"
-            element={<PageLayout text="OEM Task List" />}
-          >
-            <Route
-              path=""
-              element={
-                <RequireAuth>
-                  <OemTasklistPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="details/:id"
-              element={
-                <RequireAuth>
-                  <OemTasklistDetails />
-                </RequireAuth>
-              }
-            />
+          <Route path="tasklist">
+            <Route path="ioh" element={<PageLayout text="IOH Task List" />}>
+              <Route
+                path=""
+                element={
+                  <RequireAuth>
+                    <IohTasklistPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="details/:id"
+                element={
+                  <RequireAuth>
+                    <IohTasklistDetails />
+                  </RequireAuth>
+                }
+              />
+            </Route>
+            <Route path="decom" element={<PageLayout text="Decom Task List" />}>
+              <Route
+                path=""
+                element={
+                  <RequireAuth>
+                    <DecomTasklistPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="details/:id"
+                element={
+                  <RequireAuth>
+                    <DecomTaskListDetails />
+                  </RequireAuth>
+                }
+              />
+            </Route>
+            <Route path="scrap" element={<PageLayout text="Scrap Task List" />}>
+              <Route
+                path=""
+                element={
+                  <RequireAuth>
+                    <ScrapTasklistPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="details/:id"
+                element={
+                  <RequireAuth>
+                    <ScrapTaskListDetails />
+                  </RequireAuth>
+                }
+              />
+            </Route>
+            <Route path="oem" element={<PageLayout text="OEM Task List" />}>
+              <Route
+                path=""
+                element={
+                  <RequireAuth>
+                    <OemTasklistPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="details/:id"
+                element={
+                  <RequireAuth>
+                    <OemTasklistDetails />
+                  </RequireAuth>
+                }
+              />
+            </Route>
           </Route>
         </Route>
 
