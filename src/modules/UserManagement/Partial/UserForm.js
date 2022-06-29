@@ -6,7 +6,7 @@ import DropdownBar from "../../../components/FormComponents/DropdownBar";
 import PrimaryButton from "../../../components/Button/PrimaryButton";
 import RadioButtonWithLabel from "../../../components/Button/RadioButtonWithLabel";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import {useDispatch, useSelector, useStore} from "react-redux";
 import {genGetDataById, genGetAllData} from "../../../commons/GenericAction";
 import {activateUser, deactivateUser, editUser} from "../services/ManageUserAction";
 import { Toast } from 'primereact/toast';
@@ -15,6 +15,8 @@ import { getTeamList } from "../services/TeamAction";
 import {ConfirmDialog} from "primereact/confirmdialog";
 import {authSignup} from "../../authentication/services/OrgAuthentication";
 import {classNames} from "primereact/utils";
+import {FORM_VALIDATOR} from "../services/FormValidatorConstants";
+import FormValidator from "../services/FormValidator";
 
 const UserForm = (props) => {
   // IMPORTANT: need to preventDefault when submit form!
@@ -45,6 +47,7 @@ const UserForm = (props) => {
   const [validateError, setValidateError] =  useState({
     btnDisabled: true
   });
+  const formError = useSelector((state) => state.ValidatorReducer);
 
   useEffect(() => {
     if(userId) {
@@ -154,7 +157,6 @@ const UserForm = (props) => {
 
 
   const onInputChange = (e) => {
-    console.log(e);
     setFormData((prevState => ({
       ...prevState,
       [e.target.name] : e.target.value
@@ -191,13 +193,36 @@ const UserForm = (props) => {
 
   useEffect(() => {
     formValidation();
-  }, [formData])
+  }, [formData]);
+
+  useEffect(() => {
+    console.log(validateError);
+  }, [validateError])
 
   const formValidation = () => {
-    // let isFormValid = false;
     setValidateError({
       btnDisabled: true
     });
+
+    dispatch({type: FORM_VALIDATOR.VALIDATE, types: [FORM_VALIDATOR.REQUIRED], payload: formData.name, fieldName:"name"})
+    dispatch({type: FORM_VALIDATOR.VALIDATE, types: [FORM_VALIDATOR.REQUIRED, FORM_VALIDATOR.EMAIL], payload: formData.email, fieldName: "email"})
+    let formValidators =  formError.validator ?? [];
+
+    console.log(formValidators);
+    formValidators.map(formValidator => {
+      if(formValidator.isValid === false) {
+        console.log(formValidator.isValid);
+        setValidateError(prevState => ({
+          ...prevState,
+          [formValidator.fieldName] : formValidator.messageError
+        }))
+      }
+    });
+
+
+
+    // let isFormValid = false;
+
     // if(!formData.orgId) {
     //   setValidateError(prevState => ({...prevState, orgId: "Please choose an organization"}));
     // }
@@ -206,26 +231,26 @@ const UserForm = (props) => {
     // }
     // if(!formData.orgUsrGroupId) {
     //   setValidateError(prevState => ({...prevState , orgUsrGroupId : "Please choose a user group"}));
+    // // }
+    // if(!(formData.name.length > 0) === true) {
+    //   console.log("please fill in the name");
+    //   setValidateError(prevState => ({...prevState, name: "Please fill in the name"}));
     // }
-    if(!(formData.name.length > 0) === true) {
-      console.log("please fill in the name");
-      setValidateError(prevState => ({...prevState, name: "Please fill in the name"}));
-    }
-    if((window.location.pathname.indexOf("signup") > 0 && !formData.password) || (formData.password && formData.password.length <= 0)) {
-      setValidateError(prevState => ({...prevState, password: "Please fill in password"}));
-    }
-    if(!formData.email && !(formData.email.length > 0)) {
-      setValidateError(prevState => ({...prevState, email: "Please fill in email"}));
-    }
-    if(formData.email.length > 0) {
-      const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-      if(regex.test(formData.email) === false){
-        setValidateError(prevState => ({...prevState, email: "Please make sure email is correct"}));
-      }
-    }
-    if(!formData.code || !(formData.code.length > 0)) {
-      setValidateError(prevState => ({...prevState, code: "Please fill in user code"}));
-    }
+    // if((window.location.pathname.indexOf("signup") > 0 && !formData.password) || (formData.password && formData.password.length <= 0)) {
+    //   setValidateError(prevState => ({...prevState, password: "Please fill in password"}));
+    // }
+    // if(!formData.email && !(formData.email.length > 0)) {
+    //   setValidateError(prevState => ({...prevState, email: "Please fill in email"}));
+    // }
+    // if(formData.email.length > 0) {
+    //   const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    //   if(regex.test(formData.email) === false){
+    //     setValidateError(prevState => ({...prevState, email: "Please make sure email is correct"}));
+    //   }
+    // }
+    // if(!formData.code || !(formData.code.length > 0)) {
+    //   setValidateError(prevState => ({...prevState, code: "Please fill in user code"}));
+    // }
 
     // console.log(validateError);
     // console.log(formData);

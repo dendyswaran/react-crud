@@ -11,7 +11,8 @@ export const FORM_VALIDATOR = {
     MIN_LENGTH: 0,
     MAX_LENGTH: 255,
     MAX_VALUE: "MAX_VALUE",
-    MIN_VALUE: "MIN_VALUE"
+    MIN_VALUE: "MIN_VALUE",
+    VALIDATE: "VALIDATE"
 };
 
 export const FORM_VALIDATOR_MESSAGE = {
