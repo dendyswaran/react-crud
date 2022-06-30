@@ -31,6 +31,9 @@ const FormValidator = (values = [{types: [], payload: "", fieldName: ""}], respo
                 payload: val.payload,
                 fieldName: val.fieldName,
             };
+            if(val.custom) {
+                dispatchObj.custom = val.custom;
+            }
             if (val.adds) {
                 val.adds.forEach((elem => {
                     for (const key in elem) {

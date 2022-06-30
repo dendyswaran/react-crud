@@ -13,7 +13,8 @@ const ValidatorReducer = (state = initialState, action) => {
      * Validate Params should contain all parameter that needed to be checked with the input
      * validateParams can be constructed as an array of object containing :
      * input: the input value
-     * validateType(required): i.e: [required, numeric, alphanumeric, email, minLength, date]\
+     * validateType(required): i.e: [required, numeric, alphanumeric, email, minLength, date]
+     * TODO: Make a custom validator
      */
     if(action.type === FORM_VALIDATOR.VALIDATE) {
         const input = action.payload;
@@ -84,12 +85,22 @@ const ValidatorReducer = (state = initialState, action) => {
                             message = FORM_VALIDATOR_MESSAGE.DATE;
                         }
                         break;
+                    case FORM_VALIDATOR.CUSTOM:
+                        /**
+                         * idea: return either true or false that indicate the isValid
+                         */
+                        if(typeof (action.custom()) === "boolean") {
+                            isValid = action.custom();
+                        }else {
+                            throw new Error("function custom must return boolean");
+                        }
+                        break;
                     default:
                         isValid = true;
                         message = "";
                 }
                 return {
-                    isValid, errorMessage: message, fieldName
+                    isValid, errorMessage: action.customMessage ?? message, fieldName
                 };
             })
             const newState = {

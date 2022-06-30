@@ -66,6 +66,7 @@ const UserListingCardView = (props) => {
   const TEXT_ORGANIZATION = "Organization";
   const TEXT_PHONE_NUMBER = "Phone No";
   const TEXT_EMAIL_ADDRESS = "Email";
+  const TEXT_CODE = "Code";
 
   return (
     // TODO: Change table structure to grid --> when phone screen is small --> split into 2 rows (until 320px can fit)
@@ -91,6 +92,12 @@ const UserListingCardView = (props) => {
 
         <table className="w-full table-auto text-slate-500 text-sm">
           <tbody>
+          <tr>
+            <td className="w-1/3">{TEXT_CODE}</td>
+            <td className="flex">
+              <UserInfoCardView>{props.userDetails.code}</UserInfoCardView>
+            </td>
+          </tr>
             <tr>
               <td className="w-1/3">{TEXT_NAME}</td>
               <td className="flex">

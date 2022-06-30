@@ -6,7 +6,7 @@ import DropdownBar from "../../../components/FormComponents/DropdownBar";
 import PrimaryButton from "../../../components/Button/PrimaryButton";
 import RadioButtonWithLabel from "../../../components/Button/RadioButtonWithLabel";
 import { useNavigate } from "react-router-dom";
-import {useDispatch, useSelector, useStore} from "react-redux";
+import {useDispatch} from "react-redux";
 import {genGetDataById, genGetAllData} from "../../../commons/GenericAction";
 import {activateUser, deactivateUser, editUser} from "../services/ManageUserAction";
 import { Toast } from 'primereact/toast';
@@ -81,7 +81,7 @@ const UserForm = (props) => {
           orgUsrGroupId: formData.orgUsrGroupIds[0]}));
       }
     }
-  },[user]);
+  },[user, formData.orgUsrGroupIds, organizationsList, teamList]);
 
   const fetchUserGroupList = () => {
     dispatch(genGetAllData("/api/org-group",
@@ -164,6 +164,20 @@ const UserForm = (props) => {
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
+    if(Object.keys(validateError).length > 0) {
+      let flag = false;
+      for(const key in validateError) {
+        flag = validateError[key].length !== 0;
+        if(flag) {
+          break;
+        }
+      }
+      if(!flag) {
+        console.log(!flag);
+      }else {
+        return flag;
+      }
+    }
 
     if(userId) {
     dispatch(editUser(formData,
@@ -195,7 +209,7 @@ const UserForm = (props) => {
   }, [formData]);
 
   useEffect(() => {
-    console.log(validateError);
+    // console.log(validateError);
     if(Object.keys(validateError).length > 0) {
       let flag = false;
       for(const key in validateError) {
@@ -211,25 +225,55 @@ const UserForm = (props) => {
   const formValidation = () => {
     /**
      * This array is to be constructed to use with the FormValidator
-     * @type {[{types: string[], fieldName: string, payload: string},{types: (string)[], fieldName: string, payload: string},{types: string[], fieldName: string, payload: string}]}
+     * To use the form validator, the required field that are needed is:
+     * types - contains the validator types array (all the validator can be seen at FormValidatorConstant.js)
+     * fieldName - contains the name attribute of the input that comes from the component
+     * payload -  the input value
+     * @type {[{types: string[], fieldName: string, payload: string},]}
      */
     let checkVal = [
       {
         types: [FORM_VALIDATOR.REQUIRED],
         payload: formData.name,
-        fieldName: "name"
+        fieldName: "name",
       },
       {
-        types: [FORM_VALIDATOR.REQUIRED, FORM_VALIDATOR.EMAIL],
+        types: [FORM_VALIDATOR.REQUIRED, FORM_VALIDATOR.EMAIL, FORM_VALIDATOR.CUSTOM],
         payload: formData.email,
-        fieldName: "email"
+        fieldName: "email",
+        custom: (test) => {
+          const a = 5;
+          let b =  a * 12;
+          // console.log(test);
+          return true;
+        }
       },
       {
-        types: [FORM_VALIDATOR.REQUIRED],
+        types: [FORM_VALIDATOR.REQUIRED,],
         payload: formData.code,
         fieldName: "code"
       },
-
+      {
+        types: [FORM_VALIDATOR.REQUIRED],
+        payload: formData.orgId,
+        fieldName: "orgId",
+        adds: [{
+          customMessage: "Please Choose One Organization"
+        }]
+      },
+      {
+        types: [FORM_VALIDATOR.REQUIRED],
+        payload: formData.orgTeamId,
+        fieldName: "orgTeamId",
+        adds: [{
+          customMessage: "Please choose on of the team"
+        }]
+      },
+      {
+        types: [FORM_VALIDATOR.REQUIRED],
+        payload: formData.orgUsrGroupId,
+        fieldName: "orgUsrGroupId",
+      }
     ];
     if(window.location.pathname.indexOf("signup") > 0) {
       checkVal = [
@@ -239,7 +283,7 @@ const UserForm = (props) => {
           payload: formData.password,
           fieldName: "password",
           adds: [{
-            minLength:3
+            minLength:5
           }]
         }
       ]
@@ -410,6 +454,11 @@ const UserForm = (props) => {
 
       {/* User Group */}
       <InputLabel>User Group</InputLabel>
+      {validateError.orgUsrGroupId &&
+        <p className="mt-2 text-pink-600 text-sm">
+          {validateError.orgUsrGroupId}
+        </p>
+      }
       <div className="flex flex-wrap -mx-3 mb-6">
 
         {userGroupList && viewUserGroups()}
@@ -427,8 +476,14 @@ const UserForm = (props) => {
             // onChange={onInputChange}
             onChange={onInputChange}
             optionLabel="name"
+            className={`standardBar full ${invalidInput("orgId")}`}
             placeholder="Select an Organization"
           />
+          {validateError.orgId &&
+              <p className="mt-2 text-pink-600 text-sm">
+                {validateError.orgId}
+              </p>
+          }
         </div>
         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>team</InputLabel>
@@ -438,8 +493,14 @@ const UserForm = (props) => {
             onChange={onInputChange}
             name={"orgTeamId"}
             optionLabel="name"
+            className={`standardBar full ${invalidInput("orgTeamId")}`}
             placeholder="Select a Team"
           />
+          {validateError.orgTeamId &&
+              <p className="mt-2 text-pink-600 text-sm">
+                {validateError.orgTeamId}
+              </p>
+          }
         </div>
       </div>
 

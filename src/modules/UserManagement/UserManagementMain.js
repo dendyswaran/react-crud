@@ -87,7 +87,7 @@ const UserManagementMain = () => {
     dispatch(getUserList(
       (data) => {
         setUserListState(true);
-        // console.log(data);
+        console.log(data);
         setUserList(data.map((user) => {
           return {
             id: user.id,
@@ -98,7 +98,8 @@ const UserManagementMain = () => {
             organization: (user.org && user.org.name) ? user.org.name : "",
             phone: "",
             email: user.email,
-            mtStatus: (user.mtStatus && user.mtStatus.code) ? user.mtStatus.code === "01" : false
+            mtStatus: (user.mtStatus && user.mtStatus.code) ? user.mtStatus.code === "01" : false,
+            code: user.code ? user.code : ""
           };
         }));
       },
@@ -108,20 +109,6 @@ const UserManagementMain = () => {
   }
 
   return (
-    // <Layout>
-    //   {/* TODO: key to be added */}
-    //   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-    //     {items.map((userInfo) => (
-    //       <UserListingCardView key={userInfo.id} userDetails={userInfo} />
-    //     ))}
-    //   </div>
-    //   <div className="ml-auto">
-    //     <PrimaryButton
-    //       icon="pi pi-user-plus"
-    //       onClick={() => navigate("/user-management/form")}
-    //     />
-    //   </div>
-    // </Layout>
     <Fragment>
       {/* TODO: key to be added */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
