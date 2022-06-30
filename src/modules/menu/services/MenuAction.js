@@ -8,54 +8,69 @@ import { Route } from "react-router-dom";
 import RequireAuth from "../../../components/RequireAuth";
 import { ROUTES } from "./MenuMappingConstants";
 
-export function fetchMenuParents(useLocalStorage = false) {
+// export function fetchMenuParents(useLocalStorage = false) {
+//   return async (dispatch) => {
+//     try {
+//       let menu = session.getMenu();
+
+//       if (!useLocalStorage || !menu) {
+//         const { data: resp } = await get(`/api/menus/get`, true);
+//         if (resp.success) {
+//           menu = resp.data;
+
+//           // save into local storage
+//           session.persistMenu(menu);
+//         }
+//       }
+
+//       await dispatch({ type: MENU_ACTION.MENU_LIST_SUCCESS, payload: menu });
+//       const { navMenu, clickEventMappingStr } = processMenu(menu);
+//       const clickEventMapping = `{${clickEventMappingStr.slice(0, -2)}}`;
+
+//       await dispatch({
+//         type: MENU_ACTION.MENU_NAVIGATION_SUCCESS,
+//         payload: navMenu,
+//         eventMapping: JSON.parse(clickEventMapping),
+//       });
+//     } catch (_err) {
+//       dispatch({
+//         type: MENU_ACTION.MENU_NAVIGATION_ERROR,
+//         payload: _err.message,
+//       });
+//     }
+//   };
+// }
+
+export function fetchMenuParents(useLocalStorage = true) {
   return async (dispatch) => {
-    let menu;
+    try {
+      let menu = session.getMenu();
 
-    if (!useLocalStorage || !session.getMenu()) {
-      const { data: resp } = await get(`/api/menus/get`, true);
-      if (resp.success) {
-        menu = resp.data;
+      if (!useLocalStorage || !menu) {
+        const { data: resp } = await get(`/api/menus/get`, true);
+        if (resp.success) {
+          menu = resp.data;
 
-        // save into local storage
-        session.persistMenu(menu);
+          // save into local storage
+          session.persistMenu(menu);
+        }
       }
-    } else {
-      menu = session.getMenu();
-    }
 
-    await dispatch({ type: MENU_ACTION.MENU_LIST_SUCCESS, payload: menu });
-    await dispatch(constructMenuNavigation(menu));
-    const { navMenu, clickEventMappingStr } = processMenu(menu);
+      await dispatch({ type: MENU_ACTION.MENU_LIST_SUCCESS, payload: menu });
+      const { navMenu, clickEventMappingStr } = processMenu(menu);
+      const clickEventMapping = `{${clickEventMappingStr.slice(0, -2)}}`;
 
-    // convert string mapping into json
-    const clickEventMapping = `{${clickEventMappingStr.slice(0, -2)}}`;
-
-    await dispatch({
-      type: MENU_ACTION.MENU_NAVIGATION_SUCCESS,
-      payload: navMenu,
-      eventMapping: JSON.parse(clickEventMapping),
-    });
-
-    // console.log("processedMenu: ", navMenu);
-    console.log("appRoutes: ", JSON.parse(clickEventMapping));
-  };
-}
-
-/**
- *
- * @param {Array} menus
- */
-export function constructMenuNavigation(menus) {
-  return async (dispatch) => {
-    const baseMenu = await renderBaseMenu(menus).catch((_err) =>
+      await dispatch({
+        type: MENU_ACTION.MENU_NAVIGATION_SUCCESS,
+        payload: navMenu,
+        eventMapping: JSON.parse(clickEventMapping),
+      });
+    } catch (_err) {
       dispatch({
         type: MENU_ACTION.MENU_NAVIGATION_ERROR,
         payload: _err.message,
-      })
-    );
-
-    dispatch({ type: MENU_ACTION.MENU_NAVIGATION_SUCCESS, payload: baseMenu });
+      });
+    }
   };
 }
 
@@ -70,13 +85,12 @@ const processMenu = (
   isRoot = true,
   href = "",
   clickEventMapping = "",
-  menus = [],
-  routes = [],
-  test = []
+  menus = []
 ) => {
   menuItems.forEach((item) => {
     // if menu do not have a child
     // or have hidden child --> in case of user management form and main page.
+    href = parentPath + "/" + item.pathname;
     if (!item.children.length) {
       // TODO: create an icon field for the icons
       // TODO: change menu "children" field to "name" field.
@@ -88,12 +102,16 @@ const processMenu = (
           icon="pi pi-users" // TODO: this field is to be updated.
         />
       );
-      clickEventMapping += `"${item.href}": "${item.clickEvent}", `;
+
+      // console.log("item.href:  ", item.href);
+      // console.log("href:  ", href);
+      clickEventMapping += `"${href}": "${item.clickEvent}", `;
     } else {
       // perform recursion on children menu items
+
       const { navMenu, clickEventMappingStr } = processMenu(
         item.children,
-        item.pathname,
+        href,
         false
       );
 
@@ -112,8 +130,10 @@ const processMenu = (
           {navMenu}
         </MenuDropdown>
       );
+      // console.log("item.href:  ", item.href);
+      // console.log("href:  ", href);
       clickEventMapping +=
-        clickEventMappingStr + `"${item.href}": "${item.clickEvent}", `;
+        clickEventMappingStr + `"${href}": "${item.clickEvent}", `;
     }
   });
   return {
@@ -123,8 +143,26 @@ const processMenu = (
 };
 
 //----------------------
-// PRIVATE FUNCTIONS
+// PRIVATE FUNCTIONS (INACTIVE)
 //----------------------
+
+// TODO: This function is not relevant anymore.
+/**
+ *
+ * @param {Array} menus
+ */
+export function constructMenuNavigation(menus) {
+  return async (dispatch) => {
+    const baseMenu = await renderBaseMenu(menus).catch((_err) =>
+      dispatch({
+        type: MENU_ACTION.MENU_NAVIGATION_ERROR,
+        payload: _err.message,
+      })
+    );
+
+    dispatch({ type: MENU_ACTION.MENU_NAVIGATION_SUCCESS, payload: baseMenu });
+  };
+}
 
 /**
  * A helper function to render the initial menu data (parent menus)

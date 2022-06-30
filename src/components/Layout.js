@@ -5,16 +5,25 @@ import NavPath from "./NavigationPath/NavPath";
 import { Outlet } from "react-router-dom";
 import TimeoutModal from "./Modal/TimeoutModal";
 import { useIdleTimer } from "react-idle-timer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { authSignout } from "../modules/authentication/services/AuthenticationAction";
+import useMenuAction from "../modules/menu/services/MenuState";
+import { fetchMenuParents } from "../modules/menu/services/MenuAction";
 
 export default function Layout(props, { children }) {
   // TODO: design a flag to disable the timeout
+  const { isReady } = useMenuAction();
+  const dispatch = useDispatch();
+  const [isIdle, setIsIdle] = useState(false);
   const timeoutWarn = 200000; // TODO: move into Spring config
   const timeoutLogout = 12000; // Warning additional 2 seconds for loading timer!!!, TODO: add 2 seconds on react 10 sec in Spring config
-  const [isIdle, setIsIdle] = useState(false);
-  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchMenuParents());
+  }, [dispatch]);
+
+  //fetch menu data from the backend --> if empty fetch again.
 
   const handleSignout = () => {
     dispatch(

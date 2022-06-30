@@ -5,6 +5,7 @@ const initialState = {
   menu_navigation: [],
   click_event_map: [],
   message: undefined,
+  isReady: false,
   action: "",
 };
 
@@ -14,6 +15,7 @@ const menuReducer = (state = initialState, action) => {
       return {
         ...state,
         menus: action.payload,
+        isReady: false,
         action: action.type,
       };
     case MENU_ACTION.MENU_NAVIGATION_SUCCESS:
@@ -21,12 +23,14 @@ const menuReducer = (state = initialState, action) => {
         ...state,
         menu_navigation: action.payload,
         click_event_map: action.eventMapping,
+        isReady: true,
         action: action.type,
       };
     case MENU_ACTION.MENU_NAVIGATION_ERROR:
       return {
         ...state,
         message: action.payload,
+        isReady: false,
         action: action.type,
       };
     default:
