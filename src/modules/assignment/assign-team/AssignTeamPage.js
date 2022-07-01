@@ -250,7 +250,7 @@ export default function AssignTeamPage() {
   return (
     <Layout>
       <div className="pb-3">
-        <div className="grid grid-cols-3 gap-2">
+        <div className="flex flex-inline gap-2 grid-cols-3">
           <InputTextBar
             name="search"
             placeholder="Enter Site ID"
@@ -263,7 +263,7 @@ export default function AssignTeamPage() {
             /* value={search}
           onChange={searchBox} */
           />
-          <div className="col-end-7 flex justify-end">
+          <div className="lg:col-span-1 col-span-2 flex justify-end">
             <PrimaryButton name="search" onClick={searchTasklist}>
               Search
             </PrimaryButton>
