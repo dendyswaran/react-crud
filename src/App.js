@@ -25,6 +25,9 @@ import OemTasklistPage from "./modules/tasklist/OemTasklistPage";
 import OemTasklistDetails from "./modules/tasklist/tasklist_details/OemTasklistDetails";
 import IohTasklistPage from "./modules/tasklist/IohTasklistPage";
 import IohTasklistDetails from "./modules/tasklist/tasklist_details/IohTasklistDetails";
+import WarehouseAssignPage from "./modules/assignment/WarehouseAssignPage";
+import SiteAccessPage from "./modules/assignment/SiteAccessPage";
+import SiteDetails from "./modules/assignment/assignment_details/SiteDetails";
 
 function App() {
   return (
@@ -157,6 +160,40 @@ function App() {
               element={
                 <RequireAuth>
                   <OemTasklistDetails />
+                </RequireAuth>
+              }
+            />
+          </Route>
+          <Route
+            path="/warehouse-assignment"
+            element={<PageLayout text="Assign Warehouse" />}
+          >
+            <Route
+              path=""
+              element={
+                <RequireAuth>
+                  <WarehouseAssignPage />
+                </RequireAuth>
+              }
+            />
+          </Route>
+          <Route
+            path="site-access"
+            element={<PageLayout text="Site Access" />}
+          >
+            <Route
+              path=""
+              element={
+                <RequireAuth>
+                  <SiteAccessPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="details/:id"
+              element={
+                <RequireAuth>
+                  <SiteDetails />
                 </RequireAuth>
               }
             />

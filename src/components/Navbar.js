@@ -105,7 +105,20 @@ export default function Navbar() {
             </MenuDropdown>
 
             <MenuSimple children="File Upload" icon="pi pi-upload" />
-            <MenuSimple children="Assignment" icon="pi pi-check-square" />
+
+            <MenuDropdown 
+              icon="pi pi-check-square"
+              className="flex-1"
+              menu={"Assignment"}
+            >
+              <MenuDropdownLink href="/warehouse-assignment" icon="pi pi-file">
+                Assign Warehouse
+              </MenuDropdownLink>
+              <MenuDropdownLink href="/site-access" icon="pi pi-file">
+                Apply Site Access
+              </MenuDropdownLink>
+            </MenuDropdown>
+
             <MenuSimple
               children="Site Status Enquiry"
               icon="pi pi-info-circle"
@@ -119,7 +132,7 @@ export default function Navbar() {
           <div className="hidden xl:block">
             <MenuDropdown
               className="flex-1"
-              menu={"Hi admin, " + user.username}
+              menu={"Hi, " + user.username}
             >
               <MenuDropdownButton
                 // onClick={test}
