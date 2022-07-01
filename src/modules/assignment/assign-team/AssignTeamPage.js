@@ -9,7 +9,6 @@ import { genGetDataById } from "../../../commons/GenericAction";
 import InputTextBar from "../../../components/FormComponents/InputTextBar";
 import TeamAssignmentCardView from "../../../components/CardView/TeamAssignmentCardView";
 import { DataTable } from "primereact/datatable";
-import { Ripple } from "react";
 import { Fragment } from "react";
 import { InputText } from "primereact/inputtext";
 
@@ -263,6 +262,8 @@ export default function AssignTeamPage() {
             /* value={search}
           onChange={searchBox} */
           />
+        </div>
+        <div>
           <div className="lg:col-span-1 col-span-2 flex justify-end">
             <PrimaryButton name="search" onClick={searchTasklist}>
               Search
