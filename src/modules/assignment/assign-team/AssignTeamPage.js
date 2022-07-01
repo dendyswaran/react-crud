@@ -24,41 +24,6 @@ export default function AssignTeamPage() {
     postCodeQuery || ""
   );
 
-  const items = [
-    {
-      id: 1,
-      siteId: "C008009",
-      siteName: "PT Cellsite",
-      equipment: 20,
-      assignedDate: "6-Jun-22",
-      postCode: 60000,
-    },
-    {
-      id: 2,
-      siteId: "C008010",
-      siteName: "PT Cellsite",
-      equipment: 30,
-      assignedDate: "10-Jun-22",
-      postCode: 52100,
-    },
-    {
-      id: 3,
-      siteId: "C008011",
-      siteName: "CT Cellsite",
-      equipment: 30,
-      assignedDate: "15-Jul-22",
-      postCode: 63100,
-    },
-    {
-      id: 4,
-      siteId: "C008012",
-      siteName: "CT Cellsite",
-      equipment: 40,
-      assignedDate: "12-Jul-22",
-      postCode: 44400,
-    },
-  ];
-
   const teamItems = [
     { name: "Team 1", value: "1" },
     { name: "Team 2", value: "2" },
@@ -87,7 +52,7 @@ export default function AssignTeamPage() {
       })
     );
   }, []);
-  
+
   const handleChange = (e) => {
     const { name, checked } = e.target;
 
@@ -122,10 +87,16 @@ export default function AssignTeamPage() {
   return (
     <Layout>
       <div className="pb-3">
-        <SiteIdSearchBar
-          searchSiteQuery={searchSiteQuery}
-          setSearchSiteQuery={setSearchSiteQuery}
-        />
+        <div>
+          <SiteIdSearchBar
+            searchSiteQuery={searchSiteQuery}
+            setSearchSiteQuery={setSearchSiteQuery}
+          />
+          <PostCodeSearchBar
+            searchPostCodeQuery={searchPostCodeQuery}
+            setSearchPostCodeQuery={setSearchPostCodeQuery}
+          />
+        </div>
         <div className="flex pt-8">
           <CheckboxMain
             name="allSelect"
@@ -142,7 +113,7 @@ export default function AssignTeamPage() {
             <CheckboxMain
               className="mr-2 pt-5"
               name={props.cd}
-            value={props.cd}
+              value={props.cd}
               checked={props?.isChecked || false}
               onChange={handleChange}
             />
