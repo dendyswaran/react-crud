@@ -173,7 +173,7 @@ export default function AssignTeamPage() {
     }
   };
 
-  const template2 = {
+  const paginationTemplate = {
     layout: "RowsPerPageDropdown CurrentPageReport PrevPageLink NextPageLink",
     PrevPageLink: (options) => {
       return (
@@ -302,7 +302,7 @@ export default function AssignTeamPage() {
           <DataTable
             value={sites}
             paginator
-            paginatorTemplate={template2}
+            paginatorTemplate={paginationTemplate}
           ></DataTable>
         </div>
       </div>
