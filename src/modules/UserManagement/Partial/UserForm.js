@@ -16,7 +16,7 @@ import {ConfirmDialog} from "primereact/confirmdialog";
 import {authSignup} from "../../authentication/services/OrgAuthentication";
 import {classNames} from "primereact/utils";
 import {FORM_VALIDATOR} from "../services/FormValidatorConstants";
-import FormValidator from "../services/FormValidator";
+import FormValidator, {FormValidatorExtractor} from "../services/FormValidator";
 
 const UserForm = (props) => {
   // IMPORTANT: need to preventDefault when submit form!
@@ -241,11 +241,9 @@ const UserForm = (props) => {
         types: [FORM_VALIDATOR.REQUIRED, FORM_VALIDATOR.EMAIL, FORM_VALIDATOR.CUSTOM],
         payload: formData.email,
         fieldName: "email",
-        custom: (test) => {
-          const a = 5;
-          let b =  a * 12;
-          // console.log(test);
-          return true;
+        custom: () => {
+          // console.log(formData);
+          return !(formData.name || formData.name === "");
         }
       },
       {
@@ -289,7 +287,10 @@ const UserForm = (props) => {
       ]
     }
     dispatch(FormValidator(checkVal, (validateResponse) => {
-      setValidateError(validateResponse);
+      // console.log(validateResponse);
+      FormValidatorExtractor(validateResponse, response => {
+        setValidateError(response);
+      });
     }));
   }
 

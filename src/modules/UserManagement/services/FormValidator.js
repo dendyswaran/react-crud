@@ -25,6 +25,7 @@ const FormValidator = (values = [{types: [], payload: "", fieldName: ""}], respo
         values.forEach(val => {
             // form validator state updated everytime dispatch is done
             // need to check the state of the reducer after dispatch
+            const fieldName = val.fieldName;
             let dispatchObj = {
                 type: FORM_VALIDATOR.VALIDATE,
                 types: val.types,
@@ -42,19 +43,39 @@ const FormValidator = (values = [{types: [], payload: "", fieldName: ""}], respo
                 }));
             }
             dispatch(dispatchObj);
-            const fieldName = val.fieldName;
-            // console.log(currentState)
+
+            // console.log(currentState);
             currentState[fieldName].forEach(validators => {
-                const temp = validators.find(validator => validator.isValid === false)
+                const temp = validators.find(validator => {
+                    return validator.isValid === false;
+                })
                 if (temp && !temp.isEmpty) {
                     setValidateError[fieldName] = temp.errorMessage;
                 } else {
                     setValidateError[fieldName]= "";
                 }
             });
+            // response(currentState);
         });
-        response(setValidateError);
+        response(currentState);
     }
 }
 
+const FormValidatorExtractor = (currentState, response) => {
+    const validateError = {}
+    // console.log(currentState);
+    for (const key in currentState) {
+        currentState[key].forEach(values => {
+             const temp = values.find(value => value.isValid === false);
+             if(temp && !temp.isEmpty) {
+                 validateError[key] = temp.errorMessage;
+             }else {
+                 validateError[key] = "";
+             }
+        });
+    }
+    response(validateError);
+}
+
 export default FormValidator;
+export {FormValidatorExtractor};

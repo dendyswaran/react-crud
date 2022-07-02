@@ -1,11 +1,11 @@
 import {FORM_VALIDATOR, FORM_VALIDATOR_MESSAGE} from "./FormValidatorConstants";
 
 const initialState = {validator: [
-        {
+        [{
             isValid: true,
             messageError: undefined,
             fieldName: undefined
-        }
+        }]
     ]};
 
 const ValidatorReducer = (state = initialState, action) => {
