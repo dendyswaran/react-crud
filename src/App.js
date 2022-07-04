@@ -25,6 +25,8 @@ import OemTasklistPage from "./modules/tasklist/OemTasklistPage";
 import OemTasklistDetails from "./modules/tasklist/tasklist_details/OemTasklistDetails";
 import IohTasklistPage from "./modules/tasklist/IohTasklistPage";
 import IohTasklistDetails from "./modules/tasklist/tasklist_details/IohTasklistDetails";
+import FileUploadPage from "./modules/file-upload/FileUploadPage";
+import AssignTeamPage from "./modules/assignment/assign-team/AssignTeamPage";
 
 function App() {
   return (
