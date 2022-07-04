@@ -15,8 +15,10 @@ import { getTeamList } from "../services/TeamAction";
 import {ConfirmDialog} from "primereact/confirmdialog";
 import {authSignup} from "../../authentication/services/OrgAuthentication";
 import {classNames} from "primereact/utils";
-import {FORM_VALIDATOR} from "../services/FormValidatorConstants";
+import {FORM_VALIDATOR, FORM_VALIDATOR_MESSAGE} from "../services/FormValidatorConstants";
 import FormValidator, {FormValidatorExtractor} from "../services/FormValidator";
+import InputTextBarWithValidator from "../../../components/FormComponents/InputTextBarWithValidator";
+import DropdownBarWithValidator from "../../../components/FormComponents/DropdownBarWithValidator";
 
 const UserForm = (props) => {
   // IMPORTANT: need to preventDefault when submit form!
@@ -238,12 +240,21 @@ const UserForm = (props) => {
         fieldName: "name",
       },
       {
-        types: [FORM_VALIDATOR.REQUIRED, FORM_VALIDATOR.EMAIL, FORM_VALIDATOR.CUSTOM],
+        types: [FORM_VALIDATOR.REQUIRED, FORM_VALIDATOR.CUSTOM],
         payload: formData.email,
         fieldName: "email",
         custom: () => {
           // console.log(formData);
-          return !(formData.name || formData.name === "");
+          let isValid = false;
+          let custMessage = "tst";
+          if (formData.email !== formData.name) {
+            isValid = false;
+            custMessage = "email must be same as name";
+          }else {
+            isValid = true;
+            custMessage = "";
+          }
+          return {isValid, message: custMessage};
         }
       },
       {
@@ -256,7 +267,9 @@ const UserForm = (props) => {
         payload: formData.orgId,
         fieldName: "orgId",
         adds: [{
-          customMessage: "Please Choose One Organization"
+          customMessage: {
+            [FORM_VALIDATOR.REQUIRED]: "Please Choose One Organization",
+          }
         }]
       },
       {
@@ -264,7 +277,9 @@ const UserForm = (props) => {
         payload: formData.orgTeamId,
         fieldName: "orgTeamId",
         adds: [{
-          customMessage: "Please choose on of the team"
+          customMessage: {
+            [FORM_VALIDATOR.REQUIRED] : "Please choose on of the team",
+          }
         }]
       },
       {
@@ -357,7 +372,6 @@ const UserForm = (props) => {
                   value={element.id}
                   onChange={onInputChange}
                   checked={formData.orgUsrGroupId === element.id}
-                  // required
                 />
               </div>
             </div>
@@ -368,12 +382,7 @@ const UserForm = (props) => {
     }
   }
 
-  const invalidInput = (fieldName) => {
-    return classNames((validateError[fieldName] ? "p-invalid" : ""));
-  }
-
   const myHeader = userId ? "Modify " + userId : "Register New User";
-
 
   return (
     <form className="w-full md:w-4/5 items-center bg-white rounded-lg mx-auto p-4 sm:p-10" onSubmit={handleSubmitForm}>
@@ -397,18 +406,12 @@ const UserForm = (props) => {
       <div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-full px-3">
           <InputLabel>User Code</InputLabel>
-          <InputTextBar className={`standardBar full ${invalidInput("code")}`}
-                        value={formData.code}
-                        name={"code"}
-                        onChange={onInputChange}
-                        // onChange={onCodeChange}
-                        // required
-          />
-          {validateError.code &&
-            <p className="mt-2 text-pink-600 text-sm">
-              {validateError.code}
-            </p>
-          }
+          <InputTextBarWithValidator className={'standardBar full'}
+                                     value={formData.code}
+                                     name={"code"}
+                                     onChange={onInputChange}
+                                     validator={validateError.code}
+                                     />
         </div>
       </div>
 
@@ -416,15 +419,12 @@ const UserForm = (props) => {
       <div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-full md:w-full px-3 mb-6 md:mb-0">
           <InputLabel>Name</InputLabel>
-          <InputTextBar className={`standardBar full ${invalidInput("name")}`} //`standardBar full `
-                        value={formData.name}
-                        name={"name"}
-            onChange={onInputChange}/>
-          {validateError.name &&
-            <p className="mt-2 text-pink-600 text-sm">
-              {validateError.name}
-            </p>
-          }
+          <InputTextBarWithValidator className={'standardBar full'}
+                                     value={formData.name}
+                                     name={"name"}
+                                     onChange={onInputChange}
+                                     validator={validateError.name}
+                                     />
         </div>
         {/* <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>First Name</InputLabel>
@@ -441,15 +441,12 @@ const UserForm = (props) => {
       {window.location.pathname.indexOf("signup") > 0 && (<div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-full md:w-full px-3 mb-6 md:mb-0">
           <InputLabel>Password</InputLabel>
-          <InputTextBar type="password"
-                        className={`standardBar full ${invalidInput("password")}`}
-                        name={"password"}
-                        onChange={onInputChange}/>
-          {validateError.password &&
-            <p className="mt-2 text-pink-600 text-sm">
-              {validateError.password}
-            </p>
-          }
+          <InputTextBarWithValidator type={"password"}
+                                     className={'standardBar full'}
+                                     name={"password"}
+                                     onChange={onInputChange}
+                                     validator={validateError.password}
+                                     />
         </div>
       </div>)}
 
@@ -470,38 +467,29 @@ const UserForm = (props) => {
       <div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>organization</InputLabel>
-          <DropdownBar
+          <DropdownBarWithValidator
             value={formData.orgId}
             options={organizations}
             name={"orgId"}
-            // onChange={onInputChange}
             onChange={onInputChange}
             optionLabel="name"
-            className={`standardBar full ${invalidInput("orgId")}`}
+            className={"standardBar full"}
             placeholder="Select an Organization"
+            validator={validateError.orgId}
           />
-          {validateError.orgId &&
-              <p className="mt-2 text-pink-600 text-sm">
-                {validateError.orgId}
-              </p>
-          }
         </div>
         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>team</InputLabel>
-          <DropdownBar
+          <DropdownBarWithValidator
             value={formData.orgTeamId}
             options={teams}
             onChange={onInputChange}
             name={"orgTeamId"}
             optionLabel="name"
-            className={`standardBar full ${invalidInput("orgTeamId")}`}
+            className={"standardBar full"}
             placeholder="Select a Team"
+            validator={validateError.orgTeamId}
           />
-          {validateError.orgTeamId &&
-              <p className="mt-2 text-pink-600 text-sm">
-                {validateError.orgTeamId}
-              </p>
-          }
         </div>
       </div>
 
@@ -509,25 +497,21 @@ const UserForm = (props) => {
       <div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>Phone</InputLabel>
-          <InputTextBar
-            className="standardBar full" name={"phoneNumber"} onChange={onInputChange}
-            placeholder="e.g. 6212XXXXXXX"
+          <InputTextBarWithValidator className="standardBar full"
+                                     name={"phoneNumber"}
+                                     onChange={onInputChange}
+                                     placeholder="e.g. 6212XXXXXXX"
           />
         </div>
         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <InputLabel>Email</InputLabel>
-          <InputTextBar
-            className={`standardBar full ${invalidInput("email")}`}
-            placeholder="e.g. sample@xxxx.com"
-            value={formData.email} name={"email"}
-            onChange={onInputChange}
-            // required
-          />
-          {validateError.email &&
-            <p className="mt-2 text-pink-600 text-sm">
-              {validateError.email}
-            </p>
-          }
+          <InputTextBarWithValidator name={"email"}
+                                     className={"standardBar full"}
+                                     placeholder={"e.g sample@xxxx.com"}
+                                     onChange={onInputChange}
+                                     value={formData.email}
+                                     validator={validateError.email}
+                                     />
         </div>
       </div>
 

@@ -29,5 +29,6 @@ export const FORM_VALIDATOR_MESSAGE = {
     MIN_LENGTH: 0,
     MAX_LENGTH: 255,
     MAX_VALUE: "Please enter number less than ",
-    MIN_VALUE: "Please enter number more than"
+    MIN_VALUE: "Please enter number more than",
+    CUSTOM: "CUSTOM_MESSAGE"
 };

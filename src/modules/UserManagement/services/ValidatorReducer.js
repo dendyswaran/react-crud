@@ -89,18 +89,20 @@ const ValidatorReducer = (state = initialState, action) => {
                         /**
                          * idea: return either true or false that indicate the isValid
                          */
-                        if(typeof (action.custom()) === "boolean") {
-                            isValid = action.custom();
+                        // console.log(action.custom());
+                        if(typeof (action.custom().isValid) === "boolean") {
+                            isValid = action.custom().isValid;
                         }else {
-                            throw new Error("function custom must return boolean");
+                            throw new Error("custom function must return object isValid as a boolean");
                         }
+                        message = action.custom().message ?? FORM_VALIDATOR_MESSAGE.CUSTOM;
                         break;
                     default:
                         isValid = true;
                         message = "";
                 }
                 return {
-                    isValid, errorMessage: action.customMessage ?? message, fieldName
+                    isValid, errorMessage: (action.customMessage && action.customMessage[type]) ? action.customMessage[type]: message, fieldName
                 };
             })
             const newState = {

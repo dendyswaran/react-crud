@@ -42,6 +42,7 @@ const FormValidator = (values = [{types: [], payload: "", fieldName: ""}], respo
                     }
                 }));
             }
+            // console.log(dispatchObj);
             dispatch(dispatchObj);
 
             // console.log(currentState);
