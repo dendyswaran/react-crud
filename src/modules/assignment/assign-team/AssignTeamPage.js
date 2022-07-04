@@ -1,62 +1,17 @@
-import { useState } from "react";
-import SiteIdSearchBar from "../../../components/SiteIdSearchBar";
-import Layout from "../../../components/Layout";
-import TeamAssignmentCardView from "../../../components/CardView/TeamAssignmentCardView";
-import PostCodeSearchBar from "../../../components/PostCodeSearchBar";
 import { Dropdown } from "primereact/dropdown";
 import InputLabel from "../../../components/FormComponents/InputLabel";
 import PrimaryButton from "../../../components/Button/PrimaryButton";
 import CheckboxMain from "../../../components/FormComponents/CheckboxMain";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { genGetDataById } from "../../../commons/GenericAction";
+import InputTextBar from "../../../components/FormComponents/InputTextBar";
+import TeamAssignmentCardView from "../../../components/CardView/TeamAssignmentCardView";
+import { DataTable } from "primereact/datatable";
+import { Fragment } from "react";
+import { InputText } from "primereact/inputtext";
 
 export default function AssignTeamPage() {
-
-  //Site ID Search Query Logic
-  const { searchSite } = window.location;
-  const siteQuery = new URLSearchParams(searchSite).get("s");
-  const [searchSiteQuery, setSearchSiteQuery] = useState(siteQuery || "");
-
-  //Post Code Search Query Logic
-  const { searchPostCode } = window.location;
-  const postCodeQuery = new URLSearchParams(searchPostCode).get("pcs");
-  const [searchPostCodeQuery, setSearchPostCodeQuery] = useState(
-    postCodeQuery || ""
-  );
-
-  const items = [
-    {
-      id: 1,
-      siteId: "C008009",
-      siteName: "PT Cellsite",
-      equipment: 20,
-      assignedDate: "6-Jun-22",
-      postCode: 60000,
-    },
-    {
-      id: 2,
-      siteId: "C008010",
-      siteName: "PT Cellsite",
-      equipment: 30,
-      assignedDate: "10-Jun-22",
-      postCode: 52100,
-    },
-    {
-      id: 3,
-      siteId: "C008011",
-      siteName: "CT Cellsite",
-      equipment: 30,
-      assignedDate: "15-Jul-22",
-      postCode: 63100,
-    },
-    {
-      id: 4,
-      siteId: "C008012",
-      siteName: "CT Cellsite",
-      equipment: 40,
-      assignedDate: "12-Jul-22",
-      postCode: 44400,
-    },
-  ];
-
   const teamItems = [
     { name: "Team 1", value: "1" },
     { name: "Team 2", value: "2" },
@@ -73,9 +28,85 @@ export default function AssignTeamPage() {
     setSelectedTeam(e.value);
   };
 
-  //Checkbox handleChange Logic
-  const [sites, setSite] = useState(items);
+  //Paginator and Search States
+  const [totalPages, setTotalPages] = useState(0);
+  const [pageRows, setPageRows] = useState(5);
+  const [totalElements, setTotalElements] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchSites, setSearchSites] = useState("");
+  const [pageInputTooltip] = useState("");
 
+  //Records Per Page Logic
+  const onRecordsChange = (e) => {
+    setPageRows(e.value);
+    //Reset current page to 1 to show first page
+    setCurrentPage(1);
+    handleData(currentPage);
+  };
+
+  //Fetch data through REST API
+  const dispatch = useDispatch();
+  const [sites, setSite] = useState([]);
+
+  // Get data from DB
+  const handleData = (currentPage) => {
+    currentPage = currentPage - 1;
+    dispatch(
+      genGetDataById(
+        `/api/tasklist/sites?page=` + currentPage + `&size=` + pageRows,
+        (_respData) => {
+          setSite(_respData.content);
+          setTotalPages(_respData.totalPages);
+          setTotalElements(_respData.totalElements);
+          setCurrentPage(_respData.number + 1);
+          console.info(`Data have been loaded successfully.`);
+        }
+      )
+    );
+  };
+
+  useEffect(() => {
+    handleData(currentPage);
+  }, [pageRows]);
+
+  //Search Box Method
+  const searchBox = (e) => {
+    setSearchSites(
+      //assigning value to event target
+      (e.target.name = e.target.value)
+    );
+    //handleData(currentPage);
+  };
+
+  // Search logic
+  const searchTasklist = (currentPage) => {
+    currentPage = currentPage - 1;
+    dispatch(
+      genGetDataById(
+        `/api/tasklist/sites?siteId=` +
+          searchSites +
+          `&page=` +
+          currentPage +
+          `&size=` +
+          pageRows,
+        (_respData) => {
+          setSite(_respData.content);
+          setTotalPages(_respData.totalPages);
+          setTotalElements(_respData.totalElements);
+          setCurrentPage(_respData.number + 1);
+          console.info(`Search have been loaded successfully.`);
+        }
+      )
+    );
+  };
+
+  //Reset Search Box
+  const resetSearch = () => {
+    setSearchSites("");
+    handleData(currentPage);
+  };
+
+  //Checkbox handleChange Logic
   const handleChange = (e) => {
     const { name, checked } = e.target;
 
@@ -86,112 +117,211 @@ export default function AssignTeamPage() {
       setSite(tempItem);
     } else {
       let tempItem = sites.map((props) =>
-        props.siteId === name ? { ...props, isChecked: checked } : props
+        props.cd === name ? { ...props, isChecked: checked } : props
       );
       setSite(tempItem);
     }
   };
 
-  //Site ID Filter Query Logic
-  const filterSites = (sites, siteQuery) => {
-    if (!siteQuery) {
-      return sites;
+  //Pagination Logic
+  //Show Next page
+  const showNextPage = () => {
+    if (currentPage < Math.ceil(totalElements / pageRows)) {
+      if (!searchSites) {
+        handleData(currentPage + 1);
+      } else {
+        searchTasklist(currentPage + 1);
+      }
     }
-
-    return sites.filter((site) => {
-      const itemName = site.siteId.toLowerCase();
-
-      return itemName.startsWith(siteQuery.toLowerCase());
-    });
   };
 
-  const filteredSites = filterSites(sites, searchSiteQuery);
-
-  //Post Code Filter Query Logic
-  const filterPostCode = (items, postCodeQuery) => {
-    if (!postCodeQuery) {
-      return items;
+  //Show previous page
+  const showPrevPage = () => {
+    let prevPage = 1;
+    if (currentPage > prevPage) {
+      if (!searchSites) {
+        handleData(currentPage - prevPage);
+      } else {
+        searchTasklist(currentPage - prevPage);
+      }
     }
-
-    return items.filter((item) => {
-      const itemPostCode = item.postCode.toString();
-      return itemPostCode.startsWith(postCodeQuery);
-    });
   };
 
-  const filteredPostCode = filterPostCode(items, searchPostCodeQuery);
-  
+  const onPageInputChange = (e) => {
+    setCurrentPage(e.target.value);
+  };
+
+  const onPageInputKeyDown = (e, recordOptions) => {
+    if (e.key === "Enter") {
+      const page = parseInt(currentPage);
+      if (page < 1 || page > totalPages) {
+        console.log("Invalid Page number: ");
+        //setPageInputTooltip(`Value must be between 1 and ${totalPages}.`);
+      } else {
+        setCurrentPage(currentPage);
+        handleData(currentPage);
+      }
+    }
+  };
+
+  const paginationTemplate = {
+    layout: "RowsPerPageDropdown CurrentPageReport PrevPageLink NextPageLink",
+    PrevPageLink: (options) => {
+      return (
+        <button
+          type="button"
+          className={options.className}
+          onClick={showPrevPage}
+          disabled={currentPage === 1 ? true : false}
+        >
+          <i className="pi pi-angle-left"></i>
+        </button>
+      );
+    },
+    NextPageLink: (options) => {
+      return (
+        <button
+          type="button"
+          className={options.className}
+          onClick={showNextPage}
+          disabled={currentPage === totalPages ? true : false}
+        >
+          <i className="pi pi-angle-right"></i>
+        </button>
+      );
+    },
+    RowsPerPageDropdown: (options) => {
+      const dropdownRecordsOptions = [
+        { label: 5, value: 5 },
+        { label: 10, value: 10 },
+        { label: 20, value: 20 },
+        { label: 30, value: 30 },
+      ];
+
+      return (
+        <Fragment>
+          <span
+            className="mx-1"
+            style={{ color: "var(--text-color)", userSelect: "none" }}
+          >
+            Items per page:{" "}
+          </span>
+          <Dropdown
+            value={pageRows}
+            options={dropdownRecordsOptions}
+            onChange={onRecordsChange}
+            optionLabel="label"
+            placeholder="5"
+          />
+        </Fragment>
+      );
+    },
+    CurrentPageReport: (options) => {
+      return (
+        <span
+          className="mx-3"
+          style={{ color: "var(--text-color)", userSelect: "none" }}
+        >
+          Go to{" "}
+          <InputText
+            size="2"
+            className="ml-1"
+            value={currentPage}
+            tooltip={pageInputTooltip}
+            onKeyDown={(e) => onPageInputKeyDown(e, options)}
+            onChange={onPageInputChange}
+          />
+          <span> of {totalPages} pages</span>
+        </span>
+      );
+    },
+  };
+
+  //Format Date Display
+  function formatDate(string){
+    var options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(string).toLocaleDateString('en-US',options);
+  }
 
   return (
-    <Layout>
+  <Fragment>
       <div className="pb-3">
-        <SiteIdSearchBar
-          searchSiteQuery={searchSiteQuery}
-          setSearchSiteQuery={setSearchSiteQuery}
-        />
+        <div className="flex flex-inline gap-2 grid-cols-3">
+          <InputTextBar
+            name="search"
+            placeholder="Enter Site ID"
+            value={searchSites}
+            onChange={searchBox}
+          />
+          <InputTextBar
+            name="search"
+            placeholder="Enter Postcode"
+            /* value={search}
+          onChange={searchBox} */
+          />
+        </div>
+        <div>
+          <div className="lg:col-span-1 col-span-2 flex justify-end">
+            <PrimaryButton name="search" onClick={searchTasklist}>
+              Search
+            </PrimaryButton>
+            <PrimaryButton name="reset" onClick={resetSearch}>
+              Reset
+            </PrimaryButton>
+          </div>
+        </div>
         <div className="flex pt-8">
           <CheckboxMain
             name="allSelect"
             className="mr-2"
-            checked={!filteredSites.some((props) => props?.isChecked !== true)}
+            checked={!sites.some((props) => props?.isChecked !== true)}
             onChange={handleChange}
           />
           <label className="pt-1">Select All</label>
         </div>
         <br />
         <label>Site ID Query Results</label>
-        {filteredSites.map((props, index) => (
-          <div key={index}>
+        <br />
+        {/* Pagination here */}
+        {sites.map((properties, index) => (
+          <div key={index} className="flex in-line">
             <CheckboxMain
               className="mr-2 pt-5"
-              name={props.siteId}
-              checked={props?.isChecked || false}
+              name={properties.cd}
+              value={properties.cd}
+              checked={properties?.isChecked || false}
               onChange={handleChange}
             />
-            <TeamAssignmentCardView key={props.key} item={props} />
-          </div>
-        ))}
-        <br />
-        <PostCodeSearchBar
-          searchPostCodeQuery={searchPostCodeQuery}
-          setSearchPostCodeQuery={setSearchPostCodeQuery}
-        />
-        <div className="flex pt-8">
-          <CheckboxMain
-            name="allSelect"
-            className="mr-2"
-            checked={!filteredPostCode.some((props) => props?.isChecked !== true)}
-            onChange={handleChange}
-          />
-          <label className="pt-1">Select All</label>
-        </div>
-        <br />
-        <label>Post Code Query Results</label>
-        {filteredPostCode.map((props, index) => (
-          <div key={index}>
-            <CheckboxMain
-              className="mr-2 pt-5"
-              name={props.siteId}
-              checked={props?.isChecked || false}
-              onChange={handleChange}
+            <TeamAssignmentCardView
+              key={properties.id}
+              href={`/assign-team`}
+              primary={properties.cd}
+              secondary="SITE ID"
+              data={[properties.eqpCount + " Equipments", properties.nm, "To Decom " + formatDate(properties.dtDecom)]}
             />
-            <TeamAssignmentCardView key={props.key} item={props} />
           </div>
         ))}
-        <div className="col-span-1">
-          <InputLabel>Team</InputLabel>
-          <Dropdown
-            value={selectedTeam}
-            options={teamItems}
-            onChange={onTeamChange}
-            optionLabel="name"
-            placeholder="Select Team"
-          />
-        </div>
         <div>
-          <PrimaryButton>Assign Team</PrimaryButton>
+          <DataTable
+            value={sites}
+            paginator
+            paginatorTemplate={paginationTemplate}
+          ></DataTable>
         </div>
       </div>
-    </Layout>
+      <div className="col-span-1">
+        <InputLabel>Team</InputLabel>
+        <Dropdown
+          value={selectedTeam}
+          options={teamItems}
+          onChange={onTeamChange}
+          optionLabel="name"
+          placeholder="Select Team"
+        />
+      </div>
+      <div>
+        <PrimaryButton>Assign Team</PrimaryButton>
+      </div>
+  </Fragment>
   );
 }

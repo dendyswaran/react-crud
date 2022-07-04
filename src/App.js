@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import RequireAuth from "./components/RequireAuth";
 import MyAccountPage from "./modules/account/MyAccountPage";
 import SigninPage from "./modules/authentication/SigninPage";
@@ -161,6 +161,32 @@ function App() {
                   <OemTasklistDetails />
                 </RequireAuth>
               }
+            />
+          </Route>
+          <Route
+              path="assign-team"
+              element={<PageLayout text="Assign Team List" />}
+          >
+            <Route
+                  path="/assign-team"
+                  element={
+                  <RequireAuth>
+                    <AssignTeamPage />
+                  </RequireAuth>
+                  }
+            />
+          </Route>
+          <Route
+              path="file-upload"
+              element={<PageLayout text="File Upload" />}
+          >
+            <Route
+                  path="/file-upload"
+                  element={
+                  <RequireAuth>
+                    <FileUploadPage />
+                  </RequireAuth>
+                  }
             />
           </Route>
         </Route>
