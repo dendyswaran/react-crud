@@ -110,6 +110,7 @@ export default function Navbar() {
               icon="pi pi-check-square"
               className="flex-1"
               menu={"Assignment"}
+              width="w-full"
             >
               <MenuDropdownLink href="/assign-warehouse" icon="pi pi-check-square">
                 ASSIGN WAREHOUSE

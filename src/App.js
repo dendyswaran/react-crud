@@ -27,6 +27,9 @@ import IohTasklistPage from "./modules/tasklist/IohTasklistPage";
 import IohTasklistDetails from "./modules/tasklist/tasklist_details/IohTasklistDetails";
 import FileUploadPage from "./modules/file-upload/FileUploadPage";
 import AssignTeamPage from "./modules/assignment/assign-team/AssignTeamPage";
+import WarehouseAssignPage  from "./modules/assignment/assign-warehouse/WarehouseAssignPage";
+import SiteAccessPage from "./modules/assignment/apply-site/SiteAccessPage";
+import SiteDetails from "./modules/assignment/apply-site/SiteDetails";
 
 function App() {
   return (
@@ -164,6 +167,19 @@ function App() {
             />
           </Route>
           <Route
+            path="assign-warehouse"
+            element={<PageLayout text="Assign Warehouse" />}
+          >
+            <Route
+              path=""
+              element={
+                <RequireAuth>
+                  <WarehouseAssignPage />
+                </RequireAuth>
+              }
+            />
+          </Route>
+          <Route
               path="assign-team"
               element={<PageLayout text="Assign Team List" />}
           >
@@ -174,6 +190,27 @@ function App() {
                     <AssignTeamPage />
                   </RequireAuth>
                   }
+            />
+          </Route>
+          <Route
+            path="apply-site"
+            element={<PageLayout text="Site Access" />}
+          >
+            <Route
+              path=""
+              element={
+                <RequireAuth>
+                  <SiteAccessPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="details/:id"
+              element={
+                <RequireAuth>
+                  <SiteDetails />
+                </RequireAuth>
+              }
             />
           </Route>
           <Route
