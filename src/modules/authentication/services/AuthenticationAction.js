@@ -3,10 +3,12 @@ import session from "../../../configs/session"
 import { post } from "../../../helpers/ApiHelper"
 
 /**
- * 
- * @param {String} username 
- * @param {String} password 
- * @returns 
+ *
+ * @param {String} username
+ * @param {String} password
+ * @param onSuccess
+ * @param onError
+ * @returns
  */
 export function authSignin(username, password, onSuccess, onError) {
     return async (dispatch) => {

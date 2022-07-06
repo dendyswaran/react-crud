@@ -246,15 +246,10 @@ const UserForm = (props) => {
         custom: () => {
           // console.log(formData);
           let isValid = false;
-          let custMessage = "tst";
-          if (formData.email !== formData.name) {
-            isValid = false;
-            custMessage = "email must be same as name";
-          }else {
+          if(formData.name) {
             isValid = true;
-            custMessage = "";
           }
-          return {isValid, message: custMessage};
+          return {isValid, message: "Name must be filled in first"};
         }
       },
       {
@@ -266,26 +261,25 @@ const UserForm = (props) => {
         types: [FORM_VALIDATOR.REQUIRED],
         payload: formData.orgId,
         fieldName: "orgId",
-        adds: [{
-          customMessage: {
-            [FORM_VALIDATOR.REQUIRED]: "Please Choose One Organization",
-          }
-        }]
+        customMessage: {
+          [FORM_VALIDATOR.REQUIRED]: "Please pick an organization",
+        },
       },
       {
         types: [FORM_VALIDATOR.REQUIRED],
         payload: formData.orgTeamId,
         fieldName: "orgTeamId",
-        adds: [{
-          customMessage: {
-            [FORM_VALIDATOR.REQUIRED] : "Please choose on of the team",
-          }
-        }]
+        customMessage: {
+          [FORM_VALIDATOR.REQUIRED] : "Please choose on of the team",
+        }
       },
       {
         types: [FORM_VALIDATOR.REQUIRED],
         payload: formData.orgUsrGroupId,
         fieldName: "orgUsrGroupId",
+        customMessage: {
+          [FORM_VALIDATOR.REQUIRED] : "Please pick one of the options below"
+        }
       }
     ];
     if(window.location.pathname.indexOf("signup") > 0) {
@@ -302,7 +296,7 @@ const UserForm = (props) => {
       ]
     }
     dispatch(FormValidator(checkVal, (validateResponse) => {
-      // console.log(validateResponse);
+      console.log(validateResponse);
       FormValidatorExtractor(validateResponse, response => {
         setValidateError(response);
       });

@@ -42,6 +42,12 @@ const FormValidator = (values = [{types: [], payload: "", fieldName: ""}], respo
                     }
                 }));
             }
+            if(val.customMessage) {
+                if(Object.keys(val.customMessage).length > 0)
+                {
+                    dispatchObj.customMessage = val.customMessage;
+                }
+            }
             // console.log(dispatchObj);
             dispatch(dispatchObj);
 
