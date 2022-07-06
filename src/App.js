@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import RequireAuth from "./components/RequireAuth";
 import MyAccountPage from "./modules/account/MyAccountPage";
 import SigninPage from "./modules/authentication/SigninPage";
@@ -27,6 +27,11 @@ import OemTasklistPage from "./modules/tasklist/OemTasklistPage";
 import OemTasklistDetails from "./modules/tasklist/tasklist_details/OemTasklistDetails";
 import IohTasklistPage from "./modules/tasklist/IohTasklistPage";
 import IohTasklistDetails from "./modules/tasklist/tasklist_details/IohTasklistDetails";
+import FileUploadPage from "./modules/file-upload/FileUploadPage";
+import AssignTeamPage from "./modules/assignment/assign-team/AssignTeamPage";
+import WarehouseAssignPage  from "./modules/assignment/assign-warehouse/WarehouseAssignPage";
+import SiteAccessPage from "./modules/assignment/apply-site/SiteAccessPage";
+import SiteDetails from "./modules/assignment/apply-site/SiteDetails";
 
 function App() {
   return (
@@ -177,6 +182,66 @@ function App() {
                   <OemTasklistDetails />
                 </RequireAuth>
               }
+            />
+          </Route>
+          <Route
+            path="assign-warehouse"
+            element={<PageLayout text="Assign Warehouse" />}
+          >
+            <Route
+              path=""
+              element={
+                <RequireAuth>
+                  <WarehouseAssignPage />
+                </RequireAuth>
+              }
+            />
+          </Route>
+          <Route
+              path="assign-team"
+              element={<PageLayout text="Assign Team List" />}
+          >
+            <Route
+                  path="/assign-team"
+                  element={
+                  <RequireAuth>
+                    <AssignTeamPage />
+                  </RequireAuth>
+                  }
+            />
+          </Route>
+          <Route
+            path="apply-site"
+            element={<PageLayout text="Site Access" />}
+          >
+            <Route
+              path=""
+              element={
+                <RequireAuth>
+                  <SiteAccessPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="details/:id"
+              element={
+                <RequireAuth>
+                  <SiteDetails />
+                </RequireAuth>
+              }
+            />
+          </Route>
+          <Route
+              path="file-upload"
+              element={<PageLayout text="File Upload" />}
+          >
+            <Route
+                  path="/file-upload"
+                  element={
+                  <RequireAuth>
+                    <FileUploadPage />
+                  </RequireAuth>
+                  }
             />
           </Route>
         </Route>

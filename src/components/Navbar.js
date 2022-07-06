@@ -104,8 +104,25 @@ export default function Navbar() {
               </MenuDropdownLink>
             </MenuDropdown>
 
-            <MenuSimple children="File Upload" icon="pi pi-upload" />
-            <MenuSimple children="Assignment" icon="pi pi-check-square" />
+            <MenuSimple href="/file-upload" children="File Upload" icon="pi pi-upload" />
+
+            <MenuDropdown
+              icon="pi pi-check-square"
+              className="flex-1"
+              menu={"Assignment"}
+              width="w-full"
+            >
+              <MenuDropdownLink href="/assign-warehouse" icon="pi pi-check-square">
+                ASSIGN WAREHOUSE
+              </MenuDropdownLink>
+              <MenuDropdownLink href="/assign-team" icon="pi pi-check-square">
+                ASSIGN TEAM
+              </MenuDropdownLink>
+              <MenuDropdownLink href="/apply-site" icon="pi pi-check-square">
+                APPLY SITE ACCESS
+              </MenuDropdownLink>
+            </MenuDropdown>
+
             <MenuSimple
               children="Site Status Enquiry"
               icon="pi pi-info-circle"
